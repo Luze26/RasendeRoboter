@@ -114,15 +114,32 @@ loggedApp.factory('propositionService', function($http, gameInfo) {
 	return service;
 });
 
+/**
+ * @ngdoc service
+ * @name loggedApp.service:gameInfo
+ *
+ * @description
+ * Used to retrieve information put in hidden input field.
+ */
 loggedApp.factory('gameInfo', function () {
   var infos = {};
   
+  //User login
   infos.login = angular.element('#login').val();
+  
+  //Game id
   infos.idGame = angular.element('#idGame').val();
 
   return infos;
 });
 
+/**
+ * @ngdoc object
+ * @name loggedApp.controller:mainController
+ *
+ * @description
+ * Main controller used to catch key events.
+ */
 loggedApp.controller("mainController", ["$scope", "socket", function($scope, socket) {
 	socket.on('FinalCountDown'	, function(data) {
 		 var ms   = data.FinalCountDown;
@@ -141,6 +158,13 @@ loggedApp.controller("mainController", ["$scope", "socket", function($scope, soc
 	
 }]);
 
+/**
+ * @ngdoc object
+ * @name loggedApp.controller:participantsController
+ *
+ * @description
+ * Handle the list of participants
+ */
 loggedApp.controller("participantsController", ["$scope", "socket", function($scope, socket) {
 	$scope.participants = [];
 	socket.on('participants', function(data) {
@@ -148,8 +172,16 @@ loggedApp.controller("participantsController", ["$scope", "socket", function($sc
 	});
 }]);
 
+/**
+ * @ngdoc object
+ * @name loggedApp.controller:mapController
+ *
+ * @description
+ * Handle map and robot behaviours.
+ */
 loggedApp.controller("mapController", ["$scope", "$http", "gameInfo", 'HOST_URL', 'propositionService', function($scope, $http, gameInfo, HOST_URL, propositionService) {
 
+	//Init everything
 	$http.get(HOST_URL + "/" + gameInfo.idGame).success(function(data) {
 			//Init map
 			$scope.map = data.board;
@@ -168,6 +200,16 @@ loggedApp.controller("mapController", ["$scope", "$http", "gameInfo", 'HOST_URL'
 			$scope.map[target.l][target.c].target = target.t;
 		});
 	
+	/**
+	 * @ngdoc function
+	 * @name loggedApp.controller:mapController#selectRobot
+	 * @methodOf loggedApp.controller:mapController
+	 *
+	 * @description
+	 * Unselect the current selected robot and select the given one.
+	 *
+	 * @param {Robot} robot Robot to be selected
+	 */
 	$scope.selectRobot = function(robot) {
 		if($scope.selectedRobot != robot) {
 			propositionService.doAction("select", robot.color);
@@ -179,6 +221,18 @@ loggedApp.controller("mapController", ["$scope", "$http", "gameInfo", 'HOST_URL'
 		}
 	};
 	
+	
+	/**
+	 * @ngdoc function
+	 * @name loggedApp.controller:mapController#moveRobotUp
+	 * @methodOf loggedApp.controller:mapController
+	 *
+	 * @description
+	 * Move the robot to the upper cell
+	 *
+	 * @param {robot} robotToMove Robot to move
+	 * @returns {boolean} true if the robot has been moved, false if the action is impossible
+	 */
 	$scope.moveRobotUp = function(robotToMove) {
 		var currentCell = $scope.map[robotToMove.line][robotToMove.column];
 		if(robotToMove.line > 0 && currentCell.h != 1) {
@@ -193,6 +247,17 @@ loggedApp.controller("mapController", ["$scope", "$http", "gameInfo", 'HOST_URL'
 		return false;
 	};
 	
+	/**
+	 * @ngdoc function
+	 * @name loggedApp.controller:mapController#moveRobotDown
+	 * @methodOf loggedApp.controller:mapController
+	 *
+	 * @description
+	 * Move the robot to the bottom cell
+	 *
+	 * @param {robot} robotToMove Robot to move
+	 * @returns {boolean} true if the robot has been moved, false if the action is impossible
+	 */
 	$scope.moveRobotDown = function(robotToMove) {
 		var currentCell = $scope.map[robotToMove.line][robotToMove.column];
 		if(robotToMove.line < $scope.map.length && currentCell.b != 1) {
@@ -207,6 +272,17 @@ loggedApp.controller("mapController", ["$scope", "$http", "gameInfo", 'HOST_URL'
 		return false;
 	};
 	
+	/**
+	 * @ngdoc function
+	 * @name loggedApp.controller:mapController#moveRobotLeft
+	 * @methodOf loggedApp.controller:mapController
+	 *
+	 * @description
+	 * Move the robot to the left cell
+	 *
+	 * @param {robot} robotToMove Robot to move
+	 * @returns {boolean} true if the robot has been moved, false if the action is impossible
+	 */
 	$scope.moveRobotLeft = function(robotToMove) {
 		var currentCell = $scope.map[robotToMove.line][robotToMove.column];
 		if(robotToMove.column > 0 && currentCell.g != 1) {
@@ -221,6 +297,17 @@ loggedApp.controller("mapController", ["$scope", "$http", "gameInfo", 'HOST_URL'
 		return false;
 	};
 	
+	/**
+	 * @ngdoc function
+	 * @name loggedApp.controller:mapController#moveRobotRight
+	 * @methodOf loggedApp.controller:mapController
+	 *
+	 * @description
+	 * Move the robot to the right cell
+	 *
+	 * @param {robot} robotToMove Robot to move
+	 * @returns {boolean} true if the robot has been moved, false if the action is impossible
+	 */
 	$scope.moveRobotRight = function(robotToMove) {
 		var currentCell = $scope.map[robotToMove.line][robotToMove.column];
 		if(robotToMove.column < $scope.map[0].length && currentCell.d != 1) {
@@ -235,10 +322,31 @@ loggedApp.controller("mapController", ["$scope", "$http", "gameInfo", 'HOST_URL'
 		return false;
 	};
 	
+	/**
+	 * @ngdoc function
+	 * @name loggedApp.controller:mapController#isOnTarget
+	 * @methodOf loggedApp.controller:mapController
+	 *
+	 * @description
+	 * If the right robot is on the target.
+	 *
+	 * @param {robot} robot Robot to check
+	 * @returns {boolean} true if the robot is on the target, false otherwise
+	 */
 	function isOnTarget(robot) {
 		return $scope.map[robot.line][robot.column].target == robot.color;
 	}
 	
+	/**
+	 * @ngdoc function
+	 * @name loggedApp.controller:mainController#keyPress
+	 * @methodOf loggedApp.controller:mainController
+	 *
+	 * @description
+	 * Called when a key is pressed. Handle keys actions on the game.
+	 *
+	 * @param {event} event key event
+	 */
 	$scope.$parent.keyPress = function(event) {
 		switch(event.which) {
 			case 40: //DOWN
@@ -271,14 +379,26 @@ loggedApp.controller("mapController", ["$scope", "$http", "gameInfo", 'HOST_URL'
 		}
 	};
 	
+	/**
+	 * @ngdoc function
+	 * @name loggedApp.controller:mapController#move
+	 * @methodOf loggedApp.controller:mapController
+	 *
+	 * @description
+	 * Move a robot until it hits something. At the end of the move, checks if the proposition is valid, if
+	 * so, send the proposition to the server and display the result.
+	 *
+	 * @param {function} moveRobot Function to execute to move the robot
+	 * @param {robot} robotToMove Robot to move
+	 */
 	$scope.move = function(moveRobot, robotToMove) {
-		if(robotToMove) {
-			if(moveRobot(robotToMove)) {
+		if(robotToMove) { //If there is a robot to move
+			if(moveRobot(robotToMove)) { //Continues to move while it's possible
 				$scope.move(moveRobot, robotToMove);
 			}
-			else {
+			else { //If the robot can't move, the movement is done, we check if the proposition is valid.
 				propositionService.doAction("move", null, robotToMove.line, robotToMove.column);
-				if(isOnTarget(robotToMove)) {
+				if(isOnTarget(robotToMove)) { //If the proposition is valid => send the proposition => display the result
 					var req = propositionService.sendProposition();
 					req.success(function(result) {
 							switch(result.state) {
