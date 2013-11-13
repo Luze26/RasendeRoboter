@@ -2,11 +2,14 @@
 <html lang="fr">
 	<head>
 		<title>Rasende Roboter</title>
+		<script src="http://codeorigin.jquery.com/jquery-2.0.3.min.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.min.js"></script>
 		<script src="/socket.io/socket.io.js"></script>
 		<script src="js/logged.js"></script>
+		
+		<link rel="stylesheet" type="text/css" href="css/main.css">
 	</head>
-	<body ng-app="loggedApp" ng-controller="mainController">
+	<body ng-app="loggedApp" ng-controller="mainController" ng-init="idGame = __IDGAME__">
 		<header>
 			<h1>Partie __IDGAME__ __STATE__</h1>
 			<p>Vous êtes connecté en tant que __LOGIN__</p>
@@ -19,8 +22,14 @@
 					<li ng-repeat="p in participants">{{p}}</li>
 				</ul>
 			</nav>
-			<section id="partie" ng-controller="mapController">
-				{{test}}
+			<section ng-controller="mapController">
+				<table>
+					<tr ng-repeat="row in map">
+						<td ng-repeat="cell in row" class="cell"
+							ng-class="{'cell-border-left': cell.g == 1, 'cell-border-right': cell.d == 1, 'cell-border-top': cell.h == 1, 'cell-border-bottom': cell.b == 1}">
+						</td>
+					</tr>
+				</table>
 			</section>
 		</section>
 		<footer>

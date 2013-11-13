@@ -24,6 +24,16 @@ loggedApp.factory('socket', function ($rootScope) {
   };
 });
 
+loggedApp.constant('HOST_URL', 'http://localhost:8090');
+
+loggedApp.factory('gameInfo', function () {
+  var infos = {};
+  
+  infos.idGame = angular.element('#idGame').val();
+
+  return infos;
+});
+
 loggedApp.controller("mainController", ["$scope", "socket", function($scope, socket) {
 	socket.on('FinalCountDown'	, function(data) {
 		 var ms   = data.FinalCountDown;
@@ -48,5 +58,8 @@ loggedApp.controller("participantsController", ["$scope", "socket", function($sc
 	});
 }]);
 
-loggedApp.controller("mapController", ["$scope", function($scope) {
+loggedApp.controller("mapController", ["$scope", "$http", "gameInfo", 'HOST_URL', function($scope, $http, gameInfo, HOST_URL) {
+	$http.get(HOST_URL + "/" + gameInfo.idGame).success(function(data) {
+			$scope.map = data.board;
+		});
 }]);
