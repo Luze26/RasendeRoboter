@@ -60,6 +60,17 @@ loggedApp.controller("participantsController", ["$scope", "socket", function($sc
 
 loggedApp.controller("mapController", ["$scope", "$http", "gameInfo", 'HOST_URL', function($scope, $http, gameInfo, HOST_URL) {
 	$http.get(HOST_URL + "/" + gameInfo.idGame).success(function(data) {
+	
+			//Init map
 			$scope.map = data.board;
+			
+			//Init robots
+			var robots = data.robots;
+			var nbRobots = robots.length;
+			for(var i = 0; i < nbRobots; i++) {
+				var robot = robots[i];
+				$scope.map[robot.line][robot.column].robot = robot;
+			}
+			$scope.robots = robots;
 		});
 }]);
