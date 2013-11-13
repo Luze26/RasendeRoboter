@@ -1,5 +1,7 @@
 var loggedApp = angular.module("loggedApp", []);
 
+loggedApp.constant('HOST_URL', 'http://localhost:8090');
+
 loggedApp.factory('socket', function ($rootScope) {
   var socket = io.connect();
   return {
@@ -24,11 +26,44 @@ loggedApp.factory('socket', function ($rootScope) {
   };
 });
 
-loggedApp.constant('HOST_URL', 'http://localhost:8090');
+loggedApp.factory('propositionService', function($http, gameInfo) {
+	var service = {};
+	
+	service.proposition = [];
+	
+	service.sendProposition = function() {
+		var data = 'login=' + gameInfo.login + '&idGame=' + gameInfo.idGame + '&proposition=' + JSON.stringify(service.proposition);
+		
+		return $http({
+			url: 'http://localhost:8090/proposition',
+			method: 'POST',
+			data: encodeURI(data),
+			headers: {
+				"Content-Type": "application/x-www-form-urlencoded"
+			}
+
+		});
+	}
+	
+	service.doAction = function(cmd, color, line, column) {
+		var action = {"command": cmd};
+		if(cmd == "select") {
+			action.robot = color;
+		}
+		else {
+			action.line = line;
+			action.column = column;
+		}
+		service.proposition.push(action);
+	}
+	
+	return service;
+});
 
 loggedApp.factory('gameInfo', function () {
   var infos = {};
   
+  infos.login = angular.element('#login').val();
   infos.idGame = angular.element('#idGame').val();
 
   return infos;
@@ -49,6 +84,7 @@ loggedApp.controller("mainController", ["$scope", "socket", function($scope, soc
 	socket.emit ('identification', 	{ login	: document.getElementById('login').value
 									, idGame: document.getElementById('idGame').value}
 				);
+	
 }]);
 
 loggedApp.controller("participantsController", ["$scope", "socket", function($scope, socket) {
@@ -58,9 +94,9 @@ loggedApp.controller("participantsController", ["$scope", "socket", function($sc
 	});
 }]);
 
-loggedApp.controller("mapController", ["$scope", "$http", "gameInfo", 'HOST_URL', function($scope, $http, gameInfo, HOST_URL) {
+loggedApp.controller("mapController", ["$scope", "$http", "gameInfo", 'HOST_URL', 'propositionService', function($scope, $http, gameInfo, HOST_URL, propositionService) {
+
 	$http.get(HOST_URL + "/" + gameInfo.idGame).success(function(data) {
-	
 			//Init map
 			$scope.map = data.board;
 			
@@ -72,32 +108,20 @@ loggedApp.controller("mapController", ["$scope", "$http", "gameInfo", 'HOST_URL'
 				$scope.map[robot.line][robot.column].robot = robot;
 			}
 			$scope.robots = robots;
-		});
-		
-	$scope.selectRobot = function(robot) {
-		if($scope.selectedRobot) {
-			$scope.selectedRobot.selected = false;
-		}
-		$scope.selectedRobot = robot;
-		robot.selected = true;
-	};
-	
-	
-	
-	$scope.moveDown = function() {
-		if($scope.selectedRobot) {
-			var robotToMove = $scope.selectedRobot;
-			var currentCell = $scope.map[robotToMove.line][robotToMove.column];
 			
-			if(robotToMove.line < $scope.map.length && currentCell.b != 1) {
-				var nextCell = $scope.map[robotToMove.line+1][robotToMove.column];
-				if(nextCell.robot == null && nextCell.h != 1) {
-					currentCell.robot = null;
-					robotToMove.line++;
-					nextCell.robot = robotToMove;
-					$scope.moveDown();
-				}
+			//Init target
+			var target = data.target;
+			$scope.map[target.l][target.c].target = target.t;
+		});
+	
+	$scope.selectRobot = function(robot) {
+		if($scope.selectedRobot != robot) {
+			propositionService.doAction("select", robot.color);
+			if($scope.selectedRobot) {
+				$scope.selectedRobot.selected = false;
 			}
+			$scope.selectedRobot = robot;
+			robot.selected = true;
 		}
 	};
 	
@@ -157,10 +181,65 @@ loggedApp.controller("mapController", ["$scope", "$http", "gameInfo", 'HOST_URL'
 		return false;
 	};
 	
+	function isOnTarget(robot) {
+		return $scope.map[robot.line][robot.column].target == robot.color;
+	}
+	
+	$scope.$parent.keyPress = function(event) {
+		switch(event.which) {
+			case 40: //DOWN
+				$scope.move($scope.moveRobotDown, $scope.selectedRobot);
+				break;
+			case 38: //UP
+				$scope.move($scope.moveRobotUp, $scope.selectedRobot);
+				break;
+			case 37: //LEFT
+				$scope.move($scope.moveRobotLeft, $scope.selectedRobot);
+				break;
+			case 39: //RIGHT
+				$scope.move($scope.moveRobotRight, $scope.selectedRobot);
+				break;
+			case 32: //SPACEBAR, SWITCH ROBOT
+				var robotToSelect;
+				if(!$scope.selectedRobot) {
+					robotToSelect = $scope.robots[0];
+				}
+				else {
+					var index = $scope.robots.indexOf($scope.selectedRobot);
+					index++;
+					if(index >= $scope.robots.length) {
+						index = 0;
+					}
+					robotToSelect = $scope.robots[index];
+				}
+				$scope.selectRobot(robotToSelect);
+				break;
+		}
+	};
+	
 	$scope.move = function(moveRobot, robotToMove) {
 		if(robotToMove) {
 			if(moveRobot(robotToMove)) {
 				$scope.move(moveRobot, robotToMove);
+			}
+			else {
+				propositionService.doAction("move", null, robotToMove.line, robotToMove.column);
+				if(isOnTarget(robotToMove)) {
+					var req = propositionService.sendProposition();
+					req.success(function(result) {
+							switch(result.state) {
+								case "SUCCESS":
+									$scope.victory = true;
+									break;
+								case "TOO_LATE":
+									//TODO
+								default:
+									//TODO
+							}
+						}).error(function() {
+							//TODO connection error
+						});
+				}
 			}
 		}
 	};

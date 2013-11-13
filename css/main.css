@@ -1,7 +1,11 @@
+table {
+	border-spacing: 0px;
+}
+
 .cell {
 	height: 20px;
 	width: 20px;
-	border: solid 2px #ccc;
+	border: solid 1px #ccc;
 }
 
 .cell-border-left {
@@ -18,6 +22,22 @@
 
 .cell-border-bottom {
 	border-bottom: solid 2px #000;
+}
+
+.target-blue {
+	background-color: #3498db;
+}
+
+.target-red {
+	background-color: #e74c3c;
+}
+
+.target-yellow {
+	background-color: #f1c40f;
+}
+
+.target-green {
+	background-color: #2ecc71;
 }
 
 .robot {
