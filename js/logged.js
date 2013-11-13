@@ -88,6 +88,18 @@ loggedApp.factory('propositionService', function($http, gameInfo) {
 
 	/**
 	 * @ngdoc function
+	 * @name loggedApp.service:propositionService#reset
+	 * @methodOf loggedApp.service:propositionService
+	 *
+	 * @description
+	 * Reset the proposition.
+	 */
+	service.reset = function() {
+		service.proposition = [];
+	}
+	
+	/**
+	 * @ngdoc function
 	 * @name loggedApp.service:propositionService#doAction
 	 * @methodOf loggedApp.service:propositionService
 	 *
@@ -181,24 +193,46 @@ loggedApp.controller("participantsController", ["$scope", "socket", function($sc
  */
 loggedApp.controller("mapController", ["$scope", "$http", "gameInfo", 'HOST_URL', 'propositionService', function($scope, $http, gameInfo, HOST_URL, propositionService) {
 
+	var originalGame;
+	
 	//Init everything
 	$http.get(HOST_URL + "/" + gameInfo.idGame).success(function(data) {
 			//Init map
-			$scope.map = data.board;
-			
-			//Init robots
-			var robots = data.robots;
-			$scope.nbRobots = robots.length;
-			for(var i = 0; i < $scope.nbRobots; i++) {
-				var robot = robots[i];
-				$scope.map[robot.line][robot.column].robot = robot;
-			}
-			$scope.robots = robots;
-			
-			//Init target
-			var target = data.target;
-			$scope.map[target.l][target.c].target = target.t;
+			originalGame = data;
+			$scope.init();
 		});
+	
+	/**
+	 * @ngdoc function
+	 * @name loggedApp.controller:mapController#init
+	 * @methodOf loggedApp.controller:mapController
+	 *
+	 * @description
+	 * Init everything, also usedc to reset.
+	 */
+	$scope.init = function() {
+		$scope.selectedRobot = null;
+		
+		var copyOriginalGame = JSON.parse(JSON.stringify(originalGame));
+		$scope.map = copyOriginalGame.board;
+		
+		//Init robots
+		var robots = copyOriginalGame.robots;
+		$scope.nbRobots = robots.length;
+		for(var i = 0; i < $scope.nbRobots; i++) {
+			var robot = robots[i];
+			$scope.map[robot.line][robot.column].robot = robot;
+		}
+		$scope.robots = robots;
+		
+		//Init target
+		var target = copyOriginalGame.target;
+		$scope.map[target.l][target.c].target = target.t;
+		
+		propositionService.reset();
+		
+		$scope.victory = false;
+	};
 	
 	/**
 	 * @ngdoc function
@@ -206,13 +240,12 @@ loggedApp.controller("mapController", ["$scope", "$http", "gameInfo", 'HOST_URL'
 	 * @methodOf loggedApp.controller:mapController
 	 *
 	 * @description
-	 * Unselect the current selected robot and select the given one.
+	 * Unselect the current selected robot and select the given one. The selection is recorded in the proposition only after the first move of the robot.
 	 *
 	 * @param {Robot} robot Robot to be selected
 	 */
 	$scope.selectRobot = function(robot) {
 		if($scope.selectedRobot != robot) {
-			propositionService.doAction("select", robot.color);
 			if($scope.selectedRobot) {
 				$scope.selectedRobot.selected = false;
 			}
@@ -350,16 +383,16 @@ loggedApp.controller("mapController", ["$scope", "$http", "gameInfo", 'HOST_URL'
 	$scope.$parent.keyPress = function(event) {
 		switch(event.which) {
 			case 40: //DOWN
-				$scope.move($scope.moveRobotDown, $scope.selectedRobot);
+				$scope.move($scope.moveRobotDown, $scope.selectedRobot, true);
 				break;
 			case 38: //UP
-				$scope.move($scope.moveRobotUp, $scope.selectedRobot);
+				$scope.move($scope.moveRobotUp, $scope.selectedRobot, true);
 				break;
 			case 37: //LEFT
-				$scope.move($scope.moveRobotLeft, $scope.selectedRobot);
+				$scope.move($scope.moveRobotLeft, $scope.selectedRobot, true);
 				break;
 			case 39: //RIGHT
-				$scope.move($scope.moveRobotRight, $scope.selectedRobot);
+				$scope.move($scope.moveRobotRight, $scope.selectedRobot, true);
 				break;
 			case 32: //SPACEBAR, SWITCH ROBOT
 				var robotToSelect;
@@ -390,13 +423,18 @@ loggedApp.controller("mapController", ["$scope", "$http", "gameInfo", 'HOST_URL'
 	 *
 	 * @param {function} moveRobot Function to execute to move the robot
 	 * @param {robot} robotToMove Robot to move
+	 * @param {boolean} If it's the first call
 	 */
-	$scope.move = function(moveRobot, robotToMove) {
+	$scope.move = function(moveRobot, robotToMove, firstCall) {
 		if(robotToMove) { //If there is a robot to move
 			if(moveRobot(robotToMove)) { //Continues to move while it's possible
+				if(!robotToMove.moved) { //If it's the first move of the robot, we memorized that, and record the selection
+					robotToMove.moved = true;
+					propositionService.doAction("select", robotToMove.color);
+				}
 				$scope.move(moveRobot, robotToMove);
 			}
-			else { //If the robot can't move, the movement is done, we check if the proposition is valid.
+			else if(!firstCall) { //If the robot can't move anymore, the movement is done except if it's the first call, we check if the proposition is valid.
 				propositionService.doAction("move", null, robotToMove.line, robotToMove.column);
 				if(isOnTarget(robotToMove)) { //If the proposition is valid => send the proposition => display the result
 					var req = propositionService.sendProposition();

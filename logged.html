@@ -35,10 +35,11 @@
 						</td>
 					</tr>
 				</table>
-				<div ng-click="move(moveRobotUp, selectedRobot)">Up</div>
-				<div ng-click="move(moveRobotDown, selectedRobot)">Down</div>
-				<div ng-click="move(moveRobotRight, selectedRobot)">Right</div>
-				<div ng-click="move(moveRobotLeft, selectedRobot)">Left</div>
+				<div ng-click="move(moveRobotUp, selectedRobot, true)">Up</div>
+				<div ng-click="move(moveRobotDown, selectedRobot, true)">Down</div>
+				<div ng-click="move(moveRobotRight, selectedRobot, true)">Right</div>
+				<div ng-click="move(moveRobotLeft, selectedRobot, true)">Left</div>
+				<div ng-click="init()">reset</div>
 			</section>
 		</section>
 		<footer>
