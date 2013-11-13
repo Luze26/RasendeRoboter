@@ -66,11 +66,102 @@ loggedApp.controller("mapController", ["$scope", "$http", "gameInfo", 'HOST_URL'
 			
 			//Init robots
 			var robots = data.robots;
-			var nbRobots = robots.length;
-			for(var i = 0; i < nbRobots; i++) {
+			$scope.nbRobots = robots.length;
+			for(var i = 0; i < $scope.nbRobots; i++) {
 				var robot = robots[i];
 				$scope.map[robot.line][robot.column].robot = robot;
 			}
 			$scope.robots = robots;
 		});
+		
+	$scope.selectRobot = function(robot) {
+		if($scope.selectedRobot) {
+			$scope.selectedRobot.selected = false;
+		}
+		$scope.selectedRobot = robot;
+		robot.selected = true;
+	};
+	
+	
+	
+	$scope.moveDown = function() {
+		if($scope.selectedRobot) {
+			var robotToMove = $scope.selectedRobot;
+			var currentCell = $scope.map[robotToMove.line][robotToMove.column];
+			
+			if(robotToMove.line < $scope.map.length && currentCell.b != 1) {
+				var nextCell = $scope.map[robotToMove.line+1][robotToMove.column];
+				if(nextCell.robot == null && nextCell.h != 1) {
+					currentCell.robot = null;
+					robotToMove.line++;
+					nextCell.robot = robotToMove;
+					$scope.moveDown();
+				}
+			}
+		}
+	};
+	
+	$scope.moveRobotUp = function(robotToMove) {
+		var currentCell = $scope.map[robotToMove.line][robotToMove.column];
+		if(robotToMove.line > 0 && currentCell.h != 1) {
+			var nextCell = $scope.map[robotToMove.line-1][robotToMove.column];
+			if(nextCell.robot == null && nextCell.b != 1) {
+				currentCell.robot = null;
+				robotToMove.line--;
+				nextCell.robot = robotToMove;
+				return true;
+			}
+		}
+		return false;
+	};
+	
+	$scope.moveRobotDown = function(robotToMove) {
+		var currentCell = $scope.map[robotToMove.line][robotToMove.column];
+		if(robotToMove.line < $scope.map.length && currentCell.b != 1) {
+			var nextCell = $scope.map[robotToMove.line+1][robotToMove.column];
+			if(nextCell.robot == null && nextCell.h != 1) {
+				currentCell.robot = null;
+				robotToMove.line++;
+				nextCell.robot = robotToMove;
+				return true;
+			}
+		}
+		return false;
+	};
+	
+	$scope.moveRobotLeft = function(robotToMove) {
+		var currentCell = $scope.map[robotToMove.line][robotToMove.column];
+		if(robotToMove.column > 0 && currentCell.g != 1) {
+			var nextCell = $scope.map[robotToMove.line][robotToMove.column-1];
+			if(nextCell.robot == null && nextCell.d != 1) {
+				currentCell.robot = null;
+				robotToMove.column--;
+				nextCell.robot = robotToMove;
+				return true;
+			}
+		}
+		return false;
+	};
+	
+	$scope.moveRobotRight = function(robotToMove) {
+		var currentCell = $scope.map[robotToMove.line][robotToMove.column];
+		if(robotToMove.column < $scope.map[0].length && currentCell.d != 1) {
+			var nextCell = $scope.map[robotToMove.line][robotToMove.column+1];
+			if(nextCell.robot == null && nextCell.g != 1) {
+				currentCell.robot = null;
+				robotToMove.column++;
+				nextCell.robot = robotToMove;
+				return true;
+			}
+		}
+		return false;
+	};
+	
+	$scope.move = function(moveRobot, robotToMove) {
+		if(robotToMove) {
+			if(moveRobot(robotToMove)) {
+				$scope.move(moveRobot, robotToMove);
+			}
+		}
+	};
 }]);

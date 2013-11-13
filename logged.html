@@ -27,12 +27,16 @@
 					<tr ng-repeat="row in map">
 						<td ng-repeat="cell in row" class="cell"
 							ng-class="{'cell-border-left': cell.g == 1, 'cell-border-right': cell.d == 1, 'cell-border-top': cell.h == 1, 'cell-border-bottom': cell.b == 1}">
-							<div class="robot" ng-show="cell.robot" 
+							<div class="robot" ng-show="cell.robot" ng-click="selectRobot(cell.robot)"
 								ng-class="{'robot-blue': cell.robot.color == 'blue', 'robot-red': cell.robot.color == 'red', 'robot-yellow': cell.robot.color == 'yellow',
-									'robot-green': cell.robot.color == 'green'}"></div>
+									'robot-green': cell.robot.color == 'green', 'robot-selected': cell.robot.selected}"></div>
 						</td>
 					</tr>
 				</table>
+				<div ng-click="move(moveRobotUp, selectedRobot)">Up</div>
+				<div ng-click="move(moveRobotDown, selectedRobot)">Down</div>
+				<div ng-click="move(moveRobotRight, selectedRobot)">Right</div>
+				<div ng-click="move(moveRobotLeft, selectedRobot)">Left</div>
 			</section>
 		</section>
 		<footer>
