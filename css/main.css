@@ -1,0 +1,48 @@
+.cell {
+	height: 20px;
+	width: 20px;
+	border: solid 2px #ccc;
+}
+
+.cell-border-left {
+	border-left: solid 2px #000;
+}
+
+.cell-border-right {
+	border-right: solid 2px #000;
+}
+
+.cell-border-top {
+	border-top: solid 2px #000;
+}
+
+.cell-border-bottom {
+	border-bottom: solid 2px #000;
+}
+
+.robot {
+	height: 15px;
+	width: 15px;
+	margin: auto;
+	border-radius: 50%;
+}
+
+.robot-selected {
+	box-shadow: 1px 2px 3px #888888;
+}
+
+.robot-blue {
+	background-color: #3498db;
+}
+
+.robot-red {
+	background-color: #e74c3c;
+}
+
+.robot-yellow {
+	background-color: #f1c40f;
+}
+
+.robot-green {
+	background-color: #2ecc71;
+}
