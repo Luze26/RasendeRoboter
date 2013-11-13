@@ -1,14 +1,12 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr">
+<!DOCTYPE HTML>
+<html lang="fr">
 	<head>
 		<title>Rasende Roboter</title>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.min.js"></script>
 		<script src="/socket.io/socket.io.js"></script>
 		<script src="js/logged.js"></script>
 	</head>
-	<body onload="init()">
+	<body ng-app="loggedApp" ng-controller="mainController">
 		<header>
 			<h1>Partie __IDGAME__ __STATE__</h1>
 			<p>Vous êtes connecté en tant que __LOGIN__</p>
@@ -17,14 +15,16 @@
 		</header>
 		<section>
 			<nav>
-				<ul id="lesParticipants" />
+				<ul ng-controller="participantsController">
+					<li ng-repeat="p in participants">{{p}}</li>
+				</ul>
 			</nav>
-			<section id="partie">
-				
+			<section id="partie" ng-controller="mapController">
+				{{test}}
 			</section>
 		</section>
 		<footer>
-			Mini-projet IHM de L3 MIAGE...
+			Mini-projet IHM de M2PGI...
 		</footer>
 	</body>
 </html>

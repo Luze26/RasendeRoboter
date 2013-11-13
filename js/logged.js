@@ -1,28 +1,30 @@
-var XHR = function(method, ad, params) {
-	var xhr = new XMLHttpRequest();
-	xhr.onload = params.onload || null;
-	xhr.open(method, ad);
-	if(method == 'POST') {xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');}
-	var variables   = params.variables || null
-	  , str			= '';
-	for(var i in variables) {
-		 str += i + '=' + encodeURIComponent( variables[i] ) + '&';
-		}
-	xhr.send( str );
-}
+var loggedApp = angular.module("loggedApp", []);
 
-function init() {
-	// Connect to the SocketIO server to retrieve ongoing games.
-	socket = io.connect();
-	socket.on('participants', function(data) {
-		 var ul = document.getElementById('lesParticipants');
-		 ul.innerHTML='';
-		 for(p in data.participants) {
-			 var li = document.createElement('li'); 
-			 ul.appendChild( li );
-			 li.appendChild( document.createTextNode( data.participants[p] ) );
-			}
-		});
+loggedApp.factory('socket', function ($rootScope) {
+  var socket = io.connect();
+  return {
+    on: function (eventName, callback) {
+      socket.on(eventName, function () {  
+        var args = arguments;
+        $rootScope.$apply(function () {
+          callback.apply(socket, args);
+        });
+      });
+    },
+    emit: function (eventName, data, callback) {
+      socket.emit(eventName, data, function () {
+        var args = arguments;
+        $rootScope.$apply(function () {
+          if (callback) {
+            callback.apply(socket, args);
+          }
+        });
+      })
+    }
+  };
+});
+
+loggedApp.controller("mainController", ["$scope", "socket", function($scope, socket) {
 	socket.on('FinalCountDown'	, function(data) {
 		 var ms   = data.FinalCountDown;
 		 console.log("FinalCountDown : " + ms);
@@ -37,5 +39,14 @@ function init() {
 	socket.emit ('identification', 	{ login	: document.getElementById('login').value
 									, idGame: document.getElementById('idGame').value}
 				);
-}
+}]);
 
+loggedApp.controller("participantsController", ["$scope", "socket", function($scope, socket) {
+	$scope.participants = [];
+	socket.on('participants', function(data) {
+		$scope.participants = data.participants;
+	});
+}]);
+
+loggedApp.controller("mapController", ["$scope", function($scope) {
+}]);

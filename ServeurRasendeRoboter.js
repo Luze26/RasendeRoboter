@@ -305,11 +305,11 @@ var RRServer = {
 		 this.app	= this.express().use(this.express.static(__dirname))
 									.use(this.express.bodyParser())
 									.get('/', function(req, res) {
-										RRServer.fs.readFile(__dirname + '/login.xhtml',
+										RRServer.fs.readFile(__dirname + '/login.html',
 												  function (err, data) {
 													if (err) {res.writeHead(500);
-															  return res.end('Error loading login.xhtml'); }
-													res.writeHead(200, {'Content-Type': 'application/xhtml+xml; charset=utf-8'});
+															  return res.end('Error loading login.html'); }
+													res.writeHead(200, {'Content-Type': 'text/html; charset=utf-8'});
 													res.end(data);
 												  });
 										})
@@ -333,11 +333,11 @@ var RRServer = {
 																break;
 															}
 														 }
-										RRServer.fs.readFile(__dirname + '/logged.xhtml',
+										RRServer.fs.readFile(__dirname + '/logged.html',
 											function (err, data) {
 												if (err) {res.writeHead(500);
-														  return res.end('Error loading logged.xhtml');}
-												res.writeHead(200, {'Content-Type': 'application/xhtml+xml; charset=utf-8'});
+														  return res.end('Error loading logged.html');}
+												res.writeHead(200, {'Content-Type': 'text/html; charset=utf-8'});
 												var title = req.body.idGame
 												  , state = '';
 												if(RRServer.games.list[req.body.idGame].Terminated) {state += ' est terminée';}
