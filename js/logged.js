@@ -1,7 +1,28 @@
+/**
+ * @ngdoc overview
+ * @name loggedApp
+ *
+ * @description
+ * Used on the page reach when login in.
+ */
 var loggedApp = angular.module("loggedApp", []);
 
+/**
+ * @ngdoc object
+ * @name loggedApp.constant:HOST_URL
+ *
+ * @description
+ * Server's url
+ */
 loggedApp.constant('HOST_URL', 'http://localhost:8090');
 
+/**
+ * @ngdoc service
+ * @name loggedApp.service:socket
+ *
+ * @description
+ * socket.io service. Open a socket shared between controllers.
+ */
 loggedApp.factory('socket', function ($rootScope) {
   var socket = io.connect();
   return {
@@ -26,11 +47,31 @@ loggedApp.factory('socket', function ($rootScope) {
   };
 });
 
+/**
+ * @ngdoc service
+ * @name loggedApp.service:propositionService
+ *
+ * @description
+ * Proposition service. Used to register actions constituting the proposition, and send the proposition.
+ */
 loggedApp.factory('propositionService', function($http, gameInfo) {
 	var service = {};
 	
+	/**
+	 * Array of actions, formatted according what except the server
+	 */
 	service.proposition = [];
 	
+	/**
+	 * @ngdoc function
+	 * @name loggedApp.service:propositionService#sendProposition
+	 * @methodOf loggedApp.service:propositionService
+	 *
+	 * @description
+	 * Send the proposition to the server.
+	 *
+	 * @returns {promise} promise for the request used to send the proposition
+	 */
 	service.sendProposition = function() {
 		var data = 'login=' + gameInfo.login + '&idGame=' + gameInfo.idGame + '&proposition=' + JSON.stringify(service.proposition);
 		
@@ -44,7 +85,20 @@ loggedApp.factory('propositionService', function($http, gameInfo) {
 
 		});
 	}
-	
+
+	/**
+	 * @ngdoc function
+	 * @name loggedApp.service:propositionService#doAction
+	 * @methodOf loggedApp.service:propositionService
+	 *
+	 * @description
+	 * Record the last action (add it to the proposition).
+	 *
+	 * @param {string} cmd The command of the action ("select" | "move")
+	 * @param {string} color Robot's color (used only if the command is "select", must be null otherwise)
+	 * @param {int} line The destination line (must be set only if the command is move)
+	 * @param {int} column The destination column (must be set only if the command is move)
+	 */	
 	service.doAction = function(cmd, color, line, column) {
 		var action = {"command": cmd};
 		if(cmd == "select") {
