@@ -3,31 +3,31 @@ RasendeRoboter
 
 Rasende roboter game. Built with node and angular.
 
-#Rules
+##Rules
 
 [wikipedia](http://en.wikipedia.org/wiki/Ricochet_Robot)
 
-#Getting started
+##Getting started
 
-##Dependencies
+###Dependencies
 * install [node](http://nodejs.org)
 * Then install dependencies with: `npm install`
 
-## Run
+###Run
 
 Run `node ServeurRasendeRoboter.js` and open http://localhost:8090 in your browser.
 
-#Documentation
+##Documentation
 
-##Dependencies
+###Dependencies
 * `node` and `npm install` already done
 * install [grunt-cli](https://github.com/gruntjs/grunt-cli) `npm install -g grunt-cli`
 
-## Build and run
+###Build and run
 
 Run `grunt` and open http://localhost:8000/docs in your browser.
 
-#Resources
+##Resources
 
 Useful resources for development
 * [AngularJS API](http://docs.angularjs.org/api/)
@@ -35,7 +35,7 @@ Useful resources for development
 * [ngDoc wiki](https://github.com/angular/angular.js/wiki/Writing-AngularJS-Documentation)
 * [npm's package.json doc](https://npmjs.org/doc/json.html)
 
-#Contributors
+##Contributors
 
 * [Alex-dit-Sean](https://github.com/Alex-dit-Sean)
 * [CocoRid](https://github.com/CocoRid)
