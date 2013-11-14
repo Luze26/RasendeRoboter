@@ -2,6 +2,10 @@ RasendeRoboter
 ==============
 
 Rasende roboter game. Built with node and angular.
+Visible at: [http://coolrobots.herokuapp.com](http://coolrobots.herokuapp.com)
+
+Continuously deployed with [Codeship](http://www.codeship.io):
+![Codeship](https://www.codeship.io/projects/ac1b4880-2f49-0131-b419-22135f4e7ccd/status)
 
 ##Rules
 
