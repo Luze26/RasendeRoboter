@@ -3,6 +3,8 @@ RasendeRoboter
 
 Rasende roboter game. Built with node and angular.
 
+![Codeship](https://www.codeship.io/projects/ac1b4880-2f49-0131-b419-22135f4e7ccd/status)
+
 ##Rules
 
 [wikipedia](http://en.wikipedia.org/wiki/Ricochet_Robot)
