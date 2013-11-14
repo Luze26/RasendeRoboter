@@ -14,7 +14,7 @@ var loggedApp = angular.module("loggedApp", []);
  * @description
  * Server's url
  */
-loggedApp.constant('HOST_URL', 'http://localhost:8090');
+loggedApp.constant('HOST_URL', window.location.origin);
 
 /**
  * @ngdoc service
@@ -54,7 +54,7 @@ loggedApp.factory('socket', function ($rootScope) {
  * @description
  * Proposition service. Used to register actions constituting the proposition, and send the proposition.
  */
-loggedApp.factory('propositionService', function($http, gameInfo) {
+loggedApp.factory('propositionService', function($http, gameInfo, HOST_URL) {
 	var service = {};
 	
 	/**
@@ -76,7 +76,7 @@ loggedApp.factory('propositionService', function($http, gameInfo) {
 		var data = 'login=' + gameInfo.login + '&idGame=' + gameInfo.idGame + '&proposition=' + JSON.stringify(service.proposition);
 		
 		return $http({
-			url: 'http://localhost:8090/proposition',
+			url: HOST_URL + '/proposition',
 			method: 'POST',
 			data: encodeURI(data),
 			headers: {
