@@ -197,6 +197,7 @@ loggedApp.controller("mapController", ["$scope", "$http", "gameInfo", 'HOST_URL'
 	
 	//Init everything
 	$http.get(HOST_URL + "/" + gameInfo.idGame).success(function(data) {
+	console.log(data);
 			//Init map
 			originalGame = data;
 			$scope.init();
