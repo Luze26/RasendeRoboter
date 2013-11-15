@@ -7,43 +7,68 @@
 		<script src="/socket.io/socket.io.js"></script>
 		<script src="js/logged.js"></script>
 		
+		<link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" media="all" />
+		<link rel="stylesheet" href="css/sticky-footer.css" type="text/css" media="all" />
 		<link rel="stylesheet" type="text/css" href="css/main.css">
 	</head>
 	<body ng-app="loggedApp" ng-controller="mainController" ng-init="idGame = __IDGAME__" ng-keydown="keyPress($event)">
-		<header>
-			<h1>Partie __IDGAME__ __STATE__</h1>
-			<p>Vous êtes connecté en tant que __LOGIN__</p>
+		<div class="container">
+			<div class="navbar navbar-default">
+			  <div class="container">
+				<div class="navbar-header">
+				  <h1 class="navbar-brand">Rasende Roboter <small>Le jeu de robots en ligne</small></h1>
+				</div>
+			  </div>
+			</div>
 			<input id="login" type="hidden" value="__LOGIN__"/>
 			<input id="idGame" type="hidden" value="__IDGAME__"/>
-		</header>
-		<section>
-			<nav>
-				<ul ng-controller="participantsController">
-					<li ng-repeat="p in participants">{{p}}</li>
-				</ul>
-			</nav>
-			<section ng-controller="mapController">
-				<div ng-show="victory">Victory</div>
-				<table>
-					<tr ng-repeat="row in map">
-						<td ng-repeat="cell in row" class="cell"
-							ng-class="{'cell-border-left': cell.g == 1, 'cell-border-right': cell.d == 1, 'cell-border-top': cell.h == 1, 'cell-border-bottom': cell.b == 1,
-							'target-red': cell.target == 'red', 'target-blue': cell.target == 'blue', 'target-yellow': cell.target == 'yellow', 'target-green': cell.target == 'green'}">
-							<div class="robot" ng-show="cell.robot" ng-click="selectRobot(cell.robot)"
-								ng-class="{'robot-blue': cell.robot.color == 'blue', 'robot-red': cell.robot.color == 'red', 'robot-yellow': cell.robot.color == 'yellow',
-									'robot-green': cell.robot.color == 'green', 'robot-selected': cell.robot.selected}"></div>
-						</td>
-					</tr>
-				</table>
-				<div ng-click="move(moveRobotUp, selectedRobot, true)">Up</div>
-				<div ng-click="move(moveRobotDown, selectedRobot, true)">Down</div>
-				<div ng-click="move(moveRobotRight, selectedRobot, true)">Right</div>
-				<div ng-click="move(moveRobotLeft, selectedRobot, true)">Left</div>
-				<div ng-click="init()">reset</div>
+			<section>
+				<div class="col-lg-3">
+					<div class="well">
+						<legend>Les participants</legend>
+						<ul ng-controller="participantsController">
+							<li ng-repeat="p in participants">{{p}}</li>
+						</ul>
+					</div>
+				</div>
+				<div ng-controller="mapController">
+					<div class="col-lg-5">
+						<div class="well">
+							<legend>Plateau</legend>
+							<div class="alert alert-success" ng-show="victory">
+								<strong>Victory</strong>
+							</div>
+							<table>
+								<tr ng-repeat="row in map">
+									<td ng-repeat="cell in row" class="cell"
+										ng-class="{'cell-border-left': cell.g == 1, 'cell-border-right': cell.d == 1, 'cell-border-top': cell.h == 1, 'cell-border-bottom': cell.b == 1,
+										'target-red': cell.target == 'red', 'target-blue': cell.target == 'blue', 'target-yellow': cell.target == 'yellow', 'target-green': cell.target == 'green'}">
+										<div class="robot" ng-show="cell.robot" ng-click="selectRobot(cell.robot)"
+											ng-class="{'robot-blue': cell.robot.color == 'blue', 'robot-red': cell.robot.color == 'red', 'robot-yellow': cell.robot.color == 'yellow',
+												'robot-green': cell.robot.color == 'green', 'robot-selected': cell.robot.selected}"></div>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+					<div class="col-lg-3">
+						<div class="well">
+							<legend>Actions</legend>
+							<p>Utilisez les fléches du clavier et espace pour changer de robot, ou les boutons en-dessous pour faire déplacer les robots.</p>
+							<button type="button" class="btn" ng-click="move(moveRobotUp, selectedRobot, true)">Up</button>
+							<button type="button" class="btn" ng-click="move(moveRobotDown, selectedRobot, true)">Down</button>
+							<button type="button" class="btn" ng-click="move(moveRobotRight, selectedRobot, true)">Right</button>
+							<button type="button" class="btn" ng-click="move(moveRobotLeft, selectedRobot, true)">Left</button>
+							<button type="button" class="btn btn-warning" ng-click="init()">reset</button>
+						</div>
+					</div>
+				</div>
 			</section>
-		</section>
-		<footer>
-			Mini-projet IHM de M2PGI...
+		</div>
+		<footer id="footer" class="container">
+		  <p class="credit">
+			M2PGI project. <a href="https://github.com/Luze26/RasendeRoboter">See the project on GitHub</a>.
+		  </p>
 		</footer>
 	</body>
 </html>
