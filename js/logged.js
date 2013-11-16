@@ -117,27 +117,28 @@ loggedApp.controller("mainController", ["$scope", "socket", "gameInfo", "$timeou
 		, idGame: gameInfo.idGame});
 	
 	$scope.firstFinder = "Un joueur";
+	$scope.player = gameInfo.login;
 	
 	var countDown = function() {
-		$scope.countDown -= 10;
-		$scope.countDownStr = ("00000" + $scope.countDown).slice(-5);
+		$scope.countDown--;
 		if($scope.countDown > 0) {
-			$timeout(countDown, 10);
+			$timeout(countDown, 1000);
 		}
 	};
 	
 	socket.on('FinalCountDown', function(data) {
 		var ms   = data.FinalCountDown;
-		$scope.countDownStr = "" + ms;
-		$scope.countDown = ms;
+		$scope.countDown = ms/1000;
 		countDown();
 	});
 	
 	socket.on('TerminateGame', function(data) {
+	console.log("tg"); console.log(data);
 		$scope.terminateGame = true;
 	});
 		
 	socket.on('solutions', function(data) {
+	console.log("solution"); console.log(data);
 		$scope.firstFinder = data.solutions[0].player;
 	});
 		
@@ -171,12 +172,18 @@ loggedApp.controller("mapController", ["$scope", "$http", "gameInfo", 'HOST_URL'
 	var originalData;
 	
 	var resizeMap = function() {
-		var height = angular.element('table').width()/16 - 4;
+		var table = angular.element('table');
+		var width = table.width();
+		var height = width/16 - 4;
 		angular.element('.cell').height(height);
 		robots = angular.element('.robot');
 		height -= 4;
 		robots.height(height);
 		robots.width(height);
+		
+		var overlay = angular.element('.map-overlay');
+		overlay.width(width);
+		overlay.height(table.height());
 	};
 	
 	window.onresize = resizeMap;
@@ -185,9 +192,11 @@ loggedApp.controller("mapController", ["$scope", "$http", "gameInfo", 'HOST_URL'
 	$http.get(HOST_URL + "/" + gameInfo.idGame).success(function(data) {
 			originalData = JSON.parse(JSON.stringify(data));
 			init(data);
-			$timeout(resizeMap, 500);
+			$timeout(resizeMap, 200);
 	});
-		
+	
+	$scope.gameName = gameInfo.idGame;
+	
 	var init = function(data) {
 		$scope.game = {};
 
@@ -240,7 +249,7 @@ loggedApp.controller("mapController", ["$scope", "$http", "gameInfo", 'HOST_URL'
 	 * @param {Robot} robot Robot to be selected
 	 */
 	$scope.selectRobot = function(robot) {
-		if($scope.game.selectedRobot != robot) { //If the robot isn't already selected
+		if(!$scope.$parent.terminateGame && $scope.game.selectedRobot != robot) { //If the robot isn't already selected
 			if(robot.canMove($scope.game.lastRobotMoved)) {
 				if($scope.game.selectedRobot) {
 					$scope.game.selectedRobot.selected = false;
@@ -252,34 +261,41 @@ loggedApp.controller("mapController", ["$scope", "$http", "gameInfo", 'HOST_URL'
 	};
 		
 	$scope.move = function(direction) {
-		var robotToMove = $scope.game.selectedRobot;
-		var alreadyMoved = robotToMove.moved;
+		if(!$scope.$parent.terminateGame) {
+			var robotToMove = $scope.game.selectedRobot;
+			var alreadyMoved = robotToMove.moved;
 
-		if(robotToMove && robotToMove.canMove($scope.game.lastRobotMoved)) { //Check if the robot can be moved
-			var moved = robotToMove.move(direction, true);
-			if(moved) { //If the robot has actually moved
-				$scope.game.lastRobotMoved = robotToMove;
-				
-				if(!alreadyMoved && moved) { //If it's first move, we also register the select
-					propositionService.doAction("select", robotToMove.color);
-				}
-				propositionService.doAction("move", null, robotToMove.line, robotToMove.column);
-				
-				if(robotToMove.isOnTarget()) { //If the proposition is valid => send the proposition => display the result
-					var req = propositionService.sendProposition();
-					req.success(function(result) {
-							switch(result.state) {
-								case "SUCCESS":
-									$scope.victory = true;
-									break;
-								case "TOO_LATE":
-									//TODO
-								default:
-									//TODO
-							}
-						}).error(function() {
-							//TODO connection error
-						});
+			if(robotToMove && robotToMove.canMove($scope.game.lastRobotMoved)) { //Check if the robot can be moved
+				var moved = robotToMove.move(direction, true);
+				if(moved) { //If the robot has actually moved
+					$scope.game.lastRobotMoved = robotToMove;
+					
+					if(!alreadyMoved && moved) { //If it's first move, we also register the select
+						propositionService.doAction("select", robotToMove.color);
+					}
+					propositionService.doAction("move", null, robotToMove.line, robotToMove.column);
+					
+					if(robotToMove.isOnTarget()) { //If the proposition is valid => send the proposition => display the result
+						var req = propositionService.sendProposition();
+						req.success(function(result) {
+						console.log(result);
+								switch(result.state) {
+									case "SUCCESS":
+										$scope.victory = true;
+										$scope.$parent.terminateGame = true;
+										break;
+									case "TOO_LATE":
+										$scope.tooLate = true;
+										$scope.$parent.terminateGame = true;
+										break;
+									default:
+										$scope.error = true;
+										break;
+								}
+							}).error(function() {
+								//TODO connection error
+							});
+					}
 				}
 			}
 		}

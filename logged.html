@@ -39,15 +39,23 @@
 				<div ng-controller="mapController">
 					<div class="col-sm-12 col-md-5">
 						<div class="well">
-							<legend>Plateau</legend>
+							<legend>Partie: {{gameName}}</legend>
 							<div class="alert alert-info" ng-show="countDown && !victory">
-								{{firstFinder}} a trouvé une solution. Il vous reste <strong>{{countDownStr[0]}}{{countDownStr[1]}}:{{countDownStr[2]}}{{countDownStr[3]}} secondes !</strong>
+								<p>{{firstFinder}} a trouvé une solution.<br>
+								Il vous reste <strong>{{countDown}} secondes !</strong></p>
+							</div>
+							<div class="alert alert-danger" ng-show="tooLate">
+								<strong>Trop tard, cette partie est déjà finie.</strong>
+							</div>
+							<div class="alert alert-danger" ng-show="error">
+								<strong>HACKER !!!</strong> Ou peut-être c'est un bug.
 							</div>
 							<div class="alert alert-success" ng-show="victory">
 								<strong>Victory</strong>
+								<p ng-show="firstFinder == player">Vous avez été le premier à trouver!</p>
 							</div>
 							<div id="tableWrap">
-								<div class="map-overlay" ng-show="terminateGame"></div>
+								<div class="map-overlay" ng-show="$parent.terminateGame"></div>
 								<table>
 									<tr ng-repeat="row in game.map">
 										<td ng-repeat="cell in row" class="cell"
@@ -66,11 +74,16 @@
 						<div class="well">
 							<legend>Actions</legend>
 							<p>Utilisez les fléches du clavier et espace pour changer de robot, ou les boutons en-dessous pour faire déplacer les robots.</p>
-							<button type="button" class="btn" ng-click="move('UP')">Up</button>
-							<button type="button" class="btn" ng-click="move('DOWN')">Down</button>
-							<button type="button" class="btn" ng-click="move('RIGHT')">Right</button>
-							<button type="button" class="btn" ng-click="move('LEFT')">Left</button>
-							<div><button type="button" class="btn btn-warning" ng-click="reset()">reset</button></div>
+							<button type="button" class="btn" ng-click="move('UP')"
+								ng-disabled="$parent.terminateGame || (game.selectedRobot && !game.selectedRobot.canMoveUp())">Up</button>
+							<button type="button" class="btn" ng-click="move('DOWN')"
+								ng-disabled="$parent.terminateGame || (game.selectedRobot && !game.selectedRobot.canMoveDown())">Down</button>
+							<button type="button" class="btn" ng-click="move('RIGHT')"
+								ng-disabled="$parent.terminateGame || (game.selectedRobot && !game.selectedRobot.canMoveRight())">Right</button>
+							<button type="button" class="btn" ng-click="move('LEFT')"
+								ng-disabled="$parent.terminateGame || (game.selectedRobot && !game.selectedRobot.canMoveLeft())">Left</button>
+							<div><button type="button" class="btn btn-warning" ng-click="reset()"
+								ng-disabled="$parent.terminateGame">reset</button></div>
 						</div>
 					</div>
 				</div>
