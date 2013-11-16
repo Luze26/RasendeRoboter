@@ -112,21 +112,36 @@ loggedApp.factory('gameInfo', function () {
  * @description
  * Main controller used to catch key events.
  */
-loggedApp.controller("mainController", ["$scope", "socket", function($scope, socket) {
-	socket.on('FinalCountDown'	, function(data) {
-		 var ms   = data.FinalCountDown;
-		 console.log("FinalCountDown : " + ms);
-		});
-	socket.on('TerminateGame'	, function(data) {
-		 h1 = document.querySelector('body > header > h1');
-		 h1.innerHTML += ' est terminée !';
-		});
-	socket.on('solutions'		, function(data) {
-		 console.log("Solutions are :\n"+JSON.stringify(data.solutions));
-		});
-	socket.emit ('identification', 	{ login	: document.getElementById('login').value
-									, idGame: document.getElementById('idGame').value}
-				);
+loggedApp.controller("mainController", ["$scope", "socket", "gameInfo", "$timeout", function($scope, socket, gameInfo, $timeout) {
+	socket.emit ('identification', 	{ login	: gameInfo.login
+		, idGame: gameInfo.idGame});
+	
+	$scope.firstFinder = "Un joueur";
+	
+	var countDown = function() {
+		$scope.countDown -= 10;
+		$scope.countDownStr = ("00000" + $scope.countDown).slice(-5);
+		if($scope.countDown > 0) {
+			$timeout(countDown, 10);
+		}
+	};
+	
+	socket.on('FinalCountDown', function(data) {
+		var ms   = data.FinalCountDown;
+		$scope.countDownStr = "" + ms;
+		$scope.countDown = ms;
+		countDown();
+	});
+	
+	socket.on('TerminateGame', function(data) {
+		$scope.terminateGame = true;
+	});
+		
+	socket.on('solutions', function(data) {
+		$scope.firstFinder = data.solutions[0].player;
+	});
+		
+	
 	
 }]);
 
@@ -151,16 +166,28 @@ loggedApp.controller("participantsController", ["$scope", "socket", function($sc
  * @description
  * Handle map and robot behaviours.
  */
-loggedApp.controller("mapController", ["$scope", "$http", "gameInfo", 'HOST_URL', 'propositionService', function($scope, $http, gameInfo, HOST_URL, propositionService) {
+loggedApp.controller("mapController", ["$scope", "$http", "gameInfo", 'HOST_URL', 'propositionService', '$timeout', function($scope, $http, gameInfo, HOST_URL, propositionService, $timeout) {
 
 	var originalData;
+	
+	var resizeMap = function() {
+		var height = angular.element('table').width()/16 - 4;
+		angular.element('.cell').height(height);
+		robots = angular.element('.robot');
+		height -= 4;
+		robots.height(height);
+		robots.width(height);
+	};
+	
+	window.onresize = resizeMap;
 	
 	//Init everything
 	$http.get(HOST_URL + "/" + gameInfo.idGame).success(function(data) {
 			originalData = JSON.parse(JSON.stringify(data));
 			init(data);
-		});
-	
+			$timeout(resizeMap, 500);
+	});
+		
 	var init = function(data) {
 		$scope.game = {};
 
@@ -199,6 +226,7 @@ loggedApp.controller("mapController", ["$scope", "$http", "gameInfo", 'HOST_URL'
 		propositionService.reset();
 		var data = JSON.parse(JSON.stringify(originalData));
 		init(data);
+		$timeout(resizeMap, 50);
 	};
 	
 	/**
@@ -227,7 +255,7 @@ loggedApp.controller("mapController", ["$scope", "$http", "gameInfo", 'HOST_URL'
 		var robotToMove = $scope.game.selectedRobot;
 		var alreadyMoved = robotToMove.moved;
 
-		if(robotToMove.canMove($scope.game.lastRobotMoved)) { //Check if the robot can be moved
+		if(robotToMove && robotToMove.canMove($scope.game.lastRobotMoved)) { //Check if the robot can be moved
 			var moved = robotToMove.move(direction, true);
 			if(moved) { //If the robot has actually moved
 				$scope.game.lastRobotMoved = robotToMove;

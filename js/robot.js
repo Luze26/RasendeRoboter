@@ -116,6 +116,5 @@ Robot.prototype.isOnTarget = function() {
 };
 
 Robot.prototype.canMove = function(lastRobotMoved) {
-console.log(lastRobotMoved);
 	return !(this.moved == true && lastRobotMoved != this);
 };
