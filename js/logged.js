@@ -197,7 +197,8 @@ loggedApp.controller("mapController", ["$scope", "$http", "gameInfo", 'HOST_URL'
 	 */
 	$scope.reset = function() {
 		propositionService.reset();
-		init(originalData);
+		var data = JSON.parse(JSON.stringify(originalData));
+		init(data);
 	};
 	
 	/**
