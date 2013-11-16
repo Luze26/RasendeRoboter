@@ -12,7 +12,7 @@
 		<link rel="stylesheet" type="text/css" href="css/main.css">
 	</head>
 	<body ng-app="loggedApp" ng-controller="mainController" ng-init="idGame = __IDGAME__" ng-keydown="keyPress($event)">
-		<div class="container">
+		<header id="header" class="container">
 			<div class="navbar navbar-default">
 			  <div class="container">
 				<div class="navbar-header">
@@ -20,6 +20,9 @@
 				</div>
 			  </div>
 			</div>
+        </header>
+        
+        <div class="container">
 			<input id="login" type="hidden" value="__LOGIN__"/>
 			<input id="idGame" type="hidden" value="__IDGAME__"/>
 			<section>
