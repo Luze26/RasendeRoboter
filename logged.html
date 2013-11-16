@@ -5,6 +5,8 @@
 		<script src="http://codeorigin.jquery.com/jquery-2.0.3.min.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.min.js"></script>
 		<script src="/socket.io/socket.io.js"></script>
+		<script src="js/commonModule.js"></script>
+		<script src="js/robot.js"></script>
 		<script src="js/logged.js"></script>
 		
 		<link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" media="all" />
@@ -39,13 +41,13 @@
 								<strong>Victory</strong>
 							</div>
 							<table>
-								<tr ng-repeat="row in map">
+								<tr ng-repeat="row in game.map">
 									<td ng-repeat="cell in row" class="cell"
 										ng-class="{'cell-border-left': cell.g == 1, 'cell-border-right': cell.d == 1, 'cell-border-top': cell.h == 1, 'cell-border-bottom': cell.b == 1,
 										'target-red': cell.target == 'red', 'target-blue': cell.target == 'blue', 'target-yellow': cell.target == 'yellow', 'target-green': cell.target == 'green'}">
 										<div class="robot" ng-show="cell.robot" ng-click="selectRobot(cell.robot)"
 											ng-class="{'robot-blue': cell.robot.color == 'blue', 'robot-red': cell.robot.color == 'red', 'robot-yellow': cell.robot.color == 'yellow',
-												'robot-green': cell.robot.color == 'green', 'robot-selected': cell.robot.selected}"></div>
+												'robot-green': cell.robot.color == 'green', 'robot-selected': cell.robot.selected, 'robot-unselectable': !cell.robot.canMove(game.lastRobotMoved)}"></div>
 									</td>
 								</tr>
 							</table>
@@ -55,11 +57,11 @@
 						<div class="well">
 							<legend>Actions</legend>
 							<p>Utilisez les fléches du clavier et espace pour changer de robot, ou les boutons en-dessous pour faire déplacer les robots.</p>
-							<button type="button" class="btn" ng-click="move(moveRobotUp, selectedRobot, true)">Up</button>
-							<button type="button" class="btn" ng-click="move(moveRobotDown, selectedRobot, true)">Down</button>
-							<button type="button" class="btn" ng-click="move(moveRobotRight, selectedRobot, true)">Right</button>
-							<button type="button" class="btn" ng-click="move(moveRobotLeft, selectedRobot, true)">Left</button>
-							<div><button type="button" class="btn btn-warning" ng-click="init()">reset</button></div>
+							<button type="button" class="btn" ng-click="move('UP')">Up</button>
+							<button type="button" class="btn" ng-click="move('DOWN')">Down</button>
+							<button type="button" class="btn" ng-click="move('RIGHT')">Right</button>
+							<button type="button" class="btn" ng-click="move('LEFT')">Left</button>
+							<div><button type="button" class="btn btn-warning" ng-click="reset()">reset</button></div>
 						</div>
 					</div>
 				</div>
