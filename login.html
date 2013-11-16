@@ -8,48 +8,54 @@
     <link rel="stylesheet" href="css/sticky-footer.css" type="text/css" media="all" />
   </head>
   <body onload="init()">
-    <div id="wrap">
-      <div class="container">
-		<div class="navbar navbar-default">
-		  <div class="container">
-			<div class="navbar-header">
-			  <h1 class="navbar-brand">Rasende Roboter <small>Le jeu de robots en ligne</small></h1>
-			</div>
-		  </div>
-		</div>
-        <div class="col-lg-3 col-lg-offset-3">
-          <div class="well">
-            <form class="bs-example form-horizontal" method="post" action="" id="nouvellePartie">
-              <fieldset>
-                <legend>Connexion</legend>
-                <div class="form-group">
-                  <label for="login" class="control-label">Identifiant</label>
-                  <div>
-                    <input type="text" class="form-control input-sm" id="login" name="login" placeholder="Visiteur N (TODO in JS)"/>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="idGame" class="control-label">Nom de la partie</label>
-                  <div>
-                    <input type="text" class="form-control input-sm" id="idGame" name="idGame" placeholder="Nom de la partie..."/>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <button type="submit" class="btn btn-info btn-sm pull-right">Connecter...</button> 
-                </div>
-              </fieldset>
-            </form>
-          </div>
-        </div>
-        <div class="col-lg-3">
-          <div class="well">
-            <legend>Parties existantes</legend>
-            <div id="lesParties">
+    <header id="header" class="container">
+        <div class="navbar navbar-default">
+          <div class="container">
+            <div class="navbar-header">
+              <h1 class="navbar-brand">Rasende Roboter <small>Le jeu de robots en ligne</small></h1>
             </div>
           </div>
         </div>
-      </div>
+    </header>
+    
+    <div class="container">
+        <section class="">
+            <div class="col-lg-4 col-lg-offset-2">
+              <div class="well">
+                <form class="bs-example form-horizontal" method="post" action="" id="nouvellePartie">
+                  <fieldset>
+                    <legend>Rejoindre une partie</legend>
+                    <span class="help-block">Pour jouer, entrez un nom d'utilisateur et un nom de partie.</span>
+                    <div class="form-group">
+                      <label for="login" class="control-label">Identifiant</label>
+                      <div>
+                        <input type="text" class="form-control input-sm" id="login" name="login" placeholder="Visiteur N (TODO in JS)"/>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="idGame" class="control-label">Nom de la partie</label>
+                      <div>
+                        <input type="text" class="form-control input-sm" id="idGame" name="idGame" placeholder="Nom de la partie..."/>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <button type="submit" class="btn btn-info btn-sm pull-right">Connecter...</button> 
+                    </div>
+                  </fieldset>
+                </form>
+              </div>
+            </div>
+            <div class="col-lg-4">
+              <div class="well">
+                <legend>Parties existantes</legend>
+                <span class="help-block">Vous pouvez également séléctionner une partie dans la liste.</span>
+                <div id="lesParties">
+                </div>
+              </div>
+            </div>
+        </section>
     </div>
+    
     <footer id="footer" class="container">
       <p class="credit">
         M2PGI project. <a href="https://github.com/Luze26/RasendeRoboter">See the project on GitHub</a>.
