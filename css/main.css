@@ -81,3 +81,7 @@ table {
 .robot-green {
 	background-color: #2ecc71;
 }
+
+.me {
+	font-weight: bold;
+}

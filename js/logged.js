@@ -115,6 +115,7 @@ loggedApp.factory('gameInfo', function () {
 loggedApp.controller("mainController", ["$scope", "socket", "gameInfo", "$timeout", function($scope, socket, gameInfo, $timeout) {
 	socket.emit ('identification', {login: gameInfo.login, idGame: gameInfo.idGame});
 	
+	$scope.terminateGame = false;
 	$scope.firstFinder = "Un joueur";
 	$scope.player = gameInfo.login;
 	
@@ -127,36 +128,60 @@ loggedApp.controller("mainController", ["$scope", "socket", "gameInfo", "$timeou
 	
 	socket.on('FinalCountDown', function(data) {
 		var ms   = data.FinalCountDown;
+		$scope.finalCountDown = true;
 		$scope.countDown = ms/1000;
 		countDown();
 	});
 	
 	socket.on('TerminateGame', function(data) {
-	console.log("tg"); console.log(data);
 		$scope.terminateGame = true;
+		$scope.countDown = 0;
+		$scope.isWinner = false;
+		$scope.participants.forEach(function(element) {
+			if(element.place == 1) {
+				$scope.isWinner = true;
+				$scope.winner = element.name;
+				return;
+			}
+		});
 	});
 		
-	socket.on('solutions', function(data) {
-	console.log("solution"); console.log(data);
-		$scope.firstFinder = data.solutions[0].player;
-	});
-		
-	
-	
-}]);
+	$scope.finders = {};
 
-/**
- * @ngdoc object
- * @name loggedApp.controller:participantsController
- *
- * @description
- * Handle the list of participants
- */
-loggedApp.controller("participantsController", ["$scope", "socket", function($scope, socket) {
-	$scope.participants = [];
-	socket.on('participants', function(data) {
-		$scope.participants = data.participants;
+	socket.on('solutions', function(data) {
+		$scope.firstFinder = data.solutions[0].player;
+		$scope.finders = {};
+		data.solutions.forEach(function(element) {
+			var current = element.player;
+			var nbCoups = element.proposition.length;
+			var place = 1;
+			data.solutions.forEach(function(element) {
+				if(element.player != current && element.proposition.length < nbCoups) {
+					place++;
+				}
+			});
+			$scope.finders[current] = place;
+		});
+		
+		$scope.participants.forEach(function(element) {
+			if($scope.finders[element.name]) {
+				element.place = $scope.finders[element.name];
+			}
+		});
 	});
+		
+	$scope.participants = [{name: gameInfo.login, place: "~", me: true}];
+	socket.on('participants', function(data) {
+		$scope.participants = [];
+		data.participants.forEach(function(element) {
+			var participant = {name: element, place: "~", me: gameInfo.login == element};
+			if($scope.finders.element) {
+				particpant.place = $scope.finders.element;
+			}
+			$scope.participants.push(participant);
+		});
+	});
+	
 }]);
 
 /**
@@ -195,6 +220,7 @@ loggedApp.controller("mapController", ["$scope", "$http", "gameInfo", 'HOST_URL'
 	});
 	
 	$scope.gameName = gameInfo.idGame;
+	$scope.login = gameInfo.login;
 	
 	var init = function(data) {
 		$scope.game = {};
@@ -281,7 +307,6 @@ loggedApp.controller("mapController", ["$scope", "$http", "gameInfo", 'HOST_URL'
 								switch(result.state) {
 									case "SUCCESS":
 										$scope.victory = true;
-										$scope.$parent.terminateGame = true;
 										break;
 									case "TOO_LATE":
 										$scope.tooLate = true;

@@ -5,8 +5,10 @@
 		<script src="http://codeorigin.jquery.com/jquery-2.0.3.min.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.min.js"></script>
 		<script src="/socket.io/socket.io.js"></script>
-		<script src="js/min/main.min.js"></script>
-		
+		<!-- PROD JS <script src="js/min/main.min.js"></script>-->
+		<script src="js/commonModule.js"></script>
+		<script src="js/robot.js"></script>
+		<script src="js/logged.js"></script>
 		
 		<link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" media="all" />
 		<link rel="stylesheet" href="css/sticky-footer.css" type="text/css" media="all" />
@@ -30,8 +32,10 @@
 				<div class="col-sm-12 col-md-3">
 					<div class="well">
 						<legend>Les participants</legend>
-						<ul ng-controller="participantsController">
-							<li ng-repeat="p in participants">{{p}}</li>
+						<ul>
+							<li ng-repeat="p in participants | orderBy:'place'" ng-class="{'me': p.me}">
+								{{p.place}}  {{p.name}} <span ng-show="p.name == firstFinder">*</span>
+							</li>
 						</ul>
 					</div>
 				</div>
@@ -39,8 +43,8 @@
 					<div class="col-sm-12 col-md-5">
 						<div class="well">
 							<legend>Partie: {{gameName}}</legend>
-							<div class="alert alert-info" ng-show="countDown && !victory">
-								<p>{{firstFinder}} a trouvé une solution.<br>
+							<div class="alert alert-info" ng-show="!$parent.terminateGame && countDown && !victory">
+								<p>{{firstFinder}} a été le premier à trouvé une solution.<br>
 								Il vous reste <strong>{{countDown}} secondes !</strong></p>
 							</div>
 							<div class="alert alert-danger" ng-show="tooLate">
@@ -49,12 +53,27 @@
 							<div class="alert alert-danger" ng-show="error">
 								<strong>HACKER !!!</strong> Ou peut-être c'est un bug.
 							</div>
-							<div class="alert alert-success" ng-show="victory">
-								<strong>Victory</strong>
-								<p ng-show="firstFinder == player">Vous avez été le premier à trouver!</p>
+							<div class="alert" ng-class="$parent.finders[login] == 1 ? 'alert-success' : 'alert-info'"
+								ng-show="$parent.terminateGame">
+								<div ng-switch="$parent.finders[login]">
+									<p ng-switch-when="1">Yeah man! T'as fini premier.</p>
+									<div ng-switch-default>
+										<p ng-show="$parent.isWinner">
+											{{$parent.winner}} a fini premier.
+										</p>
+										<p ng-show="victory">
+											T'as fini {{$parent.finders[login]}}ème.
+										</p>
+									</div>
+								</div>
+							</div>
+							<div class="alert alert-success" ng-show="!$parent.terminateGame && victory">
+								<p>
+									T'as <span ng-show="firstFinder == player">été le premier à avoir</span> trouvé une solution!<br>
+									T'es actuellement classé: {{$parent.finders[login]}}</p>
 							</div>
 							<div id="tableWrap">
-								<div class="map-overlay" ng-show="$parent.terminateGame"></div>
+								<div class="map-overlay" ng-show="$parent.terminateGame || victory"></div>
 								<table>
 									<tr ng-repeat="row in game.map">
 										<td ng-repeat="cell in row" class="cell"
