@@ -25,7 +25,7 @@ Robot.prototype.setLine = function(line) {
 };
 
 Robot.prototype.canMoveUp = function() {
-	return !(this.line == 0 || this.currentCell.h == 1 || this.map[this.line-1][this.column].b == 1 || this.map[this.line-1][this.column].robot != null);
+	return !(this.line === 0 || this.currentCell.h == 1 || this.map[this.line-1][this.column].b == 1 || this.map[this.line-1][this.column].robot != null);
 };
 
 Robot.prototype.canMoveDown = function() {
@@ -33,7 +33,7 @@ Robot.prototype.canMoveDown = function() {
 };
 
 Robot.prototype.canMoveLeft = function() {
-	return !(this.column == 0 || this.currentCell.g == 1 || this.map[this.line][this.column-1].d == 1 || this.map[this.line][this.column-1].robot != null);
+	return !(this.column === 0 || this.currentCell.g == 1 || this.map[this.line][this.column-1].d == 1 || this.map[this.line][this.column-1].robot != null);
 };
 
 Robot.prototype.canMoveRight = function() {
@@ -116,5 +116,5 @@ Robot.prototype.isOnTarget = function() {
 };
 
 Robot.prototype.canMove = function(lastRobotMoved) {
-	return !(this.moved == true && lastRobotMoved != this);
+	return !(this.moved === true && lastRobotMoved != this);
 };

@@ -3,6 +3,8 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-ngdocs');
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-jshint');
 
   grunt.initConfig({
     ngdocs: {
@@ -12,6 +14,16 @@ module.exports = function (grunt) {
       },
       all: ['js/**/*.js']
     },
+	uglify: {
+		my_target: {
+			files: {
+				'js/min/main.min.js': ['js/robot.js', 'js/commonModule.js', 'js/logged.js']
+			}
+		}
+	},
+	jshint: {
+		all: ['js/robot.js', 'js/commonModule.js', 'js/logged.js']
+	},
 	connect: {
       options: {
         keepalive: true

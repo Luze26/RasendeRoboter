@@ -14,7 +14,7 @@ var loggedApp = angular.module("loggedApp", ['commonModule']);
  * @description
  * Proposition service. Used to register actions constituting the proposition, and send the proposition.
  */
-loggedApp.factory('propositionService', function($http, gameInfo, HOST_URL) {
+loggedApp.factory('propositionService', ['$http', 'gameInfo', 'HOST_URL', function($http, gameInfo, HOST_URL) {
 	var service = {};
 	
 	/**
@@ -44,7 +44,7 @@ loggedApp.factory('propositionService', function($http, gameInfo, HOST_URL) {
 			}
 
 		});
-	}
+	};
 
 	/**
 	 * @ngdoc function
@@ -56,7 +56,7 @@ loggedApp.factory('propositionService', function($http, gameInfo, HOST_URL) {
 	 */
 	service.reset = function() {
 		service.proposition = [];
-	}
+	};
 	
 	/**
 	 * @ngdoc function
@@ -81,10 +81,10 @@ loggedApp.factory('propositionService', function($http, gameInfo, HOST_URL) {
 			action.column = column;
 		}
 		service.proposition.push(action);
-	}
+	};
 	
 	return service;
-});
+}]);
 
 /**
  * @ngdoc service
@@ -113,8 +113,7 @@ loggedApp.factory('gameInfo', function () {
  * Main controller used to catch key events.
  */
 loggedApp.controller("mainController", ["$scope", "socket", "gameInfo", "$timeout", function($scope, socket, gameInfo, $timeout) {
-	socket.emit ('identification', 	{ login	: gameInfo.login
-		, idGame: gameInfo.idGame});
+	socket.emit ('identification', {login: gameInfo.login, idGame: gameInfo.idGame});
 	
 	$scope.firstFinder = "Un joueur";
 	$scope.player = gameInfo.login;
@@ -339,7 +338,7 @@ loggedApp.controller("mapController", ["$scope", "$http", "gameInfo", 'HOST_URL'
 							index = -1;
 						}
 						index++;
-  					}
+					}
 					robotToSelect = $scope.game.robots[index];
 				}
 				$scope.selectRobot(robotToSelect);

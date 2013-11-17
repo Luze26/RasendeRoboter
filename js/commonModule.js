@@ -16,7 +16,7 @@ commonModule.constant('HOST_URL', window.location.origin);
  * @description
  * socket.io service. Open a socket shared between controllers.
  */
-commonModule.factory('socket', function ($rootScope) {
+commonModule.factory('socket', ['$rootScope', function ($rootScope) {
   var socket = io.connect();
   return {
     on: function (eventName, callback) {
@@ -35,7 +35,7 @@ commonModule.factory('socket', function ($rootScope) {
             callback.apply(socket, args);
           }
         });
-      })
+      });
     }
   };
-});
+}]);
