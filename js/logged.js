@@ -175,8 +175,8 @@ loggedApp.controller("mainController", ["$scope", "socket", "gameInfo", "$timeou
 		$scope.participants = [];
 		data.participants.forEach(function(element) {
 			var participant = {name: element, place: "~", me: gameInfo.login == element};
-			if($scope.finders.element) {
-				particpant.place = $scope.finders.element;
+			if($scope.finders[element]) {
+				participant.place = $scope.finders[element];
 			}
 			$scope.participants.push(participant);
 		});
@@ -274,7 +274,7 @@ loggedApp.controller("mapController", ["$scope", "$http", "gameInfo", 'HOST_URL'
 	 * @param {Robot} robot Robot to be selected
 	 */
 	$scope.selectRobot = function(robot) {
-		if(!$scope.$parent.terminateGame && $scope.game.selectedRobot != robot) { //If the robot isn't already selected
+		if(!$scope.$parent.terminateGame && !$scope.victory && $scope.game.selectedRobot != robot) { //If the robot isn't already selected
 			if(robot.canMove($scope.game.lastRobotMoved)) {
 				if($scope.game.selectedRobot) {
 					$scope.game.selectedRobot.selected = false;
@@ -286,7 +286,7 @@ loggedApp.controller("mapController", ["$scope", "$http", "gameInfo", 'HOST_URL'
 	};
 		
 	$scope.move = function(direction) {
-		if(!$scope.$parent.terminateGame) {
+		if(!$scope.$parent.terminateGame && !$scope.victory) {
 			var robotToMove = $scope.game.selectedRobot;
 			var alreadyMoved = robotToMove.moved;
 

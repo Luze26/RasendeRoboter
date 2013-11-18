@@ -93,15 +93,15 @@
 							<legend>Actions</legend>
 							<p>Utilisez les fléches du clavier et espace pour changer de robot, ou les boutons en-dessous pour faire déplacer les robots.</p>
 							<button type="button" class="btn" ng-click="move('UP')"
-								ng-disabled="$parent.terminateGame || (game.selectedRobot && !game.selectedRobot.canMoveUp())">Up</button>
+								ng-disabled="$parent.terminateGame || victory || (game.selectedRobot && !game.selectedRobot.canMoveUp())">Up</button>
 							<button type="button" class="btn" ng-click="move('DOWN')"
-								ng-disabled="$parent.terminateGame || (game.selectedRobot && !game.selectedRobot.canMoveDown())">Down</button>
+								ng-disabled="$parent.terminateGame || victory || (game.selectedRobot && !game.selectedRobot.canMoveDown())">Down</button>
 							<button type="button" class="btn" ng-click="move('RIGHT')"
-								ng-disabled="$parent.terminateGame || (game.selectedRobot && !game.selectedRobot.canMoveRight())">Right</button>
+								ng-disabled="$parent.terminateGame || victory || (game.selectedRobot && !game.selectedRobot.canMoveRight())">Right</button>
 							<button type="button" class="btn" ng-click="move('LEFT')"
-								ng-disabled="$parent.terminateGame || (game.selectedRobot && !game.selectedRobot.canMoveLeft())">Left</button>
+								ng-disabled="$parent.terminateGame || victory || (game.selectedRobot && !game.selectedRobot.canMoveLeft())">Left</button>
 							<div><button type="button" class="btn btn-warning" ng-click="reset()"
-								ng-disabled="$parent.terminateGame">reset</button></div>
+								ng-disabled="$parent.terminateGame || victory">reset</button></div>
 						</div>
 					</div>
 				</div>
