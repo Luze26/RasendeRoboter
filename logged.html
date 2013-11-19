@@ -25,15 +25,15 @@
 				<div class="col-sm-12 col-md-3">
 					<div class="well">
 						<legend>Les participants</legend>
-						<ul>
+						<ul class="participants-list">
 							<li ng-repeat="p in participants | orderBy:'place'" ng-class="{'me': p.me}">
-								{{p.place}}  {{p.name}} <span ng-show="p.name == firstFinder">*</span>
+								<span class="rank">{{p.place}}</span>{{p.name}} <span ng-show="p.name == firstFinder">*</span>
 							</li>
 						</ul>
 					</div>
 				</div>
 				<div ng-controller="mapController">
-					<div class="col-sm-12 col-md-5">
+					<div class="col-sm-12 col-md-6">
 						<div class="well">
 							<legend>Partie: {{gameName}}</legend>
 							<div class="alert alert-info" ng-show="!$parent.terminateGame && countDown && !victory" ng-cloak>
