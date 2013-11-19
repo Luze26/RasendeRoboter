@@ -148,28 +148,39 @@ loggedApp.controller("mainController", ["$scope", "socket", "gameInfo", "$timeou
 		
 	$scope.finders = {};
 
-	socket.on('solutions', function(data) {
-		$scope.firstFinder = data.solutions[0].player;
-		$scope.finders = {};
-		data.solutions.forEach(function(element) {
-			var current = element.player;
-			var nbCoups = element.proposition.length;
-			var place = 1;
-			data.solutions.forEach(function(element) {
-				if(element.player != current && element.proposition.length < nbCoups) {
-					place++;
+	var solutions;
+	
+	function refreshRanks() {
+		if(solutions) {
+			$scope.firstFinder = solutions[0].player;
+			$scope.finders = {};
+			solutions.forEach(function(element) {
+				var current = element.player;
+				var nbCoups = element.proposition.length;
+				var place = 1;
+				solutions.forEach(function(element) {
+					if(element.player != current && element.proposition.length < nbCoups) {
+						place++;
+					}
+				});
+				$scope.finders[current] = place;
+			});
+			
+			$scope.participants.forEach(function(element) {
+				if($scope.finders[element.name]) {
+					element.place = $scope.finders[element.name];
 				}
 			});
-			$scope.finders[current] = place;
-		});
-		
-		$scope.participants.forEach(function(element) {
-			if($scope.finders[element.name]) {
-				element.place = $scope.finders[element.name];
-			}
-		});
+		}
+	}
+	
+	socket.on('solutions', function(data) {
+		solutions = data.solutions;
+		refreshRanks();
 	});
-		
+	
+	
+	
 	$scope.participants = [{name: gameInfo.login, place: "~", me: true}];
 	socket.on('participants', function(data) {
 		$scope.participants = [];
@@ -180,6 +191,8 @@ loggedApp.controller("mainController", ["$scope", "socket", "gameInfo", "$timeou
 			}
 			$scope.participants.push(participant);
 		});
+		
+		refreshRanks();
 	});
 	
 }]);
