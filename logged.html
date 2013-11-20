@@ -36,17 +36,17 @@
 					<div class="well">
 						<legend>Actions</legend>
 						<button type="button" class="btn" ng-click="game.move('UP')" title="Bouge le robot en haut"
-							ng-disabled="game.terminateGame || game.propositionDone || (game.selectedRobot && 
-							!game.selectedRobot.canMoveUp(game.selectedRobot.line, game.selectedRobot.column))">Haut</button>
+							ng-disabled="game.terminateGame || game.propositionDone || (!game.selectedRobot || 
+							game.selectedRobot.upCell == null)">Haut</button>
 						<button type="button" class="btn" ng-click="game.move('DOWN')" title="Bouge le robot en bas"
-							ng-disabled="game.terminateGame || game.propositionDone || (game.selectedRobot &&
-							!game.selectedRobot.canMoveDown(game.selectedRobot.line, game.selectedRobot.column))">Bas</button>
+							ng-disabled="game.terminateGame || game.propositionDone || (!game.selectedRobot ||
+							game.selectedRobot.downCell == null)">Bas</button>
 						<button type="button" class="btn" ng-click="game.move('RIGHT')" title="Bouge le robot à droite"
-							ng-disabled="game.terminateGame || game.propositionDone || (game.selectedRobot &&
-							!game.selectedRobot.canMoveRight(game.selectedRobot.line, game.selectedRobot.column))">Droite</button>
+							ng-disabled="game.terminateGame || game.propositionDone || (!game.selectedRobot ||
+							game.selectedRobot.rightCell == null)">Droite</button>
 						<button type="button" class="btn" ng-click="game.move('LEFT')" title="Bouge le robot à gauche"
-							ng-disabled="game.terminateGame || game.propositionDone || (game.selectedRobot &&
-							!game.selectedRobot.canMoveLeft(game.selectedRobot.line, game.selectedRobot.column))">Gauche</button>
+							ng-disabled="game.terminateGame || game.propositionDone || (!game.selectedRobot ||
+							game.selectedRobot.leftCell == null)">Gauche</button>
 						<div><button type="button" class="btn btn-warning" ng-click="game.reset()" title="Remet à 0 le plateau"
 							ng-disabled="game.terminateGame || game.propositionDone">RAZ</button></div>
 						<p><br>Fléches du clavier pour déplacer les robots.<br>Espace pour changer de robot.</p>
