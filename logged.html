@@ -22,81 +22,81 @@
 			<input id="login" type="hidden" value="__LOGIN__"/>
 			<input id="idGame" type="hidden" value="__IDGAME__"/>
 			<section>
-				<div class="col-sm-12 col-md-3">
+				<div class="col-sm-12 col-md-5">
 					<div class="well">
 						<legend>Les participants</legend>
 						<ul class="participants-list">
-							<li ng-repeat="p in participants | orderBy:'place'" ng-class="{'me': p.me}">
-								<span class="rank">{{p.place}}</span>{{p.name}} <span ng-show="p.name == firstFinder">*</span>
+							<li ng-repeat="p in game.participants | orderBy:'place'" ng-class="{'me': p.me}">
+								<span class="rank">{{p.place}}</span>{{p.name}} <span ng-show="p.name == game.firstFinder">*</span>
 							</li>
 						</ul>
 					</div>
+					<div class="well">
+						<legend>Actions</legend>
+						<button type="button" class="btn" ng-click="game.move('UP')" title="Bouge le robot en haut"
+							ng-disabled="game.terminateGame || game.propositionDone || (game.selectedRobot && 
+							!game.selectedRobot.canMoveUp(game.selectedRobot.line, game.selectedRobot.column))">Haut</button>
+						<button type="button" class="btn" ng-click="game.move('DOWN')" title="Bouge le robot en bas"
+							ng-disabled="game.terminateGame || game.propositionDone || (game.selectedRobot &&
+							!game.selectedRobot.canMoveDown(game.selectedRobot.line, game.selectedRobot.column))">Bas</button>
+						<button type="button" class="btn" ng-click="game.move('RIGHT')" title="Bouge le robot à droite"
+							ng-disabled="game.terminateGame || game.propositionDone || (game.selectedRobot &&
+							!game.selectedRobot.canMoveRight(game.selectedRobot.line, game.selectedRobot.column))">Droite</button>
+						<button type="button" class="btn" ng-click="game.move('LEFT')" title="Bouge le robot à gauche"
+							ng-disabled="game.terminateGame || game.propositionDone || (game.selectedRobot &&
+							!game.selectedRobot.canMoveLeft(game.selectedRobot.line, game.selectedRobot.column))">Gauche</button>
+						<div><button type="button" class="btn btn-warning" ng-click="game.reset()" title="Remet à 0 le plateau"
+							ng-disabled="game.terminateGame || game.propositionDone">RAZ</button></div>
+						<p><br>Fléches du clavier pour déplacer les robots.<br>Espace pour changer de robot.</p>
+					</div>
 				</div>
 				<div ng-controller="mapController">
-					<div class="col-sm-12 col-md-6">
+					<div class="col-sm-12 col-md-7">
 						<div class="well">
-							<legend>Partie: {{gameName}}</legend>
-							<div class="alert alert-info" ng-show="!$parent.terminateGame && countDown && !victory" ng-cloak>
-								<p><strong>{{firstFinder}}</strong> a été le premier à trouvé une solution.<br>
-								Il vous reste <strong>{{countDown}} secondes !</strong></p>
+							<legend>Partie: {{game.idGame}}</legend>
+							<div class="alert alert-info" ng-show="!game.terminateGame && game.countDown && !game.propositionDone" ng-cloak>
+								<p><strong>{{game.firstFinder}}</strong> a été le premier à trouvé une solution.<br>
+								Il vous reste <strong>{{game.countDown}} secondes !</strong></p>
 							</div>
-							<div class="alert alert-danger" ng-show="tooLate" ng-cloak>
+							<div class="alert alert-danger" ng-show="game.tooLate" ng-cloak>
 								<strong>Trop tard, cette partie est déjà finie.</strong>
 							</div>
-							<div class="alert alert-danger" ng-show="error" ng-cloak>
+							<div class="alert alert-danger" ng-show="game.error" ng-cloak>
 								<strong>HACKER !!!</strong> Ou peut-être c'est un bug.
 							</div>
-							<div class="alert" ng-class="$parent.finders[login] == 1 ? 'alert-success' : 'alert-info'"
-								ng-show="$parent.terminateGame" ng-cloak>
-								<div ng-switch="$parent.finders[login]">
-									<p ng-switch-when="1">Yeah man! T'as fini premier.</p>
-									<div ng-switch-default>
-										<p ng-show="$parent.isWinner">
-											<strong>{{$parent.winner}}</strong> a fini premier.
+							<div class="alert" ng-class="game.isCurrentPlayerWinner ? 'alert-success' : 'alert-info'"
+								ng-show="game.terminateGame" ng-cloak>
+								<p ng-show="game.isCurrentPlayerWinner">Yeah man! T'as fini premier.</p>
+								<div ng-show="!game.isCurrentPlayerWinner">
+										<p ng-show="game.winner">
+											<strong>{{game.winner.name}}</strong> a fini premier.
 										</p>
-										<p ng-show="victory">
-											T'as fini {{$parent.finders[login]}}ème.
+										<p ng-show="game.propositionDone">
+											T'as fini {{game.currentPlayer.place}}ème.
 										</p>
-									</div>
 								</div>
 							</div>
-							<div class="alert alert-success" ng-show="!$parent.terminateGame && victory">
+							<div class="alert alert-success" ng-show="!game.terminateGame && game.propositionDone">
 								<p>
-									T'as <span ng-show="firstFinder == player">été le premier à avoir</span> trouvé une solution!<br>
-									T'es actuellement classé: <strong>{{$parent.finders[login]}}</strong>.<br>
-									<span ng-show="countDown">Il reste {{countDown}} secondes aux participants pour proposer leur solution.</span>
+									T'as <span ng-show="game.firstFinder == game.login">été le premier à avoir</span> trouvé une solution!<br>
+									T'es actuellement classé: <strong>{{game.currentPlayer.place}}</strong>.<br>
+									<span ng-show="game.countDown">Il reste {{game.countDown}} secondes aux participants pour proposer leur solution.</span>
 								</p>
 							</div>
 							<div id="tableWrap">
-								<div class="map-overlay" ng-show="$parent.terminateGame || victory"></div>
+								<div class="map-overlay" ng-show="game.terminateGame || game.propositionDone"></div>
 								<table>
 									<tr ng-repeat="row in game.map">
 										<td ng-repeat="cell in row" class="cell"
-											ng-class="{'cell-border-left': cell.g == 1, 'cell-border-right': cell.d == 1, 'cell-border-top': cell.h == 1, 'cell-border-bottom': cell.b == 1,
-											'target-red': cell.target == 'red', 'target-blue': cell.target == 'blue', 'target-yellow': cell.target == 'yellow', 'target-green': cell.target == 'green'}">
-											<div class="robot" ng-show="cell.robot" ng-click="selectRobot(cell.robot)"
+											ng-class="{'cell-border-left': cell.g == 1, 'cell-border-right': cell.d == 1, 'cell-border-top': cell.h == 1, 'cell-border-bottom': cell.b == 1, 'cell-trail': cell.trail,
+											'target-red': cell.target == 'red', 'target-blue': cell.target == 'blue', 'target-yellow': cell.target == 'yellow', 'target-green': cell.target == 'green', 'cell-endpoint': cell.endpoint}">
+											<div class="robot" ng-show="cell.robot" ng-click="game.selectRobot(cell.robot)"
 												ng-class="{'robot-blue': cell.robot.color == 'blue', 'robot-red': cell.robot.color == 'red', 'robot-yellow': cell.robot.color == 'yellow',
 													'robot-green': cell.robot.color == 'green', 'robot-selected': cell.robot.selected, 'robot-unselectable': !cell.robot.canMove(game.lastRobotMoved)}"></div>
 										</td>
 									</tr>
 								</table>
 							</div>
-						</div>
-					</div>
-					<div class="col-sm-12 col-md-3">
-						<div class="well">
-							<legend>Actions</legend>
-							<button type="button" class="btn" ng-click="move('UP')" title="Bouge le robot en haut"
-								ng-disabled="$parent.terminateGame || victory || (game.selectedRobot && !game.selectedRobot.canMoveUp())">Haut</button>
-							<button type="button" class="btn" ng-click="move('DOWN')" title="Bouge le robot en bas"
-								ng-disabled="$parent.terminateGame || victory || (game.selectedRobot && !game.selectedRobot.canMoveDown())">Bas</button>
-							<button type="button" class="btn" ng-click="move('RIGHT')" title="Bouge le robot à droite"
-								ng-disabled="$parent.terminateGame || victory || (game.selectedRobot && !game.selectedRobot.canMoveRight())">Droite</button>
-							<button type="button" class="btn" ng-click="move('LEFT')" title="Bouge le robot à gauche"
-								ng-disabled="$parent.terminateGame || victory || (game.selectedRobot && !game.selectedRobot.canMoveLeft())">Gauche</button>
-							<div><button type="button" class="btn btn-warning" ng-click="reset()" title="Remet à 0 le plateau"
-								ng-disabled="$parent.terminateGame || victory">RAZ</button></div>
-							<p>Fléches du clavier pour déplacer les robots.<br>Espace pour changer de robot.</p>
 						</div>
 					</div>
 				</div>
@@ -114,6 +114,9 @@
 		<!-- PROD JS <script src="js/min/main.min.js"></script>-->
 		<script src="js/commonModule.js"></script>
 		<script src="js/robot.js"></script>
+		<script src="js/loggedApp.js"></script>
+		<script src="js/propositionService.js"></script>
+		<script src="js/gameService.js"></script>
 		<script src="js/logged.js"></script>
 	</body>
 </html>

@@ -8,6 +8,7 @@ function Robot(column, line, color, map) {
 
 	this.currentCell = map[line][column];
 	this.currentCell.robot = this;
+	this.cellSelected = [];
 }
 
 Robot.prototype.setColumn = function(column) {
@@ -24,20 +25,20 @@ Robot.prototype.setLine = function(line) {
 	this.currentCell.robot = this;
 };
 
-Robot.prototype.canMoveUp = function() {
-	return !(this.line === 0 || this.currentCell.h == 1 || this.map[this.line-1][this.column].b == 1 || this.map[this.line-1][this.column].robot != null);
+Robot.prototype.canMoveUp = function(line, column) {
+	return !(line === 0 || this.map[line][column].h == 1 || this.map[line-1][column].b == 1 || this.map[line-1][column].robot != null);
 };
 
-Robot.prototype.canMoveDown = function() {
-	return !(this.line == this.map.maxLine || this.currentCell.b == 1 || this.map[this.line+1][this.column].h == 1 || this.map[this.line+1][this.column].robot != null);
+Robot.prototype.canMoveDown = function(line, column) {
+	return !(line == this.map.maxLine || this.map[line][column].b == 1 || this.map[line+1][column].h == 1 || this.map[line+1][column].robot != null);
 };
 
-Robot.prototype.canMoveLeft = function() {
-	return !(this.column === 0 || this.currentCell.g == 1 || this.map[this.line][this.column-1].d == 1 || this.map[this.line][this.column-1].robot != null);
+Robot.prototype.canMoveLeft = function(line, column) {
+	return !(column === 0 || this.map[line][column].g == 1 || this.map[line][column-1].d == 1 || this.map[line][column-1].robot != null);
 };
 
-Robot.prototype.canMoveRight = function() {
-	return !(this.column == this.map.maxColumn || this.currentCell.d == 1 || this.map[this.line][this.column+1].g == 1 || this.map[this.line][this.column+1].robot != null);
+Robot.prototype.canMoveRight = function(line, column) {
+	return !(column == this.map.maxColumn || this.map[line][column].d == 1 || this.map[line][column+1].g == 1 || this.map[line][column+1].robot != null);
 };
 
 /**
@@ -76,11 +77,16 @@ Robot.prototype.move = function(direction) {
 		moved = true;
 	}
 	
+	if(moved) {
+		this.hideTrail();
+		this.showTrail();
+	}
+	
 	return moved;
 };
 
 Robot.prototype.moveLeft = function() {
-	if(this.canMoveLeft()) {
+	if(this.canMoveLeft(this.line, this.column)) {
 		this.setColumn(this.column - 1);
 		return true;
 	}
@@ -88,7 +94,7 @@ Robot.prototype.moveLeft = function() {
 };
 
 Robot.prototype.moveRight = function() {
-	if(this.canMoveRight()) {
+	if(this.canMoveRight(this.line, this.column)) {
 		this.setColumn(this.column + 1);
 		return true;
 	}
@@ -96,7 +102,7 @@ Robot.prototype.moveRight = function() {
 };
 
 Robot.prototype.moveDown = function() {
-	if(this.canMoveDown()) {
+	if(this.canMoveDown(this.line, this.column)) {
 		this.setLine(this.line + 1);
 		return true;
 	}
@@ -104,7 +110,7 @@ Robot.prototype.moveDown = function() {
 };
 
 Robot.prototype.moveUp = function() {
-	if(this.canMoveUp()) {
+	if(this.canMoveUp(this.line, this.column)) {
 		this.setLine(this.line - 1);
 		return true;
 	}
@@ -117,4 +123,70 @@ Robot.prototype.isOnTarget = function() {
 
 Robot.prototype.canMove = function(lastRobotMoved) {
 	return !(this.moved === true && lastRobotMoved != this);
+};
+
+Robot.prototype.unselect = function() {
+	this.selected = false;
+	this.hideTrail();
+};
+
+Robot.prototype.select = function() {
+	this.selected = true;
+	this.showTrail();
+};
+
+Robot.prototype.hideTrail = function() {
+	var nbCells = this.cellSelected.length;
+	for(var i = 0; i < nbCells; i++) {
+		this.cellSelected[i].endpoint = false;
+		this.cellSelected[i].trail = false;
+	}
+};
+
+Robot.prototype.showTrail = function() {
+	var i;
+	this.cellSelected = [];
+	if(this.canMoveUp(this.line, this.column)) {
+		i = this.line - 1;
+		while(this.canMoveUp(i, this.column)) {
+			this.map[i][this.column].trail = true;
+			this.cellSelected.push(this.map[i][this.column]);
+			i--;
+		}
+		this.cellSelected.push(this.map[i][this.column]);
+		this.map[i][this.column].endpoint = true;
+	}
+	
+	if(this.canMoveDown(this.line, this.column)) {
+		i = this.line + 1;
+		while(this.canMoveDown(i, this.column)) {
+			this.map[i][this.column].trail = true;
+			this.cellSelected.push(this.map[i][this.column]);
+			i++;
+		}
+		this.cellSelected.push(this.map[i][this.column]);
+		this.map[i][this.column].endpoint = true;
+	}
+	
+	if(this.canMoveLeft(this.line, this.column)) {
+		i = this.column - 1;
+		while(this.canMoveLeft(this.line, i)) {
+			this.map[this.line][i].trail = true;
+			this.cellSelected.push(this.map[this.line][i]);
+			i--;
+		}
+		this.cellSelected.push(this.map[this.line][i]);
+		this.map[this.line][i].endpoint = true;
+	}
+	
+	if(this.canMoveRight(this.line, this.column)) {
+		i = this.column + 1;
+		while(this.canMoveRight(this.line, i)) {
+			this.map[this.line][i].trail = true;
+			this.cellSelected.push(this.map[this.line][i]);
+			i++;
+		}
+		this.cellSelected.push(this.map[this.line][i]);
+		this.map[this.line][i].endpoint = true;
+	}
 };

@@ -1,109 +1,4 @@
-/**
- * @ngdoc overview
- * @name loggedApp
- *
- * @description
- * Used on the page reach when login in.
- */
-var loggedApp = angular.module("loggedApp", ['commonModule']);
-
-/**
- * @ngdoc service
- * @name loggedApp.service:propositionService
- *
- * @description
- * Proposition service. Used to register actions constituting the proposition, and send the proposition.
- */
-loggedApp.factory('propositionService', ['$http', 'gameInfo', 'HOST_URL', function($http, gameInfo, HOST_URL) {
-	var service = {};
-	
-	/**
-	 * Array of actions, formatted according what except the server
-	 */
-	service.proposition = [];
-	
-	/**
-	 * @ngdoc function
-	 * @name loggedApp.service:propositionService#sendProposition
-	 * @methodOf loggedApp.service:propositionService
-	 *
-	 * @description
-	 * Send the proposition to the server.
-	 *
-	 * @returns {promise} promise for the request used to send the proposition
-	 */
-	service.sendProposition = function() {
-		var data = 'login=' + gameInfo.login + '&idGame=' + gameInfo.idGame + '&proposition=' + JSON.stringify(service.proposition);
-		
-		return $http({
-			url: HOST_URL + '/proposition',
-			method: 'POST',
-			data: encodeURI(data),
-			headers: {
-				"Content-Type": "application/x-www-form-urlencoded"
-			}
-
-		});
-	};
-
-	/**
-	 * @ngdoc function
-	 * @name loggedApp.service:propositionService#reset
-	 * @methodOf loggedApp.service:propositionService
-	 *
-	 * @description
-	 * Reset the proposition.
-	 */
-	service.reset = function() {
-		service.proposition = [];
-	};
-	
-	/**
-	 * @ngdoc function
-	 * @name loggedApp.service:propositionService#doAction
-	 * @methodOf loggedApp.service:propositionService
-	 *
-	 * @description
-	 * Record the last action (add it to the proposition).
-	 *
-	 * @param {string} cmd The command of the action ("select" | "move")
-	 * @param {string} color Robot's color (used only if the command is "select", must be null otherwise)
-	 * @param {int} line The destination line (must be set only if the command is move)
-	 * @param {int} column The destination column (must be set only if the command is move)
-	 */	
-	service.doAction = function(cmd, color, line, column) {
-		var action = {"command": cmd};
-		if(cmd == "select") {
-			action.robot = color;
-		}
-		else {
-			action.line = line;
-			action.column = column;
-		}
-		service.proposition.push(action);
-	};
-	
-	return service;
-}]);
-
-/**
- * @ngdoc service
- * @name loggedApp.service:gameInfo
- *
- * @description
- * Used to retrieve information put in hidden input field.
- */
-loggedApp.factory('gameInfo', function () {
-  var infos = {};
-  
-  //User login
-  infos.login = angular.element('#login').val();
-  
-  //Game id
-  infos.idGame = angular.element('#idGame').val();
-
-  return infos;
-});
+angular.module('loggedApp').constant('gameConstants', {"login": angular.element('#login').val(),"idGame": angular.element('#idGame').val()});
 
 /**
  * @ngdoc object
@@ -112,89 +7,26 @@ loggedApp.factory('gameInfo', function () {
  * @description
  * Main controller used to catch key events.
  */
-loggedApp.controller("mainController", ["$scope", "socket", "gameInfo", "$timeout", function($scope, socket, gameInfo, $timeout) {
-	socket.emit ('identification', {login: gameInfo.login, idGame: gameInfo.idGame});
+angular.module('loggedApp').controller("mainController", ["$scope", "socket", "game", function($scope, socket, game) {
+	socket.emit ('identification', {login: game.login, idGame: game.idGame});
 	
-	$scope.terminateGame = false;
-	$scope.firstFinder = "Un joueur";
-	$scope.player = gameInfo.login;
-	
-	var countDown = function() {
-		$scope.countDown--;
-		if($scope.countDown > 0) {
-			$timeout(countDown, 1000);
-		}
-	};
+	$scope.game = game;
 	
 	socket.on('FinalCountDown', function(data) {
-		var ms   = data.FinalCountDown;
-		$scope.finalCountDown = true;
-		$scope.countDown = ms/1000;
-		countDown();
+		game.startCountdown(data.FinalCountdown);
 	});
 	
 	socket.on('TerminateGame', function(data) {
-		$scope.terminateGame = true;
-		$scope.countDown = 0;
-		$scope.isWinner = false;
-		$scope.participants.forEach(function(element) {
-			if(element.place == 1) {
-				$scope.isWinner = true;
-				$scope.winner = element.name;
-				return;
-			}
-		});
+		game.finishGame();
 	});
-		
-	$scope.finders = {};
 
-	var solutions;
-	
-	function refreshRanks() {
-		if(solutions) {
-			$scope.firstFinder = solutions[0].player;
-			$scope.finders = {};
-			solutions.forEach(function(element) {
-				var current = element.player;
-				var nbCoups = element.proposition.length;
-				var place = 1;
-				solutions.forEach(function(element) {
-					if(element.player != current && element.proposition.length < nbCoups) {
-						place++;
-					}
-				});
-				$scope.finders[current] = place;
-			});
-			
-			$scope.participants.forEach(function(element) {
-				if($scope.finders[element.name]) {
-					element.place = $scope.finders[element.name];
-				}
-			});
-		}
-	}
-	
 	socket.on('solutions', function(data) {
-		solutions = data.solutions;
-		refreshRanks();
+		game.refreshRanks(data.solutions);
 	});
 	
-	
-	
-	$scope.participants = [{name: gameInfo.login, place: "~", me: true}];
 	socket.on('participants', function(data) {
-		$scope.participants = [];
-		data.participants.forEach(function(element) {
-			var participant = {name: element, place: "~", me: gameInfo.login == element};
-			if($scope.finders[element]) {
-				participant.place = $scope.finders[element];
-			}
-			$scope.participants.push(participant);
-		});
-		
-		refreshRanks();
+		game.refreshParticipants(data.participants);
 	});
-	
 }]);
 
 /**
@@ -204,9 +36,9 @@ loggedApp.controller("mainController", ["$scope", "socket", "gameInfo", "$timeou
  * @description
  * Handle map and robot behaviours.
  */
-loggedApp.controller("mapController", ["$scope", "$http", "gameInfo", 'HOST_URL', 'propositionService', '$timeout', function($scope, $http, gameInfo, HOST_URL, propositionService, $timeout) {
+angular.module('loggedApp').controller("mapController", ["$scope", "$http", "game", 'HOST_URL', 'propositionService', '$timeout', function($scope, $http, game, HOST_URL, propositionService, $timeout) {
 
-	var originalRobots;
+	$scope.game = game;
 	
 	var resizeMap = function() {
 		var table = angular.element('table');
@@ -226,127 +58,10 @@ loggedApp.controller("mapController", ["$scope", "$http", "gameInfo", 'HOST_URL'
 	window.onresize = resizeMap;
 	
 	//Init everything
-	$http.get(HOST_URL + "/" + gameInfo.idGame).success(function(data) {
-			originalRobots = JSON.parse(JSON.stringify(data.robots));
-			init(data);
+	$http.get(HOST_URL + "/" + game.idGame).success(function(data) {
+			game.init(data);
 			$timeout(resizeMap, 200);
 	});
-	
-	$scope.gameName = gameInfo.idGame;
-	$scope.login = gameInfo.login;
-	
-	var initRobots = function(robots) {
-		//Init robots
-		var nbRobots = robots.length;
-		$scope.game.robots = [];
-		for(var i = 0; i < nbRobots; i++) {
-			var robot = robots[i];
-			$scope.game.robots.push( new Robot(robot.column, robot.line, robot.color, $scope.game.map));
-		}
-		
-		$scope.game.selectedRobot = null;
-		$scope.game.lastRobotMoved = null;
-	}
-	
-	var init = function(data) {
-		$scope.game = {};
-
-		//Init map
-		$scope.game.map = data.board;
-		$scope.game.map.maxLine = $scope.game.map.length;
-		$scope.game.map.maxColumn = $scope.game.map[0].length;
-		
-		initRobots(data.robots);		
-		
-		//Init target
-		var target = data.target;
-		$scope.game.map[target.l][target.c].target = target.t;
-		
-		//Init game status
-		$scope.gameStatus = "Running";
-	};
-	
-	/**
-	 * @ngdoc function
-	 * @name loggedApp.controller:mapController#reset
-	 * @methodOf loggedApp.controller:mapController
-	 *
-	 * @description
-	 * Reset everything.
-	 */
-	$scope.reset = function() {
-		propositionService.reset();
-		var nbRobots = $scope.game.robots.length;
-		for(var i = 0; i < nbRobots; i++) {
-			var robot = $scope.game.robots[i];
-			$scope.game.map[robot.line][robot.column].robot = null;
-		}
-		
-		var robots = JSON.parse(JSON.stringify(originalRobots));
-		initRobots(robots);
-	};
-	
-	/**
-	 * @ngdoc function
-	 * @name loggedApp.controller:mapController#selectRobot
-	 * @methodOf loggedApp.controller:mapController
-	 *
-	 * @description
-	 * Unselect the current selected robot and select the given one. The selection is recorded in the proposition only after the first move of the robot.
-	 *
-	 * @param {Robot} robot Robot to be selected
-	 */
-	$scope.selectRobot = function(robot) {
-		if(!$scope.$parent.terminateGame && !$scope.victory && $scope.game.selectedRobot != robot) { //If the robot isn't already selected
-			if(robot.canMove($scope.game.lastRobotMoved)) {
-				if($scope.game.selectedRobot) {
-					$scope.game.selectedRobot.selected = false;
-				}
-				$scope.game.selectedRobot = robot;
-				robot.selected = true;
-			}
-		}
-	};
-		
-	$scope.move = function(direction) {
-		if(!$scope.$parent.terminateGame && !$scope.victory) {
-			var robotToMove = $scope.game.selectedRobot;
-			var alreadyMoved = robotToMove.moved;
-
-			if(robotToMove && robotToMove.canMove($scope.game.lastRobotMoved)) { //Check if the robot can be moved
-				var moved = robotToMove.move(direction, true);
-				if(moved) { //If the robot has actually moved
-					$scope.game.lastRobotMoved = robotToMove;
-					
-					if(!alreadyMoved && moved) { //If it's first move, we also register the select
-						propositionService.doAction("select", robotToMove.color);
-					}
-					propositionService.doAction("move", null, robotToMove.line, robotToMove.column);
-					
-					if(robotToMove.isOnTarget()) { //If the proposition is valid => send the proposition => display the result
-						var req = propositionService.sendProposition();
-						req.success(function(result) {
-						console.log(result);
-								switch(result.state) {
-									case "SUCCESS":
-										$scope.victory = true;
-										break;
-									case "TOO_LATE":
-										$scope.tooLate = true;
-										$scope.$parent.terminateGame = true;
-										break;
-									default:
-										$scope.error = true;
-										break;
-								}
-							}).error(function() {
-								//TODO connection error
-							});
-					}
-				}
-			}
-		}
-	};
 	
 	/**
 	 * @ngdoc function
@@ -361,35 +76,35 @@ loggedApp.controller("mapController", ["$scope", "$http", "gameInfo", 'HOST_URL'
 	$scope.$parent.keyPress = function(event) {
 		switch(event.which) {
 			case 40: //DOWN
-				$scope.move('DOWN');
+				game.move('DOWN');
 				break;
 			case 38: //UP
-				$scope.move('UP');
+				game.move('UP');
 				break;
 			case 37: //LEFT
-				$scope.move('LEFT');
+				game.move('LEFT');
 				break;
 			case 39: //RIGHT
-				$scope.move('RIGHT');
+				game.move('RIGHT');
 				break;
 			case 32: //SPACEBAR, SWITCH ROBOT
 				var robotToSelect;
-				if(!$scope.game.selectedRobot) {
-					robotToSelect = $scope.game.robots[0];
+				if(!game.selectedRobot) {
+					robotToSelect = game.robots[0];
 				}
 				else {
-					var index = $scope.game.robots.indexOf($scope.game.selectedRobot);					
-					var nbRobots = $scope.game.robots.length;
+					var index = game.robots.indexOf(game.selectedRobot);					
+					var nbRobots = game.robots.length;
 					(index == nbRobots-1) ? index = 0 : index++;
-					while(!$scope.game.robots[index].canMove($scope.game.lastRobotMoved)) {
+					while(!game.robots[index].canMove(game.lastRobotMoved)) {
 						if(index == nbRobots-1) {
 							index = -1;
 						}
 						index++;
 					}
-					robotToSelect = $scope.game.robots[index];
+					robotToSelect = game.robots[index];
 				}
-				$scope.selectRobot(robotToSelect);
+				game.selectRobot(robotToSelect);
 				break;
 		}
 	};

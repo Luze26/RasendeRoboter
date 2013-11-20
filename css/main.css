@@ -31,6 +31,19 @@ table {
 	background-color: #fff;
 }
 
+.cell-endpoint {
+	background-color: #aaa;
+	cursor: pointer;
+}
+
+.cell-endpoint:hover {
+	background-color: #9b59b6;
+}
+
+.cell-trail {
+	background-color: #eee;
+}
+
 .cell-border-left {
 	border-left: solid 2px #000;
 }
