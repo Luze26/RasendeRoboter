@@ -206,13 +206,13 @@ loggedApp.controller("mainController", ["$scope", "socket", "gameInfo", "$timeou
  */
 loggedApp.controller("mapController", ["$scope", "$http", "gameInfo", 'HOST_URL', 'propositionService', '$timeout', function($scope, $http, gameInfo, HOST_URL, propositionService, $timeout) {
 
-	var originalData;
+	var originalRobots;
 	
 	var resizeMap = function() {
 		var table = angular.element('table');
 		var width = table.width();
 		var height = width/16 - 4;
-		angular.element('.cell').height(height);
+		angular.element('tr').height(height);
 		robots = angular.element('.robot');
 		height -= 4;
 		robots.height(height);
@@ -227,13 +227,26 @@ loggedApp.controller("mapController", ["$scope", "$http", "gameInfo", 'HOST_URL'
 	
 	//Init everything
 	$http.get(HOST_URL + "/" + gameInfo.idGame).success(function(data) {
-			originalData = JSON.parse(JSON.stringify(data));
+			originalRobots = JSON.parse(JSON.stringify(data.robots));
 			init(data);
 			$timeout(resizeMap, 200);
 	});
 	
 	$scope.gameName = gameInfo.idGame;
 	$scope.login = gameInfo.login;
+	
+	var initRobots = function(robots) {
+		//Init robots
+		var nbRobots = robots.length;
+		$scope.game.robots = [];
+		for(var i = 0; i < nbRobots; i++) {
+			var robot = robots[i];
+			$scope.game.robots.push( new Robot(robot.column, robot.line, robot.color, $scope.game.map));
+		}
+		
+		$scope.game.selectedRobot = null;
+		$scope.game.lastRobotMoved = null;
+	}
 	
 	var init = function(data) {
 		$scope.game = {};
@@ -243,15 +256,7 @@ loggedApp.controller("mapController", ["$scope", "$http", "gameInfo", 'HOST_URL'
 		$scope.game.map.maxLine = $scope.game.map.length;
 		$scope.game.map.maxColumn = $scope.game.map[0].length;
 		
-		//Init robots
-		var nbRobots = data.robots.length;
-		$scope.game.robots = [];
-		for(var i = 0; i < nbRobots; i++) {
-			var robot = data.robots[i];
-			$scope.game.robots.push( new Robot(robot.column, robot.line, robot.color, $scope.game.map));
-		}
-		$scope.game.selectedRobot = null;
-		$scope.game.lastRobotMoved = null;
+		initRobots(data.robots);		
 		
 		//Init target
 		var target = data.target;
@@ -271,9 +276,14 @@ loggedApp.controller("mapController", ["$scope", "$http", "gameInfo", 'HOST_URL'
 	 */
 	$scope.reset = function() {
 		propositionService.reset();
-		var data = JSON.parse(JSON.stringify(originalData));
-		init(data);
-		$timeout(resizeMap, 50);
+		var nbRobots = $scope.game.robots.length;
+		for(var i = 0; i < nbRobots; i++) {
+			var robot = $scope.game.robots[i];
+			$scope.game.map[robot.line][robot.column].robot = null;
+		}
+		
+		var robots = JSON.parse(JSON.stringify(originalRobots));
+		initRobots(robots);
 	};
 	
 	/**
