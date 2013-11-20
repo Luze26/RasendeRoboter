@@ -117,12 +117,12 @@ Robot.prototype.select = function() {
 Robot.prototype.hideTrail = function() {
 	var nbCells = this.cellsSelected.length;
 	for(var i = 0; i < nbCells; i++) {
-		this.cellsSelected[i].endpoint = false;
+		this.cellsSelected[i].endpoint = null;
 		this.cellsSelected[i].trail = false;
 	}
 };
 
-Robot.prototype.showTrail = function(lStep, cStep, lOrC) {
+Robot.prototype.showTrail = function(lStep, cStep, direction, lOrC) {
 	if(this.canMoveFn(this.line, this.column)) {
 		l = this.line + lStep;
 		c = this.column + cStep;
@@ -133,7 +133,7 @@ Robot.prototype.showTrail = function(lStep, cStep, lOrC) {
 			c += cStep;
 		}
 		this.cellsSelected.push(this.map[l][c]);
-		this.map[l][c].endpoint = true;
+		this.map[l][c].endpoint = direction;
 		
 		if(lOrC === true) {
 			return l;
@@ -145,11 +145,11 @@ Robot.prototype.showTrail = function(lStep, cStep, lOrC) {
 
 Robot.prototype.showTrails = function() {
 	this.canMoveFn = this.canMoveUp;
-	this.upCell = this.showTrail(-1, 0, true);
+	this.upCell = this.showTrail(-1, 0, "UP", true);
 	this.canMoveFn = this.canMoveDown;
-	this.downCell = this.showTrail(1, 0, true);
+	this.downCell = this.showTrail(1, 0, "DOWN", true);
 	this.canMoveFn = this.canMoveRight;
-	this.rightCell = this.showTrail(0, 1, false);
+	this.rightCell = this.showTrail(0, 1, "RIGHT", false);
 	this.canMoveFn = this.canMoveLeft;
-	this.leftCell = this.showTrail(0, -1, false);
+	this.leftCell = this.showTrail(0, -1, "LEFT", false);
 };

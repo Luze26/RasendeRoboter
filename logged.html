@@ -89,9 +89,9 @@
 								<div class="map-overlay" ng-show="game.terminateGame || game.propositionDone"></div>
 								<table>
 									<tr ng-repeat="row in game.map">
-										<td ng-repeat="cell in row" class="cell"
+										<td ng-repeat="cell in row" class="cell" ng-click="clickCell(cell)"
 											ng-class="{'cell-border-left': cell.g == 1, 'cell-border-right': cell.d == 1, 'cell-border-top': cell.h == 1, 'cell-border-bottom': cell.b == 1, 'cell-trail': cell.trail,
-											'target-red': cell.target == 'red', 'target-blue': cell.target == 'blue', 'target-yellow': cell.target == 'yellow', 'target-green': cell.target == 'green', 'cell-endpoint': cell.endpoint}">
+											'target-red': cell.target == 'red', 'target-blue': cell.target == 'blue', 'target-yellow': cell.target == 'yellow', 'target-green': cell.target == 'green', 'cell-endpoint': cell.endpoint != null}">
 											<div class="robot" ng-show="cell.robot" ng-click="game.selectRobot(cell.robot)"
 												ng-class="{'robot-blue': cell.robot.color == 'blue', 'robot-red': cell.robot.color == 'red', 'robot-yellow': cell.robot.color == 'yellow',
 													'robot-green': cell.robot.color == 'green', 'robot-selected': cell.robot.selected, 'robot-unselectable': !cell.robot.canMove(game.lastRobotMoved)}"></div>

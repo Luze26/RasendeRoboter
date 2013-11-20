@@ -63,6 +63,12 @@ angular.module('loggedApp').controller("mapController", ["$scope", "$http", "gam
 			$timeout(resizeMap, 200);
 	});
 	
+	$scope.clickCell = function(cell) {
+		if(cell.endpoint != null) {
+			game.selectedRobot.move(cell.endpoint);
+		}
+	}
+	
 	/**
 	 * @ngdoc function
 	 * @name loggedApp.controller:mainController#keyPress
