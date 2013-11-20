@@ -13,7 +13,7 @@ angular.module('loggedApp').controller("mainController", ["$scope", "socket", "g
 	$scope.game = game;
 	
 	socket.on('FinalCountDown', function(data) {
-		game.startCountdown(data.FinalCountdown);
+		game.startCountdown(data.FinalCountDown);
 	});
 	
 	socket.on('TerminateGame', function(data) {

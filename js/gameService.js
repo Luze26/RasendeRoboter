@@ -57,21 +57,22 @@ angular.module('loggedApp').factory('game', ['$http', 'HOST_URL', '$timeout', 'p
 	//First finder, first finder to have proposed a valid solution
 	service.firstFinder = "Un joueur";
 	
-	service.refreshRanks = function(solutions) {console.log("llll");
-		if(solutions) {console.log("llssssssll");
+	service.refreshRanks = function(solutions) {
+		if(solutions) {
 			service.firstFinder = solutions[0].player; //First finder
 			
-			solutions.forEach(function(solution) {console.log("lqsdqslll");
+			solutions.forEach(function(solution) {
 				var current = solution.player;
-				if(participantsHash[current]) {console.log("sqqqqq");
+				if(participantsHash[current]) {
 					var nbCoups = solution.proposition.length;
 					var place = 1;
 					solutions.forEach(function(solution2) {
 						if(solution2.player != current && solution2.proposition.length < nbCoups) {
 							place++;
 						}
-					});console.log(place);
+					});
 					participantsHash[current].place = place;
+					participantsHash[current].nbCoups = nbCoups;
 				}
 			});
 		}

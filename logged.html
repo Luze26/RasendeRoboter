@@ -27,7 +27,9 @@
 						<legend>Les participants</legend>
 						<ul class="participants-list">
 							<li ng-repeat="p in game.participants | orderBy:'place'" ng-class="{'me': p.me}">
-								<span class="rank">{{p.place}}</span>{{p.name}} <span ng-show="p.name == game.firstFinder">*</span>
+								<span class="rank">{{p.place}}</span>{{p.name}}
+								<span class="participant-nb-coups" ng-show="p.nbCoups">{{p.nbCoups}} coups</span>
+								<span ng-show="p.name == game.firstFinder">*</span>
 							</li>
 						</ul>
 					</div>
@@ -117,7 +119,7 @@
 		<script src="js/loggedApp.js"></script>
 		<script src="js/propositionService.js"></script>
 		<script src="js/gameService.js"></script>
-		<script src="js/logged.js"></script>
+		<script src="js/loggedAppCtrls.js"></script>
 	</body>
 </html>
 

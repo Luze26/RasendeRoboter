@@ -8,6 +8,12 @@ table {
 	list-style: none;
 }
 
+.participant-nb-coups {
+	font-size: 12px;
+	font-style: italic;
+	color: #888;
+}
+
 .rank {
 	margin-right: 20px;
 }
