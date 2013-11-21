@@ -65,7 +65,7 @@ angular.module('loggedApp').controller("mapController", ["$scope", "$http", "gam
 	
 	$scope.clickCell = function(cell) {
 		if(cell.endpoint != null) {
-			game.selectedRobot.move(cell.endpoint);
+			game.move(cell.endpoint);
 		}
 	}
 	
