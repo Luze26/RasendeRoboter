@@ -94,19 +94,24 @@ angular.module('loggedApp').factory('game', ['$http', 'HOST_URL', '$timeout', 'p
 		
 	var originalRobots;
 	
-	var initRobots = function(robots) {
-		//Init robots
-		var nbRobots = robots.length;
-		service.robots = [];
-		for(var i = 0; i < nbRobots; i++) {
-			var robot = robots[i];
-			service.robots.push( new Robot(robot.column, robot.line, robot.color, service.map));
+	var initRobots = function(robots, reset) {
+		if(reset !== true) {
+			service.robots = [];
 		}
 		
-		if(service.selectedRobot) {
-			service.selectedRobot.unselect();
-			service.selectedRobot = null;
+		//Init robots
+		var nbRobots = robots.length;
+		for(var i = 0; i < nbRobots; i++) {
+			var robot = robots[i];
+			if(reset === true) {
+				service.robots[i].reset(robot.column, robot.line);
+			}
+			else {
+				service.robots.push(new Robot(robot.column, robot.line, robot.color, service.map));
+			}
 		}
+		
+		service.selectedRobot = null;
 		service.lastRobotMoved = null;
 	};
 	
@@ -131,11 +136,13 @@ angular.module('loggedApp').factory('game', ['$http', 'HOST_URL', '$timeout', 'p
 			var nbRobots = service.robots.length;
 			for(var i = 0; i < nbRobots; i++) {
 				var robot = service.robots[i];
-				service.map[robot.line][robot.column].robot = null;
+				if(robot.moved === true) {
+					service.map[robot.line][robot.column].robot = null;
+				}
 			}
 			
 			var robots = JSON.parse(JSON.stringify(originalRobots));
-			initRobots(robots);
+			initRobots(robots, true);
 		}
 	};
 	

@@ -153,3 +153,13 @@ Robot.prototype.showTrails = function() {
 	this.canMoveFn = this.canMoveLeft;
 	this.leftCell = this.showTrail(0, -1, "LEFT", false);
 };
+
+Robot.prototype.reset = function(column, line) {
+	this.currentCell.robot = null;
+	this.unselect();
+	this.moved = false;
+	this.line = line;
+	this.column = column;
+	this.currentCell = this.map[line][column];
+	this.currentCell.robot = this;
+};

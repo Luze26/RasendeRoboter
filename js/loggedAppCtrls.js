@@ -74,17 +74,26 @@ angular.module('loggedApp').controller("mapController", ["$scope", "$http", "gam
 
 	$scope.game = game;
 	
+	var overlay = angular.element('.map-overlay');
+	var table = angular.element('table');
+	var lines = null;
+	
 	var resizeMap = function() {
-		var table = angular.element('table');
+		if(lines === null) {
+			lines = table.find('tr');
+		}
+		
 		var width = table.width();
 		var height = width/16 - 4;
-		angular.element('tr').height(height);
-		robots = angular.element('.robot');
+		lines.height(height);
 		height -= 4;
-		robots.height(height);
-		robots.width(height);
+		$scope.$apply(	function() {
+			game.robots.forEach(function(robot) {
+				robot.height = height;
+				robot.width = height;
+			});
+		});
 		
-		var overlay = angular.element('.map-overlay');
 		overlay.width(width);
 		overlay.height(table.height());
 	};

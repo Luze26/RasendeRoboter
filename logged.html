@@ -64,7 +64,7 @@
 					<div class="col-sm-12 col-md-7">
 						<div class="well">
 							<legend>Partie: {{game.idGame}}</legend>
-							<div class="alert alert-info" ng-show="!game.terminateGame && game.countDown && !game.propositionDone" ng-cloak>
+							<div class="alert alert-info" ng-if="!game.terminateGame && game.countDown && !game.propositionDone" ng-cloak>
 								<p><strong>{{game.firstFinder}}</strong> a été le premier à trouvé une solution.<br>
 								Il vous reste <strong>{{game.countDown}} secondes !</strong></p>
 							</div>
@@ -75,7 +75,7 @@
 								<strong>HACKER !!!</strong> Ou peut-être c'est un bug.
 							</div>
 							<div class="alert" ng-class="game.isCurrentPlayerWinner ? 'alert-success' : 'alert-info'"
-								ng-show="game.terminateGame" ng-cloak>
+								ng-if="game.terminateGame"  ng-cloak>
 								<p ng-show="game.isCurrentPlayerWinner">Yeah man! T'as fini premier.</p>
 								<div ng-show="!game.isCurrentPlayerWinner">
 										<p ng-show="game.winner">
@@ -86,7 +86,7 @@
 										</p>
 								</div>
 							</div>
-							<div class="alert alert-success" ng-show="!game.terminateGame && game.propositionDone">
+							<div class="alert alert-success" ng-if="!game.terminateGame && game.propositionDone"  ng-cloak>
 								<p>
 									T'as <span ng-show="game.firstFinder == game.login">été le premier à avoir</span> trouvé une solution!<br>
 									T'es actuellement classé: <strong>{{game.currentPlayer.place}}</strong>.<br>
@@ -100,7 +100,7 @@
 										<td ng-repeat="cell in row" class="cell" ng-click="clickCell(cell)"
 											ng-class="{'cell-border-left': cell.g == 1, 'cell-border-right': cell.d == 1, 'cell-border-top': cell.h == 1, 'cell-border-bottom': cell.b == 1, 'cell-trail': cell.trail,
 											'target-red': cell.target == 'red', 'target-blue': cell.target == 'blue', 'target-yellow': cell.target == 'yellow', 'target-green': cell.target == 'green', 'cell-endpoint': cell.endpoint != null}">
-											<div class="robot" ng-show="cell.robot" ng-click="game.selectRobot(cell.robot)"
+											<div class="robot" ng-if="cell.robot" ng-click="game.selectRobot(cell.robot)" style="height: {{cell.robot.height}}px; width: {{cell.robot.width}}px;"
 												ng-class="{'robot-blue': cell.robot.color == 'blue', 'robot-red': cell.robot.color == 'red', 'robot-yellow': cell.robot.color == 'yellow',
 													'robot-green': cell.robot.color == 'green', 'robot-selected': cell.robot.selected, 'robot-unselectable': !cell.robot.canMove(game.lastRobotMoved)}"></div>
 										</td>
