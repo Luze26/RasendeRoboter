@@ -126,15 +126,17 @@ angular.module('loggedApp').factory('game', ['$http', 'HOST_URL', '$timeout', 'p
 	};
 	
 	service.reset = function() {
-		propositionService.reset();
-		var nbRobots = service.robots.length;
-		for(var i = 0; i < nbRobots; i++) {
-			var robot = service.robots[i];
-			service.map[robot.line][robot.column].robot = null;
+		if(!service.terminateGame && !service.propositionDone) {
+			propositionService.reset();
+			var nbRobots = service.robots.length;
+			for(var i = 0; i < nbRobots; i++) {
+				var robot = service.robots[i];
+				service.map[robot.line][robot.column].robot = null;
+			}
+			
+			var robots = JSON.parse(JSON.stringify(originalRobots));
+			initRobots(robots);
 		}
-		
-		var robots = JSON.parse(JSON.stringify(originalRobots));
-		initRobots(robots);
 	};
 	
 	///////////
@@ -199,6 +201,24 @@ angular.module('loggedApp').factory('game', ['$http', 'HOST_URL', '$timeout', 'p
 					}
 				}
 			}
+		}
+	};
+	
+	service.selectNext = function() {
+		if(!service.selectedRobot) {
+			service.selectRobot(service.robots[0]);
+		}
+		else {
+			var index = service.robots.indexOf(service.selectedRobot);					
+			var nbRobots = service.robots.length;
+			(index == nbRobots-1) ? index = 0 : index++;
+			while(!service.robots[index].canMove(service.lastRobotMoved)) {
+				if(index == nbRobots-1) {
+					index = -1;
+				}
+				index++;
+			}
+			service.selectRobot(service.robots[index]);
 		}
 	};
 	

@@ -17,7 +17,6 @@ commonModule.constant('HOST_URL', window.location.origin);
  * socket.io service. Open a socket shared between controllers.
  */
 commonModule.factory('socket', ['$rootScope', function ($rootScope) {
-console.log(io);
 	var socket = io.connect();
 	return {
 	on: function (eventName, callback) {

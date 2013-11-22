@@ -33,37 +33,49 @@ table {
 .cell {
 	width: 6.25%;
 	min-height: 15px;
-	border: solid 1px #ccc;
+	border: solid 1px #ecf0f1;
 	background-color: #fff;
 }
 
+.cell-trail {
+	background-color: #D5DDE2;
+}
+
 .cell-endpoint {
-	background-color: #aaa;
+	background-color: #95a5a6;
 	cursor: pointer;
 }
 
-.cell-endpoint:hover {
-	background-color: #9b59b6;
+.table-red .cell-endpoint:hover {
+	background-color: #e74c3c;
 }
 
-.cell-trail {
-	background-color: #eee;
+.table-blue .cell-endpoint:hover {
+	background-color: #3498db;
+}
+
+.table-yellow .cell-endpoint:hover {
+	background-color: #f1c40f;
+}
+
+.table-green .cell-endpoint:hover {
+	background-color: #2ecc71;
 }
 
 .cell-border-left {
-	border-left: solid 2px #000;
+	border-left: solid 2px #2c3e50;
 }
 
 .cell-border-right {
-	border-right: solid 2px #000;
+	border-right: solid 2px #2c3e50;
 }
 
 .cell-border-top {
-	border-top: solid 2px #000;
+	border-top: solid 2px #2c3e50;
 }
 
 .cell-border-bottom {
-	border-bottom: solid 2px #000;
+	border-bottom: solid 2px #2c3e50;
 }
 
 /* TARGET */

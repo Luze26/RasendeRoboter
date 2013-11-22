@@ -27,6 +27,40 @@ angular.module('loggedApp').controller("mainController", ["$scope", "socket", "g
 	socket.on('participants', function(data) {
 		game.refreshParticipants(data.participants);
 	});
+	
+	/**
+	 * @ngdoc function
+	 * @name loggedApp.controller:mainController#keyPress
+	 * @methodOf loggedApp.controller:mainController
+	 *
+	 * @description
+	 * Called when a key is pressed. Handle keys actions on the game.
+	 *
+	 * @param {event} event key event
+	 */
+	$scope.keyPress = function(event) {
+		event.preventDefault();
+		switch(event.which) {
+			case 40: //DOWN
+				game.move('DOWN');
+				break;
+			case 38: //UP
+				game.move('UP');
+				break;
+			case 37: //LEFT
+				game.move('LEFT');
+				break;
+			case 39: //RIGHT
+				game.move('RIGHT');
+				break;
+			case 32: //SPACEBAR, SWITCH ROBOT
+				game.selectNext();
+				break;
+			case 8: //BACKSPACE, RESET
+				game.reset();
+				break;
+		}
+	};
 }]);
 
 /**
@@ -66,52 +100,6 @@ angular.module('loggedApp').controller("mapController", ["$scope", "$http", "gam
 	$scope.clickCell = function(cell) {
 		if(cell.endpoint != null) {
 			game.move(cell.endpoint);
-		}
-	}
-	
-	/**
-	 * @ngdoc function
-	 * @name loggedApp.controller:mainController#keyPress
-	 * @methodOf loggedApp.controller:mainController
-	 *
-	 * @description
-	 * Called when a key is pressed. Handle keys actions on the game.
-	 *
-	 * @param {event} event key event
-	 */
-	$scope.$parent.keyPress = function(event) {
-		switch(event.which) {
-			case 40: //DOWN
-				game.move('DOWN');
-				break;
-			case 38: //UP
-				game.move('UP');
-				break;
-			case 37: //LEFT
-				game.move('LEFT');
-				break;
-			case 39: //RIGHT
-				game.move('RIGHT');
-				break;
-			case 32: //SPACEBAR, SWITCH ROBOT
-				var robotToSelect;
-				if(!game.selectedRobot) {
-					robotToSelect = game.robots[0];
-				}
-				else {
-					var index = game.robots.indexOf(game.selectedRobot);					
-					var nbRobots = game.robots.length;
-					(index == nbRobots-1) ? index = 0 : index++;
-					while(!game.robots[index].canMove(game.lastRobotMoved)) {
-						if(index == nbRobots-1) {
-							index = -1;
-						}
-						index++;
-					}
-					robotToSelect = game.robots[index];
-				}
-				game.selectRobot(robotToSelect);
-				break;
 		}
 	};
 }]);

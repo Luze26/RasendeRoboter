@@ -47,9 +47,13 @@
 						<button type="button" class="btn" ng-click="game.move('LEFT')" title="Bouge le robot à gauche"
 							ng-disabled="game.terminateGame || game.propositionDone || (!game.selectedRobot ||
 							game.selectedRobot.leftCell == null)">Gauche</button>
-						<div><button type="button" class="btn btn-warning" ng-click="game.reset()" title="Remet à 0 le plateau"
-							ng-disabled="game.terminateGame || game.propositionDone">RAZ</button></div>
-						<p><br>Fléches du clavier pour déplacer les robots.<br>Espace pour changer de robot.</p>
+						<div>
+							<button type="button" class="btn btn-primary" ng-click="game.selectNext()" title="Sélectionne le prochain robot"
+								ng-disabled="game.terminateGame || game.propositionDone">Switcher</button>
+							<button type="button" class="btn btn-warning" ng-click="game.reset()" title="Remet à 0 le plateau"
+								ng-disabled="game.terminateGame || game.propositionDone">RAZ</button>
+						</div>
+						<p><br>Fléches du clavier pour déplacer les robots.<br>Espace pour changer de robot. Retour arrière pour reset.</p>
 					</div>
 				</div>
 				<div ng-controller="mapController">
@@ -82,12 +86,12 @@
 								<p>
 									T'as <span ng-show="game.firstFinder == game.login">été le premier à avoir</span> trouvé une solution!<br>
 									T'es actuellement classé: <strong>{{game.currentPlayer.place}}</strong>.<br>
-									<span ng-show="game.countDown">Il reste {{game.countDown}} secondes aux participants pour proposer leur solution.</span>
+									<span ng-show="game.countDown">Il reste {{game.countDown}} secondes aux autres participants pour proposer leur solution.</span>
 								</p>
 							</div>
 							<div id="tableWrap">
 								<div class="map-overlay" ng-show="game.terminateGame || game.propositionDone"></div>
-								<table>
+								<table ng-class="{'table-blue': game.selectedRobot.color == 'blue', 'table-red':  game.selectedRobot.color == 'red', 'table-yellow': game.selectedRobot.color == 'yellow', 'table-green': game.selectedRobot.color == 'green'}">
 									<tr ng-repeat="row in game.map">
 										<td ng-repeat="cell in row" class="cell" ng-click="clickCell(cell)"
 											ng-class="{'cell-border-left': cell.g == 1, 'cell-border-right': cell.d == 1, 'cell-border-top': cell.h == 1, 'cell-border-bottom': cell.b == 1, 'cell-trail': cell.trail,
