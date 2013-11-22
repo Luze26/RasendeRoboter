@@ -10,6 +10,8 @@ angular.module('loggedApp').factory('game', ['$http', 'HOST_URL', '$timeout', 'p
 	//Countdown
 	///////////
 	
+	service.countDown = null;
+	
 	var countDown = function() {
 		service.countDown--;
 		if(service.countDown > 0) {
@@ -27,6 +29,9 @@ angular.module('loggedApp').factory('game', ['$http', 'HOST_URL', '$timeout', 'p
 	///////////
 	//Finish Game
 	///////////
+	
+	//If a proposition has been done
+	service.propositionDone = false;
 	
 	//Terminate game, if the game is terminate
 	service.terminateGame = false;
@@ -82,7 +87,7 @@ angular.module('loggedApp').factory('game', ['$http', 'HOST_URL', '$timeout', 'p
 		var participantsTmp = [];
 		participants.forEach(function(participant) {
 			if(!participantsHash[participant]) {
-				participantsHash[participant] = {name: participant, place: "~", me: service.login == participant};
+				participantsHash[participant] = {name: participant, place: "~", me: service.login == participant, nbCoups: null};
 				service.participants.push(participantsHash[participant]);
 			}
 		});
@@ -93,7 +98,9 @@ angular.module('loggedApp').factory('game', ['$http', 'HOST_URL', '$timeout', 'p
 	///////////
 		
 	var originalRobots;
-	
+	service.selectedRobot = null;
+	service.lastRobotMoved = null;
+		
 	var initRobots = function(robots, reset) {
 		if(reset !== true) {
 			service.robots = [];

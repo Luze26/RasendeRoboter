@@ -103,7 +103,7 @@ angular.module('loggedApp').controller("mapController", ["$scope", "$http", "gam
 	//Init everything
 	$http.get(HOST_URL + "/" + game.idGame).success(function(data) {
 			game.init(data);
-			$timeout(resizeMap, 200);
+			$timeout(resizeMap, 80);
 	});
 	
 	$scope.clickCell = function(cell) {
