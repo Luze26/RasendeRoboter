@@ -2,6 +2,7 @@
 table {
 	border-spacing: 0px;
 	width: 100%;
+	border: solid 2px #2c3e50;
 }
 
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
