@@ -115,16 +115,10 @@ angular.module('loggedApp').controller("mapController", ["$scope", "$http", "gam
 		lines.height(height);
 		height -= 4;
 
-		if(!$scope.$$phase) {
-			$scope.$apply(function() {
-				Robot.prototype.height = height;
-				Robot.prototype.width = height;
-			});
-		}
-		else {
+		$timeout(function() {
 			Robot.prototype.height = height;
 			Robot.prototype.width = height;
-		}
+		});
 		
 		overlay.width(width);
 		overlay.height(table.height());
