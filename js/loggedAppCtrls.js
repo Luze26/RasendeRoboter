@@ -63,6 +63,33 @@ angular.module('loggedApp').controller("mainController", ["$scope", "socket", "g
 	};
 }]);
 
+angular.module('loggedApp').directive('styleCellDirective', function() {
+  return function(scope, element, attrs) {
+    var cell = scope.cell;
+	var classToAdd = [];
+	if(cell.g == 1) {
+		classToAdd.push("cell-border-left ");
+	}
+	if(cell.d == 1) {
+		classToAdd.push("cell-border-right ");
+	}
+	if(cell.h == 1) {
+		classToAdd.push("cell-border-top ");
+	}
+	if(cell.b == 1) {
+		classToAdd.push("cell-border-bottom ");
+	}
+	if(cell.target != null) {
+		classToAdd.push("target-");
+		classToAdd.push(cell.target);
+	}
+	angular.element(element).addClass(classToAdd.join(''));
+	if(scope.$last) {
+		window.onresize();
+	}
+  };
+});
+
 /**
  * @ngdoc object
  * @name loggedApp.controller:mapController
@@ -87,12 +114,17 @@ angular.module('loggedApp').controller("mapController", ["$scope", "$http", "gam
 		var height = width/16 - 4;
 		lines.height(height);
 		height -= 4;
-		$scope.$apply(	function() {
-			game.robots.forEach(function(robot) {
-				robot.height = height;
-				robot.width = height;
+
+		if(!$scope.$$phase) {
+			$scope.$apply(function() {
+				Robot.prototype.height = height;
+				Robot.prototype.width = height;
 			});
-		});
+		}
+		else {
+			Robot.prototype.height = height;
+			Robot.prototype.width = height;
+		}
 		
 		overlay.width(width);
 		overlay.height(table.height());
@@ -100,10 +132,10 @@ angular.module('loggedApp').controller("mapController", ["$scope", "$http", "gam
 	
 	window.onresize = resizeMap;
 	
+	
 	//Init everything
 	$http.get(HOST_URL + "/" + game.idGame).success(function(data) {
-			game.init(data);
-			$timeout(resizeMap, 80);
+		game.init(data);
 	});
 	
 	$scope.clickCell = function(cell) {

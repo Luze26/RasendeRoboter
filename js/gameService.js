@@ -122,14 +122,15 @@ angular.module('loggedApp').factory('game', ['$http', 'HOST_URL', '$timeout', 'p
 		service.lastRobotMoved = null;
 	};
 	
-	service.init = function(data) {
-		originalRobots = JSON.parse(JSON.stringify(data.robots));
-		
+	service.init = function(data) {		
 		//Init map
 		service.map = data.board;
-		service.map.maxLine = service.map.length;
-		service.map.maxColumn = service.map[0].length;
+		var maxLine = data.board.length;
+		service.map.maxLine = maxLine;
+		var maxCol = data.board[0].length;
+		service.map.maxColumn = maxCol;
 		
+		originalRobots = JSON.parse(JSON.stringify(data.robots));
 		initRobots(data.robots);		
 		
 		//Init target

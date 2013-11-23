@@ -3,17 +3,22 @@ function Robot(column, line, color, map) {
 	this.line = line;
 	this.color = color;
 	this.map = map;
-	this.selected = false; //if the robot is selected
-	this.moved = false; //if the robot has already moved
 
+	//Array of cells used to show the trail
+	this.cellsSelected = [];
 	this.currentCell = map[line][column]; //current cell where the robot is
 	this.currentCell.robot = this;
-	this.cellsSelected = []; //Array of cells sshowing the trail
-	this.upCell = null;
-	this.downCell = null;
-	this.rightCell = null;
-	this.leftCell = null;
 }
+
+//If the robot is selected
+Robot.prototype.selected = false;
+//If the robot has already moved
+Robot.prototype.moved = false;
+/** Cell reachable for each move **/
+Robot.prototype.upCell = null;
+Robot.prototype.downCell = null;
+Robot.prototype.rightCell = null;
+Robot.prototype.leftCell = null;
 
 Robot.prototype.setColumn = function(column) {
 	this.currentCell.robot = null;
@@ -120,6 +125,7 @@ Robot.prototype.hideTrail = function() {
 		this.cellsSelected[i].endpoint = null;
 		this.cellsSelected[i].trail = false;
 	}
+	this.cellsSelected = [];
 };
 
 Robot.prototype.showTrail = function(lStep, cStep, direction, lOrC) {

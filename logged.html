@@ -7,7 +7,7 @@
 		<link rel="stylesheet" href="css/sticky-footer.css" type="text/css" media="all" />
 		<link rel="stylesheet" type="text/css" href="css/main.css">
 	</head>
-	<body ng-app="loggedApp" ng-controller="mainController" ng-init="idGame = __IDGAME__" ng-keydown="keyPress($event)">
+	<body ng-app="loggedApp" ng-controller="mainController" ng-keydown="keyPress($event)">
 		<header id="header" class="container">
 			<div class="navbar navbar-default">
 			  <div class="container">
@@ -98,8 +98,7 @@
 								<table ng-class="{'table-blue': game.selectedRobot.color == 'blue', 'table-red':  game.selectedRobot.color == 'red', 'table-yellow': game.selectedRobot.color == 'yellow', 'table-green': game.selectedRobot.color == 'green'}">
 									<tr ng-repeat="row in game.map">
 										<td ng-repeat="cell in row" class="cell" ng-click="clickCell(cell)"
-											ng-class="{'cell-border-left': cell.g == 1, 'cell-border-right': cell.d == 1, 'cell-border-top': cell.h == 1, 'cell-border-bottom': cell.b == 1, 'cell-trail': cell.trail,
-											'target-red': cell.target == 'red', 'target-blue': cell.target == 'blue', 'target-yellow': cell.target == 'yellow', 'target-green': cell.target == 'green', 'cell-endpoint': cell.endpoint != null}">
+											ng-class="{'cell-trail': cell.trail, 'cell-endpoint': cell.endpoint != null}" style-cell-directive>
 											<div class="robot" ng-if="cell.robot" ng-click="game.selectRobot(cell.robot)" style="height: {{cell.robot.height}}px; width: {{cell.robot.width}}px;"
 												ng-class="{'robot-blue': cell.robot.color == 'blue', 'robot-red': cell.robot.color == 'red', 'robot-yellow': cell.robot.color == 'yellow',
 													'robot-green': cell.robot.color == 'green', 'robot-selected': cell.robot.selected, 'robot-unselectable': !cell.robot.canMove(game.lastRobotMoved)}"></div>
