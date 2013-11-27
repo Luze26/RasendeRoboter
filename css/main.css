@@ -9,6 +9,10 @@ table {
   display: none !important;
 }
 
+.alert-danger {
+    padding: 2px 6px;
+}
+
 .participants-list {
 	list-style: none;
 }
