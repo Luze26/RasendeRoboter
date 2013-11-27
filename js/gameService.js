@@ -66,13 +66,13 @@ angular.module('loggedApp').factory('game', ['$http', 'HOST_URL', '$timeout', 'p
 		if(solutions) {
 			service.firstFinder = solutions[0].player; //First finder
 			
-			solutions.forEach(function(solution) {
+			solutions.forEach(function(solution, i) {
 				var current = solution.player;
 				if(participantsHash[current]) {
 					var nbCoups = solution.proposition.length;
 					var place = 1;
-					solutions.forEach(function(solution2) {
-						if(solution2.player != current && solution2.proposition.length < nbCoups) {
+					solutions.forEach(function(solution2, j) {
+						if(solution2.player != current && (solution2.proposition.length < nbCoups || solution2.proposition.length == nbCoups && i > j)) {
 							place++;
 						}
 					});
