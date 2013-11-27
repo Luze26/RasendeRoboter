@@ -5,6 +5,10 @@ table {
 	border: solid 2px #2c3e50;
 }
 
+#nextGameForm {
+	float: right;
+}
+
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
   display: none !important;
 }
@@ -21,6 +25,21 @@ table {
 
 .rank {
 	margin-right: 20px;
+}
+
+.notice {
+	font-size: 12px;
+	font-style: italic;
+	color: #999;
+}
+
+.next-game {
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+.game-legend {
+	line-height: 47px;
 }
 
 .map-overlay {

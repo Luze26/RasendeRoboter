@@ -25,13 +25,14 @@
 				<div class="col-sm-12 col-md-5">
 					<div class="well">
 						<legend>Les participants</legend>
-						<ul class="participants-list">
+						<ul class="participants-list" ng-cloak>
 							<li ng-repeat="p in game.participants | orderBy:'place'" ng-class="{'me': p.me}">
 								<span class="rank">{{p.place}}</span>{{p.name}}
 								<span class="participant-nb-coups" ng-show="p.nbCoups">{{p.nbCoups}} coups</span>
 								<span ng-show="p.name == game.firstFinder">*</span>
 							</li>
 						</ul>
+						<p class="notice">* = premier participant à avoir trouvé une solution.</p>
 					</div>
 					<div class="well">
 						<legend>Actions</legend>
@@ -63,16 +64,23 @@
 				<div ng-controller="mapController">
 					<div class="col-sm-12 col-md-7">
 						<div class="well">
-							<legend>Partie: {{game.idGame}}</legend>
+							<legend class="game-legend" ng-cloak>
+								Partie: {{game.idGame}}
+								<form ng-show="game.terminateGame" ng-cloak method="post" action="/" id="nextGameForm">
+									<input type="hidden" name="login" value="__LOGIN__"/>
+									<input type="hidden" name="idGame" value="__IDGAME__1"/>
+									<button type="submit" class="btn btn-primary" title="Rejoindre la partie suivante">Rejoindre la partie suivante</button>
+								</form>
+							</legend>
 							<div class="alert alert-info" ng-if="!game.terminateGame && game.countDown && !game.propositionDone" ng-cloak>
 								<p><strong>{{game.firstFinder}}</strong> a été le premier à trouvé une solution.<br>
 								Il vous reste <strong>{{game.countDown}} secondes !</strong></p>
 							</div>
 							<div class="alert alert-danger" ng-show="game.tooLate" ng-cloak>
-								<strong>Trop tard, cette partie est déjà finie.</strong>
+								<strong>Trop tard, cette partie est déjà finie.</strong><span ng-click="nextGame()" class="next-game">Rejoindre la partie suivante.</span>
 							</div>
 							<div class="alert alert-danger" ng-show="game.error" ng-cloak>
-								<strong>HACKER !!!</strong> Ou peut-être c'est un bug.
+								<strong>HACKER !!!</strong> Ou peut-être c'est un bug.<span ng-click="nextGame()" class="next-game">Rejoindre la partie suivante.</span>
 							</div>
 							<div class="alert" ng-class="game.isCurrentPlayerWinner ? 'alert-success' : 'alert-info'"
 								ng-if="game.terminateGame"  ng-cloak>
@@ -85,6 +93,7 @@
 											T'as fini {{game.currentPlayer.place}}ème.
 										</p>
 								</div>
+								<p><span ng-click="nextGame()" class="next-game">Rejoindre la partie suivante.</span></p>
 							</div>
 							<div class="alert alert-success" ng-if="!game.terminateGame && game.propositionDone"  ng-cloak>
 								<p>

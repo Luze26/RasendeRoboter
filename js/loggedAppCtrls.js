@@ -61,6 +61,10 @@ angular.module('loggedApp').controller("mainController", ["$scope", "socket", "g
 				break;
 		}
 	};
+	
+	$scope.nextGame = function() {
+		angular.element('#nextGameForm').submit();
+	};
 }]);
 
 angular.module('loggedApp').directive('styleCellDirective', function() {
