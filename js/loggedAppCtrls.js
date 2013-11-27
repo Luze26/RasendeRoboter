@@ -151,7 +151,15 @@ angular.module('loggedApp').controller("mapController", ["$scope", "$http", "gam
 				});
 			}
         },
+		tap:function(event, target) {
+		console.log(cell);
+			var robot = angular.element(target);
+			if(robot.hasClass('robot')) {
+				console.log("iii");
+			}
+        },
 		doubleTap:function(event, target) {
+		console.log("jkjlkjlk");
 			$scope.$apply(function() {
 				game.selectNext();
 			});

@@ -108,9 +108,9 @@
 									<tr ng-repeat="row in game.map">
 										<td ng-repeat="cell in row" class="cell" ng-click="clickCell(cell)"
 											ng-class="{'cell-trail': cell.trail, 'cell-endpoint': cell.endpoint != null}" style-cell-directive>
-											<div class="robot" ng-if="cell.robot" ng-click="game.selectRobot(cell.robot)" style="height: {{cell.robot.height}}px; width: {{cell.robot.width}}px;"
+											<button class="robot" ng-if="cell.robot" ng-click="game.selectRobot(cell.robot)" style="height: {{cell.robot.height}}px; width: {{cell.robot.width}}px;"
 												ng-class="{'robot-blue': cell.robot.color == 'blue', 'robot-red': cell.robot.color == 'red', 'robot-yellow': cell.robot.color == 'yellow',
-													'robot-green': cell.robot.color == 'green', 'robot-selected': cell.robot.selected, 'robot-unselectable': !cell.robot.canMove(game.lastRobotMoved)}"></div>
+													'robot-green': cell.robot.color == 'green', 'robot-selected': cell.robot.selected, 'robot-unselectable': !cell.robot.canMove(game.lastRobotMoved)}"></button>
 										</td>
 									</tr>
 								</table>
@@ -129,7 +129,6 @@
 		<script src="//codeorigin.jquery.com/jquery-2.0.3.min.js"></script>
 		<script src="js/touchswipe.js"></script>
 		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.min.js"></script>
-		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular-touch.js"></script>
 		<script src="/socket.io/socket.io.js"></script>
 		<!-- PROD JS <script src="js/min/main.min.js"></script>-->
 		<script src="js/commonModule.js"></script>
