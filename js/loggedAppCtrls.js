@@ -141,4 +141,16 @@ angular.module('loggedApp').controller("mapController", ["$scope", "$http", "gam
 			game.move(cell.endpoint);
 		}
 	};
+	
+	angular.element('#tableWrap').swipe( {
+        swipe:function(event, direction, distance, duration, fingerCount) {
+		console.log(direction);
+			if(direction) {
+				$scope.$apply(function() {
+					game.move(direction.toUpperCase());
+				});
+			}
+        },
+         threshold:0
+      });
 }]);

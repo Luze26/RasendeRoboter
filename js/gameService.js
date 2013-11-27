@@ -181,7 +181,7 @@ angular.module('loggedApp').factory('game', ['$http', 'HOST_URL', '$timeout', 'p
 	};
 	
 	service.move = function(direction) {
-		if(!service.terminateGame && !service.propositionDone) {
+		if(!service.terminateGame && !service.propositionDone && service.selectedRobot) {
 			var robotToMove = service.selectedRobot;
 			var alreadyMoved = robotToMove.moved;
 
