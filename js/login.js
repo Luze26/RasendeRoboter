@@ -17,6 +17,7 @@ function init() {
                 var game = data.gamesList[g];
                 return function() {
                     document.getElementById('idGame').value = game;
+					document.getElementById('idConnexion').click();
                 }
             }();
             
