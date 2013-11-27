@@ -125,6 +125,8 @@ table {
 	width: 15px;
 	margin: auto;
 	cursor: pointer;
+	border: none;
+	display: block;
 	border-radius: 50%;
 }
 
@@ -135,6 +137,7 @@ table {
 
 .robot-unselectable {
 	cursor: default;
+	background-color: #D5DDE2 ! important;
 }
 	
 .robot-blue {
