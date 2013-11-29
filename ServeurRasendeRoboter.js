@@ -263,6 +263,7 @@ var RRServer = {
 						 var ms = this.list[idGame].ms;
 						 this.emit(idGame, 'FinalCountDown', {FinalCountDown: ms});
 						 this.OtherFinalProposition(idGame, playerName, proposition);
+						 setInterval(function() {RRServer.games.list[idGame].ms-=1000;}, 1000);
 						 setTimeout	( function() {RRServer.games.TerminateGame(idGame);}
 									, ms );
 						}
@@ -340,10 +341,8 @@ var RRServer = {
 												res.writeHead(200, {'Content-Type': 'text/html; charset=utf-8'});
 												var title = req.body.idGame
 												  , state = '';
-												if(RRServer.games.list[req.body.idGame].Terminated) {state += ' est terminée';}
 												res.write( data.toString().replace(/__LOGIN__/g	, req.body.login)
 																		  .replace(/__IDGAME__/g, title)
-																		  .replace(/__STATE__/g, state)
 														 );
 												res.end();
 											  });
@@ -355,7 +354,8 @@ var RRServer = {
 											 var idGame = req.url.slice(1);
 											 if( RRServer.games.list[ idGame ] ) {
 												 res.writeHead(200, {'Content-Type': 'application/json'});
-												 res.end( JSON.stringify( RRServer.games.list[ idGame ].game.getConfiguration() ) );
+												 res.end( JSON.stringify({"game": RRServer.games.list[ idGame ].game.getConfiguration(), "solutions": RRServer.games.list[ idGame ].solutions,
+													"ms": RRServer.games.list[ idGame ].ms}) );
 												 return;
 												}
 											 res.writeHead(404);

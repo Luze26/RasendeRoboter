@@ -68,17 +68,19 @@ angular.module('loggedApp').factory('game', ['$http', 'HOST_URL', '$timeout', 'p
 			
 			solutions.forEach(function(solution, i) {
 				var current = solution.player;
-				if(participantsHash[current]) {
-					var nbCoups = solution.proposition.length;
-					var place = 1;
-					solutions.forEach(function(solution2, j) {
-						if(solution2.player != current && (solution2.proposition.length < nbCoups || solution2.proposition.length == nbCoups && i > j)) {
-							place++;
-						}
-					});
-					participantsHash[current].place = place;
-					participantsHash[current].nbCoups = nbCoups;
+				if(!participantsHash[current]) {
+					participantsHash[current] = {name: current, place: "~", me: false, nbCoups: null};
+					service.participants.push(participantsHash[current]);
 				}
+				var nbCoups = solution.proposition.length;
+				var place = 1;
+				solutions.forEach(function(solution2, j) {
+					if(solution2.player != current && (solution2.proposition.length < nbCoups || solution2.proposition.length == nbCoups && i > j)) {
+						place++;
+					}
+				});
+				participantsHash[current].place = place;
+				participantsHash[current].nbCoups = nbCoups;
 			});
 		}
 	};
@@ -124,18 +126,23 @@ angular.module('loggedApp').factory('game', ['$http', 'HOST_URL', '$timeout', 'p
 	
 	service.init = function(data) {		
 		//Init map
-		service.map = data.board;
-		var maxLine = data.board.length;
+		service.map = data.game.board;
+		var maxLine = data.game.board.length;
 		service.map.maxLine = maxLine;
-		var maxCol = data.board[0].length;
+		var maxCol = data.game.board[0].length;
 		service.map.maxColumn = maxCol;
 		
-		originalRobots = JSON.parse(JSON.stringify(data.robots));
-		initRobots(data.robots);		
+		originalRobots = JSON.parse(JSON.stringify(data.game.robots));
+		initRobots(data.game.robots);		
 		
 		//Init target
-		var target = data.target;
+		var target = data.game.target;
 		service.map[target.l][target.c].target = target.t;
+		console.log(data);
+		if(data.solutions) {
+			service.startCountdown(data.ms);
+			service.refreshRanks(data.solutions);
+		}
 	};
 	
 	service.reset = function() {
