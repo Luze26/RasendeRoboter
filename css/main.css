@@ -6,7 +6,7 @@ table {
 }
 
 #nextGameForm {
-	float: right;
+	margin: auto;
 }
 
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
@@ -30,16 +30,13 @@ table {
 .notice {
 	font-size: 12px;
 	font-style: italic;
-	color: #999;
+	color: #474747;
+	text-align: center;
 }
 
 .next-game {
 	text-decoration: underline;
 	cursor: pointer;
-}
-
-.game-legend {
-	line-height: 52px;
 }
 
 .map-overlay {
@@ -154,4 +151,70 @@ table {
 
 .robot-green {
 	background-color: #2ecc71;
+}
+
+/*New rules*/
+body {
+	background-color: #f2f2e8;
+}
+	
+legend {
+	color: #444135;
+}
+
+#header {
+	line-height: 65px;
+	text-align: center;
+	margin-bottom: 20px;
+	box-shadow: 0 1px 5px -1px #333;
+	background-color: #FFFFFF;
+}
+
+.header-title{
+	display: inline-block;
+	font-size: 28px;
+	font-weight: bold;
+}
+
+.left-panel {
+	margin-bottom: 50px;
+}
+
+.border-green {
+	border-bottom: solid 2px #2ecc71;
+}
+
+.border-blue {
+	border-bottom: solid 2px #3498db;
+}
+
+.border-yellow {
+	border-bottom: solid 2px #f1c40f;
+}
+
+.actions-panel .col-xs-4,  .actions-panel > .col-xs-12{
+	padding: 0;
+}
+
+.btn{
+	border-radius: 0%;
+}
+
+.btn-key {
+	border: solid 2px #95a5a6;
+	background-color: #fff;
+}
+
+.btn-next-game {
+	display: block;
+	margin: auto;
+	margin-bottom: 10px;
+}
+	
+.btn-key:hover {
+	background-color: #95a5a6;
+}
+
+.btn-rl {
+	margin-top: 40px;
 }
