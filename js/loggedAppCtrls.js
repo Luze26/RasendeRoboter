@@ -124,8 +124,8 @@ angular.module('loggedApp').controller("mapController", ["$scope", "$http", "gam
 			Robot.prototype.width = height;
 		});
 		
-		overlay.width(width + 4);
-		overlay.height(table.height() + 4);
+		overlay.width(width);
+		overlay.height(table.height());
 	};
 	
 	window.onresize = resizeMap;

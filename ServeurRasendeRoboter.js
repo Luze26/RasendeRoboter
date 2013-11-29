@@ -263,9 +263,12 @@ var RRServer = {
 						 var ms = this.list[idGame].ms;
 						 this.emit(idGame, 'FinalCountDown', {FinalCountDown: ms});
 						 this.OtherFinalProposition(idGame, playerName, proposition);
-						 setInterval(function() {RRServer.games.list[idGame].ms-=1000;}, 1000);
-						 setTimeout	( function() {RRServer.games.TerminateGame(idGame);}
-									, ms );
+						 var clearIntervalId = setInterval(function() {RRServer.games.list[idGame].ms-=1000;}, 1000);
+						 setTimeout	( function() {
+								clearInterval(clearIntervalId);
+								RRServer.games.list[idGame].ms = -1;
+								RRServer.games.TerminateGame(idGame);
+							}, ms );
 						}
 				  , OtherFinalProposition: function(idGame, playerName, proposition) {
 						 if(this.list[idGame] == undefined) {throw new Error( 'NO_SUCH_GAME_ID');}

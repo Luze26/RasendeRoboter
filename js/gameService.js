@@ -140,7 +140,13 @@ angular.module('loggedApp').factory('game', ['$http', 'HOST_URL', '$timeout', 'p
 		service.map[target.l][target.c].target = target.t;
 		console.log(data);
 		if(data.solutions) {
-			service.startCountdown(data.ms);
+			if(data.ms > 0) {
+				service.startCountdown(data.ms);
+			}
+			else {
+				service.tooLate = true;
+				service.finishGame();
+			}
 			service.refreshRanks(data.solutions);
 		}
 	};

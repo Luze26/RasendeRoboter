@@ -77,13 +77,14 @@
 								Il vous reste <strong>{{game.countDown}} secondes !</strong></p>
 							</div>
 							<div class="alert alert-danger" ng-show="game.tooLate" ng-cloak>
-								<strong>Trop tard, cette partie est déjà finie.</strong><span ng-click="nextGame()" class="next-game">Rejoindre la partie suivante.</span>
+								<p><strong>Trop tard, cette partie est déjà finie.</strong></p>
+								<span ng-click="nextGame()" class="next-game">Rejoindre la partie suivante.</span>
 							</div>
 							<div class="alert alert-danger" ng-show="game.error" ng-cloak>
 								<strong>HACKER !!!</strong> Ou peut-être c'est un bug.<span ng-click="nextGame()" class="next-game">Rejoindre la partie suivante.</span>
 							</div>
 							<div class="alert" ng-class="game.isCurrentPlayerWinner ? 'alert-success' : 'alert-info'"
-								ng-if="game.terminateGame"  ng-cloak>
+								ng-if="game.terminateGame && !game.tooLate"  ng-cloak>
 								<p ng-show="game.isCurrentPlayerWinner">Yeah man! T'as fini premier.</p>
 								<div ng-show="!game.isCurrentPlayerWinner">
 										<p ng-show="game.winner">
