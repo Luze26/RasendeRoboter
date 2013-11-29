@@ -155,7 +155,7 @@ table {
 
 /*New rules*/
 body {
-	background-color: #f2f2e8;
+	background-color: #FDFDFD;
 }
 	
 legend {
@@ -167,7 +167,12 @@ legend {
 	text-align: center;
 	margin-bottom: 20px;
 	box-shadow: 0 1px 5px -1px #333;
-	background-color: #FFFFFF;
+	background-image: linear-gradient(#f9f9f9, #f3f3f3);
+	background-repeat: repeat-x;
+}
+
+#header a {
+	color: #696969 ! important;
 }
 
 .header-title{
