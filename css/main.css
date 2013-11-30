@@ -224,32 +224,36 @@ legend {
 	margin-top: 40px;
 }
 
-.robot.ng-enter, .participant.ng-enter {
-  -webkit-transition: 1s linear all;
-  transition: 1s linear all;
-  opacity: 0.2;
+/** ANIMATION **/
+.header-title:hover {
+	-webkit-animation: wobble 1s linear;
+	animation: wobble 1s linear;
 }
-.robot.ng-enter.ng-enter-active, .participant.ng-enter.ng-enter-active {
-  opacity: 1;
+
+.robot.ng-leave {
+	-webkit-animation: fadeOut .2s linear;
+	animation: fadeOut .2s linear;
+}
+.robot.ng-enter {
+	-webkit-animation: fadeIn .2s linear;
+	animation: fadeIn .2s linear;
+}
+
+.participant.ng-enter {
+	-webkit-animation: pulse .8s linear;
+	animation: pulse .8s linear;
 }
 .participant.ng-move {
-  -webkit-transition: 1.5s ease all;
-  transition: 1.5s ease all;
-  color: #2ecc71;
-  font-size: 20px;
+	-webkit-animation: tada .8s linear;
+	animation: tada .8s linear;
 }
-.participant.ng-move.ng-move-active {
-  color: #666;
-  font-size: 14px;
-}
+
 .alert.ng-enter {
-  -webkit-transition: 0.7s linear all;
-  transition: 0.7s linear all;	
-  overflow: hidden;
-  max-height: 0px;
-  padding: 0;
+	-webkit-animation: tada 1s linear;
+	animation: tada 1s linear;
 }
-.alert.ng-enter.ng-enter-active {	
-  max-height: 300px;
-  padding: 15px;
-}
+
+@-webkit-keyframes fadeOut{0%{opacity:1}100%{opacity:0}}@keyframes fadeOut{0%{opacity:1}100%{opacity:0}}
+@-webkit-keyframes fadeIn{0%{opacity:0}100%{opacity:1}}@keyframes fadeIn{0%{opacity:0}100%{opacity:1}}
+@-webkit-keyframes wobble{0%{-webkit-transform:translateX(0%);transform:translateX(0%)}15%{-webkit-transform:translateX(-25%)rotate(-5deg);transform:translateX(-25%)rotate(-5deg)}30%{-webkit-transform:translateX(20%)rotate(3deg);transform:translateX(20%)rotate(3deg)}45%{-webkit-transform:translateX(-15%)rotate(-3deg);transform:translateX(-15%)rotate(-3deg)}60%{-webkit-transform:translateX(10%)rotate(2deg);transform:translateX(10%)rotate(2deg)}75%{-webkit-transform:translateX(-5%)rotate(-1deg);transform:translateX(-5%)rotate(-1deg)}100%{-webkit-transform:translateX(0%);transform:translateX(0%)}}@keyframes wobble{0%{-webkit-transform:translateX(0%);-ms-transform:translateX(0%);transform:translateX(0%)}15%{-webkit-transform:translateX(-25%)rotate(-5deg);-ms-transform:translateX(-25%)rotate(-5deg);transform:translateX(-25%)rotate(-5deg)}30%{-webkit-transform:translateX(20%)rotate(3deg);-ms-transform:translateX(20%)rotate(3deg);transform:translateX(20%)rotate(3deg)}45%{-webkit-transform:translateX(-15%)rotate(-3deg);-ms-transform:translateX(-15%)rotate(-3deg);transform:translateX(-15%)rotate(-3deg)}60%{-webkit-transform:translateX(10%)rotate(2deg);-ms-transform:translateX(10%)rotate(2deg);transform:translateX(10%)rotate(2deg)}75%{-webkit-transform:translateX(-5%)rotate(-1deg);-ms-transform:translateX(-5%)rotate(-1deg);transform:translateX(-5%)rotate(-1deg)}100%{-webkit-transform:translateX(0%);-ms-transform:translateX(0%);transform:translateX(0%)}}
+@-webkit-keyframes tada{0%{-webkit-transform:scale(1);transform:scale(1)}10%,20%{-webkit-transform:scale(.9)rotate(-3deg);transform:scale(.9)rotate(-3deg)}30%,50%,70%,90%{-webkit-transform:scale(1.1)rotate(3deg);transform:scale(1.1)rotate(3deg)}40%,60%,80%{-webkit-transform:scale(1.1)rotate(-3deg);transform:scale(1.1)rotate(-3deg)}100%{-webkit-transform:scale(1)rotate(0);transform:scale(1)rotate(0)}}@keyframes tada{0%{-webkit-transform:scale(1);-ms-transform:scale(1);transform:scale(1)}10%,20%{-webkit-transform:scale(.9)rotate(-3deg);-ms-transform:scale(.9)rotate(-3deg);transform:scale(.9)rotate(-3deg)}30%,50%,70%,90%{-webkit-transform:scale(1.1)rotate(3deg);-ms-transform:scale(1.1)rotate(3deg);transform:scale(1.1)rotate(3deg)}40%,60%,80%{-webkit-transform:scale(1.1)rotate(-3deg);-ms-transform:scale(1.1)rotate(-3deg);transform:scale(1.1)rotate(-3deg)}100%{-webkit-transform:scale(1)rotate(0);-ms-transform:scale(1)rotate(0);transform:scale(1)rotate(0)}}
