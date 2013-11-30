@@ -263,11 +263,13 @@ var RRServer = {
 						 var ms = this.list[idGame].ms;
 						 this.emit(idGame, 'FinalCountDown', {FinalCountDown: ms});
 						 this.OtherFinalProposition(idGame, playerName, proposition);
-						 var clearIntervalId = setInterval(function() {RRServer.games.list[idGame].ms-=1000;}, 1000);
+						 var clearIntervalId = setInterval(function() {if(RRServer.games.list[idGame]) { RRServer.games.list[idGame].ms-=1000; } else { clearInterval(clearIntervalId); }}, 1000);
 						 setTimeout	( function() {
 								clearInterval(clearIntervalId);
-								RRServer.games.list[idGame].ms = -1;
-								RRServer.games.TerminateGame(idGame);
+								if(RRServer.games.list[idGame]) {
+									RRServer.games.list[idGame].ms = -1;
+									RRServer.games.TerminateGame(idGame);
+								}
 							}, ms );
 						}
 				  , OtherFinalProposition: function(idGame, playerName, proposition) {

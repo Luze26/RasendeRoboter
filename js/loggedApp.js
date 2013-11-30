@@ -5,4 +5,4 @@
  * @description
  * Used on the page reach when login in.
  */
-angular.module("loggedApp", ['commonModule']);
+angular.module("loggedApp", ['commonModule', 'ngAnimate']);

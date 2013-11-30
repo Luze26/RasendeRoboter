@@ -76,7 +76,7 @@
 					<div class="left-panel">
 						<legend class="border-green">Les participants</legend>
 						<ul class="participants-list" ng-cloak>
-							<li ng-repeat="p in game.participants | orderBy:'place'" ng-class="{'me': p.me}">
+							<li class="participant" ng-repeat="p in game.participants | orderBy:'place'" ng-class="{'me': p.me}">
 								<span class="rank">{{p.place}}</span>{{p.name}}
 								<span class="participant-nb-coups" ng-show="p.nbCoups">{{p.nbCoups}} coups</span>
 								<span ng-show="p.name == game.firstFinder">*</span>
@@ -118,6 +118,7 @@
 		<script src="//codeorigin.jquery.com/jquery-2.0.3.min.js"></script>
 		<script src="js/touchswipe.js"></script>
 		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.min.js"></script>
+		<script type="text/javascript" src="//code.angularjs.org/1.2.0/angular-animate.js"></script>
 		<script src="/socket.io/socket.io.js"></script>
 		<!-- PROD JS <script src="js/min/main.min.js"></script>-->
 		<script src="js/commonModule.js"></script>

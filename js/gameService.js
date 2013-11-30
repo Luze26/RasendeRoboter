@@ -138,7 +138,6 @@ angular.module('loggedApp').factory('game', ['$http', 'HOST_URL', '$timeout', 'p
 		//Init target
 		var target = data.game.target;
 		service.map[target.l][target.c].target = target.t;
-		console.log(data);
 		if(data.solutions) {
 			if(data.ms > 0) {
 				service.startCountdown(data.ms);
