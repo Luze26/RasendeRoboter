@@ -209,6 +209,7 @@ angular.module('loggedApp').factory('game', ['$http', 'HOST_URL', '$timeout', 'p
 					
 					if(robotToMove.isOnTarget()) { //If the proposition is valid => send the proposition => display the result
 						var req = propositionService.sendProposition();
+						service.end = true;
 						req.success(function(result) {
 								switch(result.state) {
 									case "SUCCESS":

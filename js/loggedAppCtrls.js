@@ -61,10 +61,6 @@ angular.module('loggedApp').controller("mainController", ["$scope", "socket", "g
 				break;
 		}
 	};
-	
-	$scope.nextGame = function() {
-		angular.element('#nextGameForm').submit();
-	};
 }]);
 
 angular.module('loggedApp').directive('styleCellDirective', function() {
@@ -130,6 +126,9 @@ angular.module('loggedApp').controller("mapController", ["$scope", "$http", "gam
 	
 	window.onresize = resizeMap;
 	
+	$scope.nextGame = function() {
+		angular.element('#nextGameForm').submit();
+	};
 	
 	//Init everything
 	$http.get(HOST_URL + "/" + game.idGame).success(function(data) {

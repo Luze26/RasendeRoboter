@@ -8,7 +8,10 @@
 	<body ng-app="loggedApp" ng-controller="mainController" ng-keydown="keyPress($event)">
 		<a href="https://github.com/Luze26/RasendeRoboter"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
 		<header id="header">
-			<a href="/" class="header-title">Cool Robots</a>
+			<a href="/" class="header-title">
+				<img src="/img/robot__ROBOT__.png" alt="logo" />
+				Cool Robots
+			</a>
         </header>
         <div class="container">
 			<input id="login" type="hidden" value="__LOGIN__"/>
@@ -51,13 +54,13 @@
 									<span ng-show="game.countDown">Il reste {{game.countDown}} secondes aux autres participants pour proposer leur solution.</span>
 								</p>
 							</div>						
-							<form ng-show="game.terminateGame" ng-cloak method="post" action="/">
+							<form id="nextGameForm" ng-show="game.terminateGame" ng-cloak method="post" action="/">
 								<input type="hidden" name="login" value="__LOGIN__"/>
 								<input type="hidden" name="idGame" value="__IDGAME__1"/>
 								<button type="submit" class="btn btn-primary btn-next-game" title="Rejoindre la partie suivante">Rejoindre la partie suivante</button>
 							</form>
 							<div id="tableWrap">
-								<div class="map-overlay" ng-show="game.terminateGame || game.propositionDone"></div>
+								<div class="map-overlay" ng-show="game.terminateGame || game.end"></div>
 								<table rules="none" ng-class="{'table-blue': game.selectedRobot.color == 'blue', 'table-red':  game.selectedRobot.color == 'red', 'table-yellow': game.selectedRobot.color == 'yellow', 'table-green': game.selectedRobot.color == 'green'}">
 									<tr ng-repeat="row in game.map">
 										<td ng-repeat="cell in row" class="cell" ng-click="clickCell(cell)"

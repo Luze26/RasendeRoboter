@@ -345,9 +345,10 @@ var RRServer = {
 														  return res.end('Error loading logged.html');}
 												res.writeHead(200, {'Content-Type': 'text/html; charset=utf-8'});
 												var title = req.body.idGame
-												  , state = '';
+												  , state = '', numRobot = Math.floor((Math.random()*19)+1);
 												res.write( data.toString().replace(/__LOGIN__/g	, req.body.login)
 																		  .replace(/__IDGAME__/g, title)
+																		  .replace(/__ROBOT__/g, numRobot)
 														 );
 												res.end();
 											  });
