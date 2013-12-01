@@ -92,26 +92,26 @@
 						<div class="col-xs-4">
 							<button type="button" class="btn btn-key btn-rl col-xs-12" ng-click="game.move('LEFT')" title="Bouge le robot à gauche (flèche gauche)"
 								ng-disabled="game.terminateGame || game.propositionDone || (!game.selectedRobot ||
-								game.selectedRobot.leftCell == null)">Gauche</button>
+								game.selectedRobot.leftCell == null)"><img src="/img/left.png" alt="left"/></button>
 						</div>
 						<div class="col-xs-4">
 							<button type="button" class="btn btn-key col-xs-12" ng-click="game.move('UP')" title="Bouge le robot en haut (flèche haut)"
 								ng-disabled="game.terminateGame || game.propositionDone || (!game.selectedRobot || 
-								game.selectedRobot.upCell == null)">Haut</button>
+								game.selectedRobot.upCell == null)"><img src="/img/up.png" alt="up"/></button>
 							<button type="button" class="btn btn-key col-xs-12" ng-click="game.move('DOWN')" title="Bouge le robot en bas (flèche bas)"
 								ng-disabled="game.terminateGame || game.propositionDone || (!game.selectedRobot ||
-								game.selectedRobot.downCell == null)">Bas</button>
+								game.selectedRobot.downCell == null)"><img src="/img/down.png" alt="down"/></button>
 						</div>
 						<div class="col-xs-4">
 							<button type="button" class="btn btn-key btn-rl col-xs-12" ng-click="game.move('RIGHT')" title="Bouge le robot à droite (flèche droite)"
 								ng-disabled="game.terminateGame || game.propositionDone || (!game.selectedRobot ||
-								game.selectedRobot.rightCell == null)">Droite</button>
+								game.selectedRobot.rightCell == null)"><img src="/img/right.png" alt="right"/></button>
 						</div>
 						<div class="col-xs-12">
-							<button type="button" class="btn btn-primary col-xs-6" ng-click="game.selectNext()" title="Sélectionne le prochain robot (espace)"
-								ng-disabled="game.terminateGame || game.propositionDone">Switcher</button>
-							<button type="button" class="btn btn-warning col-xs-6" ng-click="game.reset()" title="Remet à 0 le plateau (retour arrière)"
-								ng-disabled="game.terminateGame || game.propositionDone">RAZ</button>
+							<button type="button" style="margin-top: 8px;" class="btn btn-primary col-xs-6" ng-click="game.selectNext()" title="Sélectionne le prochain robot (espace)"
+								ng-disabled="game.terminateGame || game.propositionDone"><img src="/img/switch.svg" alt="switch"/> Switcher</button>
+							<button type="button" style="margin-top: 8px;" class="btn btn-warning col-xs-6" ng-click="game.reset()" title="Remet à 0 le plateau (retour arrière)"
+								ng-disabled="game.terminateGame || game.propositionDone"><img src="/img/restart.svg" alt="restart"/> RAZ</button>
 						</div>
 					</div>
 				</div>

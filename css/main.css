@@ -221,7 +221,11 @@ legend {
 }
 
 .btn-rl {
-	margin-top: 40px;
+	margin-top: 41px;
+}
+
+.btn[disabled] {
+	background-color: #eee;
 }
 
 /** ANIMATION **/
