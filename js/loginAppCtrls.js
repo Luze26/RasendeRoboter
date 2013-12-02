@@ -15,6 +15,8 @@ angular.module('loginApp').controller("mainController", ['$http', 'HOST_URL', "$
           
     $scope.game = {idGame:"", login:""};
     
+    $scope.displayCreationField = false;
+    
     $scope.loginKO = {display:false, text:"Vous n'avez renseigné votre nom d'utilisateur."};
     $scope.idGameKO = {display:false, text:"Vous n'avez renseigné le nom de votre partie."};
 
@@ -27,6 +29,10 @@ angular.module('loginApp').controller("mainController", ['$http', 'HOST_URL', "$
             $scope.loginKO.display = $scope.game.login === "";
             $scope.idGameKO.display = $scope.game.idGame === ""; 
         }
+    }
+    
+    $scope.showCreationField = function() {
+        $scope.displayCreationField = true;
     }
     
     $scope.select = function(game) {

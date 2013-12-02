@@ -316,7 +316,9 @@ var RRServer = {
 													if (err) {res.writeHead(500);
 															  return res.end('Error loading login.html'); }
 													res.writeHead(200, {'Content-Type': 'text/html; charset=utf-8'});
-													res.end(data);
+                                                    var numRobot = Math.floor((Math.random()*19)+1);
+                                                    res.write( data.toString().replace(/__ROBOT__/g, numRobot));
+                                                    res.end();
 												  });
 										})
 									.post('/', function(req, res) {
