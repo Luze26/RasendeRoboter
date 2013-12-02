@@ -263,8 +263,14 @@ var RRServer = {
 						 var ms = this.list[idGame].ms;
 						 this.emit(idGame, 'FinalCountDown', {FinalCountDown: ms});
 						 this.OtherFinalProposition(idGame, playerName, proposition);
-						 setTimeout	( function() {RRServer.games.TerminateGame(idGame);}
-									, ms );
+						 var clearIntervalId = setInterval(function() {if(RRServer.games.list[idGame]) { RRServer.games.list[idGame].ms-=1000; } else { clearInterval(clearIntervalId); }}, 1000);
+						 setTimeout	( function() {
+								clearInterval(clearIntervalId);
+								if(RRServer.games.list[idGame]) {
+									RRServer.games.list[idGame].ms = -1;
+									RRServer.games.TerminateGame(idGame);
+								}
+							}, ms );
 						}
 				  , OtherFinalProposition: function(idGame, playerName, proposition) {
 						 if(this.list[idGame] == undefined) {throw new Error( 'NO_SUCH_GAME_ID');}
@@ -339,11 +345,10 @@ var RRServer = {
 														  return res.end('Error loading logged.html');}
 												res.writeHead(200, {'Content-Type': 'text/html; charset=utf-8'});
 												var title = req.body.idGame
-												  , state = '';
-												if(RRServer.games.list[req.body.idGame].Terminated) {state += ' est terminée';}
+												  , state = '', numRobot = Math.floor((Math.random()*19)+1);
 												res.write( data.toString().replace(/__LOGIN__/g	, req.body.login)
 																		  .replace(/__IDGAME__/g, title)
-																		  .replace(/__STATE__/g, state)
+																		  .replace(/__ROBOT__/g, numRobot)
 														 );
 												res.end();
 											  });
@@ -355,7 +360,8 @@ var RRServer = {
 											 var idGame = req.url.slice(1);
 											 if( RRServer.games.list[ idGame ] ) {
 												 res.writeHead(200, {'Content-Type': 'application/json'});
-												 res.end( JSON.stringify( RRServer.games.list[ idGame ].game.getConfiguration() ) );
+												 res.end( JSON.stringify({"game": RRServer.games.list[ idGame ].game.getConfiguration(), "solutions": RRServer.games.list[ idGame ].solutions,
+													"ms": RRServer.games.list[ idGame ].ms}) );
 												 return;
 												}
 											 res.writeHead(404);

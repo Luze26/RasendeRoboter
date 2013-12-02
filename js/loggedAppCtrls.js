@@ -120,12 +120,15 @@ angular.module('loggedApp').controller("mapController", ["$scope", "$http", "gam
 			Robot.prototype.width = height;
 		});
 		
-		overlay.width(width + 4);
-		overlay.height(table.height() + 4);
+		overlay.width(width);
+		overlay.height(table.height());
 	};
 	
 	window.onresize = resizeMap;
 	
+	$scope.nextGame = function() {
+		angular.element('#nextGameForm').submit();
+	};
 	
 	//Init everything
 	$http.get(HOST_URL + "/" + game.idGame).success(function(data) {
@@ -137,4 +140,23 @@ angular.module('loggedApp').controller("mapController", ["$scope", "$http", "gam
 			game.move(cell.endpoint);
 		}
 	};
+	
+	var table = angular.element('#tableWrap');
+	table.swipe( {
+        swipe:function(event, direction, distance) {
+			if(direction && distance > 15) {
+				$scope.$apply(function() {
+					game.move(direction.toUpperCase());
+				});
+			}
+        },
+		tap:function(event) {
+        },
+		doubleTap:function(event) {
+			$scope.$apply(function() {
+				game.selectNext();
+			});
+        },
+        threshold:0
+      });
 }]);

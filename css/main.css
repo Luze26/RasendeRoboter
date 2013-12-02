@@ -5,6 +5,10 @@ table {
 	border: solid 2px #2c3e50;
 }
 
+#nextGameForm {
+	margin: auto;
+}
+
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
   display: none !important;
 }
@@ -25,6 +29,18 @@ table {
 
 .rank {
 	margin-right: 20px;
+}
+
+.notice {
+	font-size: 12px;
+	font-style: italic;
+	color: #474747;
+	text-align: center;
+}
+
+.next-game {
+	text-decoration: underline;
+	cursor: pointer;
 }
 
 .map-overlay {
@@ -110,6 +126,8 @@ table {
 	width: 15px;
 	margin: auto;
 	cursor: pointer;
+	border: none;
+	display: block;
 	border-radius: 50%;
 }
 
@@ -120,6 +138,7 @@ table {
 
 .robot-unselectable {
 	cursor: default;
+	background-color: #D5DDE2 ! important;
 }
 	
 .robot-blue {
@@ -137,3 +156,112 @@ table {
 .robot-green {
 	background-color: #2ecc71;
 }
+
+/*New rules*/
+body {
+	background-color: #FDFDFD;
+}
+	
+legend {
+	color: #444135;
+}
+
+#header {
+	line-height: 65px;
+	text-align: center;
+	margin-bottom: 20px;
+	box-shadow: 0 1px 5px -1px #333;
+	background-image: linear-gradient(#f9f9f9, #f3f3f3);
+	background-repeat: repeat-x;
+}
+
+#header a {
+	color: #696969 ! important;
+}
+
+.header-title{
+	display: inline-block;
+	font-size: 28px;
+	font-weight: bold;
+}
+
+.left-panel {
+	margin-bottom: 50px;
+}
+
+.border-green {
+	border-bottom: solid 2px #2ecc71;
+}
+
+.border-blue {
+	border-bottom: solid 2px #3498db;
+}
+
+.border-yellow {
+	border-bottom: solid 2px #f1c40f;
+}
+
+.actions-panel .col-xs-4,  .actions-panel > .col-xs-12{
+	padding: 0;
+}
+
+.btn{
+	border-radius: 0%;
+}
+
+.btn-key {
+	border: solid 2px #95a5a6;
+	background-color: #fff;
+}
+
+.btn-next-game {
+	display: block;
+	margin: auto;
+	margin-bottom: 10px;
+}
+	
+.btn-key:hover {
+	background-color: #95a5a6;
+}
+
+.btn-rl {
+	margin-top: 41px;
+}
+
+.btn[disabled] {
+	background-color: #eee;
+}
+
+/** ANIMATION **/
+.header-title:hover {
+	-webkit-animation: wobble 1s linear;
+	animation: wobble 1s linear;
+}
+
+.robot.ng-leave {
+	-webkit-animation: fadeOut .2s linear;
+	animation: fadeOut .2s linear;
+}
+.robot.ng-enter {
+	-webkit-animation: fadeIn .2s linear;
+	animation: fadeIn .2s linear;
+}
+
+.participant.ng-enter {
+	-webkit-animation: pulse .8s linear;
+	animation: pulse .8s linear;
+}
+.participant.ng-move {
+	-webkit-animation: tada .8s linear;
+	animation: tada .8s linear;
+}
+
+.alert.ng-enter {
+	-webkit-animation: tada 1s linear;
+	animation: tada 1s linear;
+}
+
+@-webkit-keyframes fadeOut{0%{opacity:1}100%{opacity:0}}@keyframes fadeOut{0%{opacity:1}100%{opacity:0}}
+@-webkit-keyframes fadeIn{0%{opacity:0}100%{opacity:1}}@keyframes fadeIn{0%{opacity:0}100%{opacity:1}}
+@-webkit-keyframes wobble{0%{-webkit-transform:translateX(0%);transform:translateX(0%)}15%{-webkit-transform:translateX(-25%)rotate(-5deg);transform:translateX(-25%)rotate(-5deg)}30%{-webkit-transform:translateX(20%)rotate(3deg);transform:translateX(20%)rotate(3deg)}45%{-webkit-transform:translateX(-15%)rotate(-3deg);transform:translateX(-15%)rotate(-3deg)}60%{-webkit-transform:translateX(10%)rotate(2deg);transform:translateX(10%)rotate(2deg)}75%{-webkit-transform:translateX(-5%)rotate(-1deg);transform:translateX(-5%)rotate(-1deg)}100%{-webkit-transform:translateX(0%);transform:translateX(0%)}}@keyframes wobble{0%{-webkit-transform:translateX(0%);-ms-transform:translateX(0%);transform:translateX(0%)}15%{-webkit-transform:translateX(-25%)rotate(-5deg);-ms-transform:translateX(-25%)rotate(-5deg);transform:translateX(-25%)rotate(-5deg)}30%{-webkit-transform:translateX(20%)rotate(3deg);-ms-transform:translateX(20%)rotate(3deg);transform:translateX(20%)rotate(3deg)}45%{-webkit-transform:translateX(-15%)rotate(-3deg);-ms-transform:translateX(-15%)rotate(-3deg);transform:translateX(-15%)rotate(-3deg)}60%{-webkit-transform:translateX(10%)rotate(2deg);-ms-transform:translateX(10%)rotate(2deg);transform:translateX(10%)rotate(2deg)}75%{-webkit-transform:translateX(-5%)rotate(-1deg);-ms-transform:translateX(-5%)rotate(-1deg);transform:translateX(-5%)rotate(-1deg)}100%{-webkit-transform:translateX(0%);-ms-transform:translateX(0%);transform:translateX(0%)}}
+@-webkit-keyframes tada{0%{-webkit-transform:scale(1);transform:scale(1)}10%,20%{-webkit-transform:scale(.9)rotate(-3deg);transform:scale(.9)rotate(-3deg)}30%,50%,70%,90%{-webkit-transform:scale(1.1)rotate(3deg);transform:scale(1.1)rotate(3deg)}40%,60%,80%{-webkit-transform:scale(1.1)rotate(-3deg);transform:scale(1.1)rotate(-3deg)}100%{-webkit-transform:scale(1)rotate(0);transform:scale(1)rotate(0)}}@keyframes tada{0%{-webkit-transform:scale(1);-ms-transform:scale(1);transform:scale(1)}10%,20%{-webkit-transform:scale(.9)rotate(-3deg);-ms-transform:scale(.9)rotate(-3deg);transform:scale(.9)rotate(-3deg)}30%,50%,70%,90%{-webkit-transform:scale(1.1)rotate(3deg);-ms-transform:scale(1.1)rotate(3deg);transform:scale(1.1)rotate(3deg)}40%,60%,80%{-webkit-transform:scale(1.1)rotate(-3deg);-ms-transform:scale(1.1)rotate(-3deg);transform:scale(1.1)rotate(-3deg)}100%{-webkit-transform:scale(1)rotate(0);-ms-transform:scale(1)rotate(0);transform:scale(1)rotate(0)}}
