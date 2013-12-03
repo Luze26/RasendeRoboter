@@ -6,9 +6,11 @@
     <link rel="stylesheet" href="css/main.css" type="text/css" media="all" />
     </head>
   <body ng-app="loginApp" ng-controller="mainController" >
+  
     <a href="https://github.com/Luze26/RasendeRoboter">
         <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub">
     </a>
+    
     <header id="header">
         <a href="/" class="header-title">
             <img src="/img/robot__ROBOT__.png" alt="logo" />
@@ -16,7 +18,8 @@
         </a>
     </header>
     
-    <div class="container">
+    <div class="container" ng-cloak ng-show="displayContainer">
+        <!-- Login Panel -->
         <div class="page-header">
             <div class="row">
                 <div class="col-lg-12">
@@ -24,13 +27,14 @@
                         Identifiant
                         <input type="text" class="form-control input-sm" ng-model="game.login" placeholder="Entrez votre nom d'utilisateur"/>
                     </div>
-                    <div ng-cloak ng-show="loginKO.display" class="alert-danger">
+                    <div ng-show="loginKO.display" class="alert-danger">
                         <small>{{loginKO.text}}</small>
                     </div>
                 </div>
             </div>
         </div>
         
+        <!-- Game Creation Panel -->
         <div class="row">
             <div ng-show="displayCreationField" class="">
                 <div class="form-group">
@@ -42,21 +46,29 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-12">
-                <div ng-hide="displayCreationField" class="">
-                    <button type="button" ng-click="showCreationField()" class="btn btn-warning">Créer votre partie</button>
-                </div>
+            <div class="col-lg-12" ng-hide="displayCreationField">
+                <button type="button" ng-click="showCreationField()" class="btn btn-warning">Créer votre partie</button>
             </div>
-            <div ng-cloak ng-show="idGameKO.display" class="alert-danger">
+            <div ng-show="idGameKO.display" class="alert-danger">
                 <small>{{idGameKO.text}}</small>
             </div>
         </div>
             
-        <div class="row">
+        <!-- Game Selection Panel -->
+        <div class="row" ng-show="displayGameSelection">
             <div class="col-lg-12">
-                <p class="lead">Ou rejoignez une partie de la liste</p>
-                <div id="lesParties">
-                    <button type="button" class="btn btn-default"  ng-repeat="game in gamesList" ng-click="select(game)">{{game}}</button>
+                <div class="list-group-item">
+                    <p class="lead">Ou rejoignez une partie de la liste</p>
+                    <div id="lesParties">
+                        <button type="button" class="btn btn-default" ng-repeat="game in gamesList" ng-click="select(game)">{{game}}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" ng-hide="displayGameSelection">
+            <div class="col-lg-12">
+                <div class="list-group-item">
+                    <p class="lead">Aucune partie n'est disponible actuellement</p>
                 </div>
             </div>
         </div>

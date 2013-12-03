@@ -7,19 +7,32 @@
  * Main controller used to catch key events.
  */
 angular.module('loginApp').controller("mainController", ['$http', 'HOST_URL', "$scope", "socket", function($http, HOST_URL, $scope, socket, $location) {
-
-	socket.on('gamesList', function(data) {
-        $scope.gamesList = data.gamesList;
-    });
-          
-          
+              
     $scope.game = {idGame:"", login:""};
     
     $scope.displayCreationField = false;
+    $scope.displayGameSelection = false;
+    $scope.displayContainer = false; // Enforse socket init before 
     
     $scope.loginKO = {display:false, text:"Vous n'avez renseigné votre nom d'utilisateur."};
     $scope.idGameKO = {display:false, text:"Vous n'avez renseigné le nom de votre partie."};
 
+    
+	socket.on('gamesList', function(data) {
+        $scope.gamesList = data.gamesList;
+        
+        if($scope.gamesList.length == 0) {
+            $scope.displayCreationField = true;
+            $scope.displayGameSelection = false;
+        } else {
+            $scope.displayCreationField = false;
+            $scope.displayGameSelection = true;
+        }
+        
+        $scope.displayContainer = true;
+    });
+
+    
     $scope.join = function() {
         if ($scope.game.login != "" && $scope.game.idGame != "") {
             document.getElementById('idGame').value = $scope.game.idGame;
