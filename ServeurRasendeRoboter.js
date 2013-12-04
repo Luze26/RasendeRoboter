@@ -202,6 +202,7 @@ var RRServer = {
 									 //console.log("\tParticipant " + playerName + ' is joining game ' + idGame);
 									 this.list[idGame].participants[playerName] = {name:playerName, sockets: new Array()};
 									}
+								 RRServer.sendGamesInfo();
 								}
 				  , leaving	: function(idGame, playerName) {
 								 if(this.list[idGame] == undefined) {throw new Error( 'NO_SUCH_GAME_ID' );}
@@ -210,6 +211,7 @@ var RRServer = {
 								 delete this.list[idGame].participants[playerName];
 								 this.sendListOfParticipants(idGame);
 								 setTimeout( function() {RRServer.games.checkParticipants(idGame);}, 5000);
+								 RRServer.sendGamesInfo();
 								}
 				  , checkParticipants : function(idGame) {//console.log("\tcheckParticipants");
 								 if(this.list[idGame] == undefined) {return;}
@@ -271,6 +273,7 @@ var RRServer = {
 									RRServer.games.TerminateGame(idGame);
 								}
 							}, ms );
+						 RRServer.sendGamesInfo();
 						}
 				  , OtherFinalProposition: function(idGame, playerName, proposition) {
 						 if(this.list[idGame] == undefined) {throw new Error( 'NO_SUCH_GAME_ID');}
@@ -281,6 +284,7 @@ var RRServer = {
 						 if(this.list[idGame] == undefined) {throw new Error( 'NO_SUCH_GAME_ID');}
 						 this.emit(idGame, 'TerminateGame', {TerminateGame: true});
 						 this.list[idGame].Terminated = true;
+						 RRServer.sendGamesInfo();
 						}
 				  }
 	, sockets	: [] // Sockets connected to the loggin page
@@ -301,7 +305,15 @@ var RRServer = {
 		 sockets = sockets || this.sockets;
 		 // Build the game list
 		 var gamesList = [];
-		 for(var g in this.games.list) {gamesList.push(g);}
+		 //for(var g in this.games.list) {gamesList.push(g);}
+		 for(var g in this.games.list) {
+			var i = 0;
+			for(var p in this.games.list[g].participants) {
+				i++;
+			}
+			var itemToAdd = {gameName: g, gameParticipants: i, gameTerminate: this.games.list[g].Terminated};
+			gamesList.push(itemToAdd);
+		 }
 		 // Send it to all connected login pages
 		 for(var i in sockets) {
 			 sockets[i].emit( 'gamesList', {gamesList: gamesList});

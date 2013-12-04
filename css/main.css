@@ -166,6 +166,11 @@ legend {
 	color: #444135;
 }
 
+#lesParties button {
+	width: 25%;
+	height: 25%;
+}
+
 #header {
 	line-height: 65px;
 	text-align: center;
