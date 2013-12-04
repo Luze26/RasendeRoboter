@@ -140,8 +140,10 @@ angular.module('loggedApp').controller("mapController", ["$scope", "$http", "gam
 	var table = angular.element('#tableWrap');
 	table.swipe( {
         swipe:function(event, direction, distance) {
+		alert("la");
 			if(direction && distance > 15) {
 				$scope.$apply(function() {
+				alert("la2");
 					game.move(direction.toUpperCase());
 				});
 			}
@@ -154,6 +156,7 @@ angular.module('loggedApp').controller("mapController", ["$scope", "$http", "gam
 			});
         },
 		pinchIn:function(event, direction, distance, duration, fingerCount, pinchZoom) {
+			alert("ici");
 			$scope.$apply(function() {
 				game.reset();
 			});
