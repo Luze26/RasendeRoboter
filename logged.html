@@ -18,7 +18,7 @@
 			<input id="idGame" type="hidden" value="__IDGAME__"/>
 			<section>
 				<div ng-controller="mapController">
-					<div class="col-sm-12 col-md-7">
+					<div class="col-sm-12 col-md-7 map-container">
 						<div>
 							<legend class="game-legend border-blue" ng-cloak>
 								Partie: {{game.idGame}}
@@ -30,10 +30,9 @@
 							</div>
 							<div class="alert alert-danger" ng-show="game.tooLate" ng-cloak>
 								<p><strong>Trop tard, cette partie est déjà finie.</strong></p>
-								<span ng-click="nextGame()" class="next-game">Rejoindre la partie suivante.</span>
 							</div>
 							<div class="alert alert-danger" ng-show="game.error" ng-cloak>
-								<strong>HACKER !!!</strong> Ou peut-être c'est un bug.<span ng-click="nextGame()" class="next-game">Rejoindre la partie suivante.</span>
+								<strong>HACKER !!!</strong> Ou peut-être c'est un bug.
 							</div>
 							<div class="alert" ng-class="game.isCurrentPlayerWinner ? 'alert-success' : 'alert-info'"
 								ng-if="game.terminateGame && !game.tooLate"  ng-cloak>
@@ -46,7 +45,6 @@
 											T'as fini {{game.currentPlayer.place}}ème.
 										</p>
 								</div>
-								<p><span ng-click="nextGame()" class="next-game">Rejoindre la partie suivante.</span></p>
 							</div>
 							<div class="alert alert-success" ng-if="!game.terminateGame && game.propositionDone"  ng-cloak>
 								<p>

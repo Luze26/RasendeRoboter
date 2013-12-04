@@ -126,10 +126,6 @@ angular.module('loggedApp').controller("mapController", ["$scope", "$http", "gam
 	
 	window.onresize = resizeMap;
 	
-	$scope.nextGame = function() {
-		angular.element('#nextGameForm').submit();
-	};
-	
 	//Init everything
 	$http.get(HOST_URL + "/" + game.idGame).success(function(data) {
 		game.init(data);

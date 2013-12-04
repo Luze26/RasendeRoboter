@@ -44,11 +44,6 @@ table {
 	text-align: center;
 }
 
-.next-game {
-	text-decoration: underline;
-	cursor: pointer;
-}
-
 .map-overlay {
 	position: absolute;
 	z-index: 1500;
@@ -124,6 +119,10 @@ table {
 
 .target-green {
 	background-color: #27ae60;
+}
+
+.map-container {
+	margin-bottom: 30px;
 }
 
 /* ROBOT */
