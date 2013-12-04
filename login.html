@@ -18,17 +18,20 @@
         </a>
     </header>
     
+    <!-- Loading image -->
+    <center ng-show="!displayContainer" >
+        <img src="/img/spinner.gif" alt="Application loading .. Please wait ..">
+    </center>
+    
     <div class="container" ng-cloak ng-show="displayContainer">
         <div class="page-header">
         
             <!-- Login Panel -->
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="form-group">
-                        <div class="col-lg-2">
-                            Identifiant
-                        </div>
-                        <div class="col-lg-10">
+                    <div class="form-group homepage-form">
+                        <label class="col-lg-2">Identifiant</label>
+                        <div class="col-lg-8">
                             <input type="text" class="form-control input-sm" ng-model="game.login" placeholder="Entrez votre nom d'utilisateur"/>
                         </div>
                     </div>
@@ -42,10 +45,8 @@
             <div class="row">
                 <div class="col-lg-12" ng-show="displayCreationField" >
                     <div class="form-group">
-                        <div class="col-lg-2">
-                            Nom de la partie
-                        </div>
-                        <div class="col-lg-10">
+                        <label class="col-lg-2">Nom de la partie</label>
+                        <div class="col-lg-8">
                             <input type="text" class="form-control input-sm" ng-model="game.idGame" placeholder="Entrez le nom de votre partie"/>
                         </div>
                     </div>
@@ -80,7 +81,7 @@
         <div class="row" ng-hide="displayGameSelection">
             <div class="col-lg-12">
                 <div class="list-group-item">
-                    <legend class="lead">Aucune partie n'est disponible actuellement</legend>
+                    <p class="lead">Aucune partie n'est disponible actuellement</p>
                 </div>
             </div>
         </div>
