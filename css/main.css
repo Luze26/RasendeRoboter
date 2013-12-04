@@ -210,6 +210,14 @@ legend {
 	padding: 0;
 }
 
+.creation-btn{
+    text-align:center; 
+    margin-top:10px;
+}
+.creation-btn button {
+    width:15%;
+}
+
 .btn{
 	border-radius: 0%;
 }
