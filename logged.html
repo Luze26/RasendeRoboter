@@ -41,12 +41,12 @@
 										<p ng-show="game.winner">
 											<strong>{{game.winner.name}}</strong> a fini premier.
 										</p>
-										<p ng-show="game.propositionDone">
+										<p ng-show="game.propositionSuccess">
 											T'as fini {{game.currentPlayer.place}}ème.
 										</p>
 								</div>
 							</div>
-							<div class="alert alert-success" ng-if="!game.terminateGame && game.propositionDone"  ng-cloak>
+							<div class="alert alert-success" ng-if="!game.terminateGame && game.propositionSuccess"  ng-cloak>
 								<p>
 									T'as <span ng-show="game.firstFinder == game.login">été le premier à avoir</span> trouvé une solution!<br>
 									T'es actuellement classé: <strong>{{game.currentPlayer.place}}</strong>.<br>
@@ -59,7 +59,7 @@
 								<button type="submit" class="btn btn-primary btn-next-game" title="Rejoindre la partie suivante">Rejoindre la partie suivante</button>
 							</form>
 							<div id="tableWrap">
-								<div class="map-overlay" ng-show="game.terminateGame || game.end" ng-cloak></div>
+								<div class="map-overlay" ng-show="game.terminateGame || game.propositionDone" ng-cloak></div>
 								<table rules="none" class="table-{{game.selectedRobot.color}}" ng-cloak>
 									<tr ng-repeat="row in game.map">
 										<td ng-repeat="cell in row" class="cell" ng-click="clickCell(cell)"

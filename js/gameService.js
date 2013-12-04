@@ -209,11 +209,11 @@ angular.module('loggedApp').factory('game', ['$http', 'HOST_URL', '$timeout', 'p
 					
 					if(robotToMove.isOnTarget()) { //If the proposition is valid => send the proposition => display the result
 						var req = propositionService.sendProposition();
-						service.end = true;
+						service.propositionDone = true;
 						req.success(function(result) {
 								switch(result.state) {
 									case "SUCCESS":
-										service.propositionDone = true;
+										service.propositionSuccess = true;
 										break;
 									case "TOO_LATE":
 										service.tooLate = true;

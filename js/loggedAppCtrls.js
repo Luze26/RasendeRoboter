@@ -153,6 +153,11 @@ angular.module('loggedApp').controller("mapController", ["$scope", "$http", "gam
 				game.selectNext();
 			});
         },
+		pinchIn:function(event, direction, distance, duration, fingerCount, pinchZoom) {
+			$scope.$apply(function() {
+				game.reset();
+			});
+		},
         threshold:0
       });
 }]);
