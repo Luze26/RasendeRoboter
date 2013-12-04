@@ -55,7 +55,7 @@
 							</div>						
 							<form id="nextGameForm" ng-show="game.terminateGame" ng-cloak method="post" action="/">
 								<input type="hidden" name="login" value="__LOGIN__"/>
-								<input type="hidden" name="idGame" value="__IDGAME__1"/>
+								<input type="hidden" name="idGame" ng-value="game.nextGame"/>
 								<button type="submit" class="btn btn-primary btn-next-game" title="Rejoindre la partie suivante">Rejoindre la partie suivante</button>
 							</form>
 							<div id="tableWrap">

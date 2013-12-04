@@ -36,9 +36,10 @@ angular.module('loggedApp').factory('game', ['$http', 'HOST_URL', '$timeout', 'p
 	//Terminate game, if the game is terminate
 	service.terminateGame = false;
 	
-	service.finishGame = function() {
+	service.finishGame = function(nextGame) {
 		service.terminateGame = true;
 		service.countDown = 0;
+		service.nextGame = nextGame;
 		service.isWinner = false;
 		service.participants.forEach(function(participant) {
 			if(participant.place == 1) {

@@ -279,7 +279,8 @@ var RRServer = {
 						}
 				  , TerminateGame: function(idGame) {
 						 if(this.list[idGame] == undefined) {throw new Error( 'NO_SUCH_GAME_ID');}
-						 this.emit(idGame, 'TerminateGame', {TerminateGame: true});
+						 var nextGame = idGame + Math.floor(Math.random()*100000);
+						 this.emit(idGame, 'TerminateGame', {TerminateGame: true, NextGame: nextGame});
 						 this.list[idGame].Terminated = true;
 						}
 				  }

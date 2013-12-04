@@ -17,7 +17,7 @@ angular.module('loggedApp').controller("mainController", ["$scope", "socket", "g
 	});
 	
 	socket.on('TerminateGame', function(data) {
-		game.finishGame();
+		game.finishGame(data.NextGame);
 	});
 
 	socket.on('solutions', function(data) {
