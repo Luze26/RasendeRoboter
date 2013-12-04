@@ -63,7 +63,8 @@
 								<table rules="none" class="table-{{game.selectedRobot.color}}" ng-cloak>
 									<tr ng-repeat="row in game.map">
 										<td ng-repeat="cell in row" class="cell" ng-click="clickCell(cell)"
-											ng-class="{'cell-trail': cell.trail, 'cell-endpoint': cell.endpoint != null}" style-cell-directive>
+											ng-class="{'cell-trail': cell.trail}" style-cell-directive>
+											<button ng-show="cell.endpoint" class="cell-endpoint"></button>
 											<button class="robot robot-{{cell.robot.color}}" ng-if="cell.robot" ng-click="game.selectRobot(cell.robot)" style="height: {{cell.robot.height}}px; width: {{cell.robot.width}}px;"
 												ng-class="{'robot-selected': cell.robot.selected, 'robot-unselectable': !cell.robot.canMove(game.lastRobotMoved)}"></button>
 										</td>

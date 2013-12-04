@@ -147,13 +147,7 @@ angular.module('loggedApp').controller("mapController", ["$scope", "$http", "gam
         },
 		tap:function(event) {
         },
-		doubleTap:function(event) {
-			if(fingerCount === 2) {
-				$scope.$apply(function() {
-					game.reset();
-				});
-				return;
-			}
+		doubleTap:function() {
 			$scope.$apply(function() {
 				game.selectNext();
 			});
