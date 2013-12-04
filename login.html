@@ -24,33 +24,48 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="form-group">
-                        Identifiant
-                        <input type="text" class="form-control input-sm" ng-model="game.login" placeholder="Entrez votre nom d'utilisateur"/>
+                        <div class="col-lg-2">
+                            Identifiant
+                        </div>
+                        <div class="col-lg-10">
+                            <input type="text" class="form-control input-sm" ng-model="game.login" placeholder="Entrez votre nom d'utilisateur"/>
+                        </div>
                     </div>
                     <div ng-show="loginKO.display" class="alert-danger">
                         <small>{{loginKO.text}}</small>
                     </div>
                 </div>
             </div>
-        </div>
-        
-        <!-- Game Creation Panel -->
-        <div class="row">
-            <div ng-show="displayCreationField" class="">
-                <div class="form-group">
-                    <div class="col-lg-8">
-                        <input type="text" class="form-control input-sm" ng-model="game.idGame" placeholder="Entrez le nom de votre partie"/>
+            
+            <!-- Game Creation Panel -->
+            <div class="row">
+                <div class="col-lg-12" ng-show="displayCreationField" >
+                    <div class="form-group">
+                        <div class="col-lg-2">
+                            Nom de la partie
+                        </div>
+                        <div class="col-lg-10">
+                            <input type="text" class="form-control input-sm" ng-model="game.idGame" placeholder="Entrez le nom de votre partie"/>
+                        </div>
                     </div>
-                    <div class="col-lg-4">
+                    <div ng-show="idGameKO.display" class="alert-danger">
+                        <small>{{idGameKO.text}}</small>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12" ng-show="displayCreationField">
+                    <div class="span12" style="text-align:center; margin-top:10px">
                         <button type="button" id="idConnexion" ng-click="join()" class="btn btn-warning">Créer</button>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-12" ng-hide="displayCreationField">
-                <button type="button" ng-click="showCreationField()" class="btn btn-warning">Créer votre partie</button>
-            </div>
-            <div ng-show="idGameKO.display" class="alert-danger">
-                <small>{{idGameKO.text}}</small>
+            <div class="row">
+                <div class="col-lg-12" ng-hide="displayCreationField">
+                    <div class="span12" style="text-align:center; margin-top:10px">
+                        <button type="button" ng-click="showCreationField()" class="btn btn-warning">Créer votre partie</button>
+                    </div>
+                </div>
             </div>
         </div>
             
@@ -58,7 +73,7 @@
         <div class="row" ng-show="displayGameSelection">
             <div class="col-lg-12">
                 <div class="list-group-item">
-                    <p class="lead">Ou rejoignez une partie de la liste</p>
+                    <p class="lead">Ou rejoignez une partie existante</p>
                     <div id="lesParties">
                         <button type="button" class="btn btn-default" ng-repeat="game in gamesList" ng-click="select(game)">{{game}}</button>
                     </div>
