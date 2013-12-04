@@ -12,7 +12,7 @@ angular.module('loginApp').controller("mainController", ['$http', 'HOST_URL', "$
     
     $scope.displayCreationField = false;
     $scope.displayGameSelection = false;
-    $scope.displayContainer = false; // Enforse socket init before 
+    $scope.displayContainer = false; // Enforse socket init before display
     
     $scope.loginKO = {display:false, text:"Vous n'avez renseigné votre nom d'utilisateur."};
     $scope.idGameKO = {display:false, text:"Vous n'avez renseigné le nom de votre partie."};
@@ -25,7 +25,6 @@ angular.module('loginApp').controller("mainController", ['$http', 'HOST_URL', "$
             $scope.displayCreationField = true;
             $scope.displayGameSelection = false;
         } else {
-            $scope.displayCreationField = false;
             $scope.displayGameSelection = true;
         }
         
