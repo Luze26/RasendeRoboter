@@ -22,6 +22,7 @@
 						<div>
 							<legend class="game-legend border-blue" ng-cloak>
 								Partie: {{game.idGame}}
+								<span class="help" ng-click="showHelp()">Aide</span>
 							</legend>
 							<div class="alert alert-info" ng-if="!game.terminateGame && game.countDown && !game.propositionDone" ng-cloak>
 								<p><strong>{{game.firstFinder}}</strong> a été le premier à trouvé une solution.<br>
@@ -60,8 +61,8 @@
 								<button type="submit" class="btn btn-primary btn-next-game" title="Rejoindre la partie suivante">Rejoindre la partie suivante</button>
 							</form>
 							<div id="tableWrap">
-								<div class="map-overlay" ng-show="game.terminateGame || game.end"></div>
-								<table rules="none" class="table-{{game.selectedRobot.color}}">
+								<div class="map-overlay" ng-show="game.terminateGame || game.end" ng-cloak></div>
+								<table rules="none" class="table-{{game.selectedRobot.color}}" ng-cloak>
 									<tr ng-repeat="row in game.map">
 										<td ng-repeat="cell in row" class="cell" ng-click="clickCell(cell)"
 											ng-class="{'cell-trail': cell.trail, 'cell-endpoint': cell.endpoint != null}" style-cell-directive>
