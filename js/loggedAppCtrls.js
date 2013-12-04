@@ -139,13 +139,18 @@ angular.module('loggedApp').controller("mapController", ["$scope", "$http", "gam
 	
 	var table = angular.element('#tableWrap');
 	table.swipe( {
-        swipe:function(event, direction, distance) {
-		alert("la");
+        swipe:function(event, direction, distance, duration, fingerCount) {
 			if(direction && distance > 15) {
-				$scope.$apply(function() {
-				alert("la2");
-					game.move(direction.toUpperCase());
-				});
+				if(fingerCount === 4) {
+					$scope.$apply(function() {
+						game.reset();
+					});
+				}
+				else {
+					$scope.$apply(function() {
+						game.move(direction.toUpperCase());
+					});
+				}
 			}
         },
 		tap:function(event) {
@@ -155,12 +160,6 @@ angular.module('loggedApp').controller("mapController", ["$scope", "$http", "gam
 				game.selectNext();
 			});
         },
-		pinchIn:function(event, direction, distance, duration, fingerCount, pinchZoom) {
-			alert("ici");
-			$scope.$apply(function() {
-				game.reset();
-			});
-		},
         threshold:0
       });
 }]);
