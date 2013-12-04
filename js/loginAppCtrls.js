@@ -14,8 +14,8 @@ angular.module('loginApp').controller("mainController", ['$http', 'HOST_URL', "$
     $scope.displayGameSelection = false;
     $scope.displayContainer = false; // Enforse socket init before display
     
-    $scope.loginKO = {display:false, text:"Vous n'avez renseigné votre nom d'utilisateur."};
-    $scope.idGameKO = {display:false, text:"Vous n'avez renseigné le nom de votre partie."};
+    $scope.loginKO = {display:false, text:"Vous n'avez pas renseigné votre nom d'utilisateur."};
+    $scope.idGameKO = {display:false, text:"Vous n'avez pas renseigné le nom de votre partie."};
 
     
 	socket.on('gamesList', function(data) {

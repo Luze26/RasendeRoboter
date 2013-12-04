@@ -19,8 +19,9 @@
     </header>
     
     <div class="container" ng-cloak ng-show="displayContainer">
-        <!-- Login Panel -->
         <div class="page-header">
+        
+            <!-- Login Panel -->
             <div class="row">
                 <div class="col-lg-12">
                     <div class="form-group">
@@ -53,17 +54,13 @@
                     </div>
                 </div>
             </div>
+            
+            <!-- Creation buttons -->
             <div class="row">
-                <div class="col-lg-12" ng-show="displayCreationField">
-                    <div class="span12" style="text-align:center; margin-top:10px">
-                        <button type="button" id="idConnexion" ng-click="join()" class="btn btn-warning">Créer</button>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-12" ng-hide="displayCreationField">
-                    <div class="span12" style="text-align:center; margin-top:10px">
-                        <button type="button" ng-click="showCreationField()" class="btn btn-warning">Créer votre partie</button>
+                <div class="col-lg-12">
+                    <div class="creation-btn span12">
+                        <button ng-hide="displayCreationField" type="button" ng-click="showCreationField()" class="btn btn-warning">Créer votre partie</button>
+                        <button ng-show="displayCreationField" type="button" id="idConnexion" ng-click="join()" class="btn btn-warning">Créer</button>
                     </div>
                 </div>
             </div>
@@ -73,7 +70,7 @@
         <div class="row" ng-show="displayGameSelection">
             <div class="col-lg-12">
                 <div class="list-group-item">
-                    <p class="lead">Ou rejoignez une partie existante</p>
+                    <legend class="lead">Ou rejoignez une partie existante</legend>
                     <div id="lesParties">
                         <button type="button" class="btn btn-default" ng-repeat="game in gamesList" ng-click="select(game)">{{game}}</button>
                     </div>
@@ -83,7 +80,7 @@
         <div class="row" ng-hide="displayGameSelection">
             <div class="col-lg-12">
                 <div class="list-group-item">
-                    <p class="lead">Aucune partie n'est disponible actuellement</p>
+                    <legend class="lead">Aucune partie n'est disponible actuellement</legend>
                 </div>
             </div>
         </div>
