@@ -18,10 +18,11 @@
 			<input id="idGame" type="hidden" value="__IDGAME__"/>
 			<section>
 				<div ng-controller="mapController">
-					<div class="col-sm-12 col-md-7">
+					<div class="col-sm-12 col-md-7 map-container">
 						<div>
 							<legend class="game-legend border-blue" ng-cloak>
 								Partie: {{game.idGame}}
+								<span class="help" ng-click="showHelp()">Aide</span>
 							</legend>
 							<div class="alert alert-info" ng-if="!game.terminateGame && game.countDown && !game.propositionDone" ng-cloak>
 								<p><strong>{{game.firstFinder}}</strong> a été le premier à trouvé une solution.<br>
@@ -29,10 +30,9 @@
 							</div>
 							<div class="alert alert-danger" ng-show="game.tooLate" ng-cloak>
 								<p><strong>Trop tard, cette partie est déjà finie.</strong></p>
-								<span ng-click="nextGame()" class="next-game">Rejoindre la partie suivante.</span>
 							</div>
 							<div class="alert alert-danger" ng-show="game.error" ng-cloak>
-								<strong>HACKER !!!</strong> Ou peut-être c'est un bug.<span ng-click="nextGame()" class="next-game">Rejoindre la partie suivante.</span>
+								<strong>HACKER !!!</strong> Ou peut-être c'est un bug.
 							</div>
 							<div class="alert" ng-class="game.isCurrentPlayerWinner ? 'alert-success' : 'alert-info'"
 								ng-if="game.terminateGame && !game.tooLate"  ng-cloak>
@@ -41,13 +41,12 @@
 										<p ng-show="game.winner">
 											<strong>{{game.winner.name}}</strong> a fini premier.
 										</p>
-										<p ng-show="game.propositionDone">
+										<p ng-show="game.propositionSuccess">
 											T'as fini {{game.currentPlayer.place}}ème.
 										</p>
 								</div>
-								<p><span ng-click="nextGame()" class="next-game">Rejoindre la partie suivante.</span></p>
 							</div>
-							<div class="alert alert-success" ng-if="!game.terminateGame && game.propositionDone"  ng-cloak>
+							<div class="alert alert-success" ng-if="!game.terminateGame && game.propositionSuccess"  ng-cloak>
 								<p>
 									T'as <span ng-show="game.firstFinder == game.login">été le premier à avoir</span> trouvé une solution!<br>
 									T'es actuellement classé: <strong>{{game.currentPlayer.place}}</strong>.<br>
@@ -60,14 +59,13 @@
 								<button type="submit" class="btn btn-primary btn-next-game" title="Rejoindre la partie suivante">Rejoindre la partie suivante</button>
 							</form>
 							<div id="tableWrap">
-								<div class="map-overlay" ng-show="game.terminateGame || game.end"></div>
-								<table rules="none" ng-class="{'table-blue': game.selectedRobot.color == 'blue', 'table-red':  game.selectedRobot.color == 'red', 'table-yellow': game.selectedRobot.color == 'yellow', 'table-green': game.selectedRobot.color == 'green'}">
+								<div class="map-overlay" ng-show="game.terminateGame || game.propositionDone" ng-cloak></div>
+								<table rules="none" class="table-{{game.selectedRobot.color}}" ng-cloak>
 									<tr ng-repeat="row in game.map">
 										<td ng-repeat="cell in row" class="cell" ng-click="clickCell(cell)"
 											ng-class="{'cell-trail': cell.trail, 'cell-endpoint': cell.endpoint != null}" style-cell-directive>
-											<button class="robot" ng-if="cell.robot" ng-click="game.selectRobot(cell.robot)" style="height: {{cell.robot.height}}px; width: {{cell.robot.width}}px;"
-												ng-class="{'robot-blue': cell.robot.color == 'blue', 'robot-red': cell.robot.color == 'red', 'robot-yellow': cell.robot.color == 'yellow',
-													'robot-green': cell.robot.color == 'green', 'robot-selected': cell.robot.selected, 'robot-unselectable': !cell.robot.canMove(game.lastRobotMoved)}"></button>
+											<button class="robot robot-{{cell.robot.color}}" ng-if="cell.robot" ng-click="game.selectRobot(cell.robot)" style="height: {{cell.robot.height}}px; width: {{cell.robot.width}}px;"
+												ng-class="{'robot-selected': cell.robot.selected, 'robot-unselectable': !cell.robot.canMove(game.lastRobotMoved)}"></button>
 										</td>
 									</tr>
 								</table>
