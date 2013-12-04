@@ -141,21 +141,13 @@ angular.module('loggedApp').controller("mapController", ["$scope", "$http", "gam
 	table.swipe( {
         swipe:function(event, direction, distance, duration, fingerCount) {
 			if(direction && distance > 15) {
-				if(fingerCount === 4) {
-					$scope.$apply(function() {
-						game.reset();
-					});
-				}
-				else {
-					$scope.$apply(function() {
-						game.move(direction.toUpperCase());
-					});
-				}
+				game.move(direction.toUpperCase());
+				$scope.$apply();
 			}
         },
 		tap:function(event) {
         },
-		doubleTap:function(event) {
+		doubleTap:function() {
 			$scope.$apply(function() {
 				game.selectNext();
 			});

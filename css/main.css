@@ -60,6 +60,7 @@ table {
 	width: 6.25%;
 	min-height: 15px;
 	border: solid 1px #ecf0f1;
+	padding: 0;
 	background-color: #fff;
 }
 
@@ -68,8 +69,11 @@ table {
 }
 
 .cell-endpoint {
+	width: 100%;
+	height: 100%;
+	border: 0;
+	vertical-align: middle;
 	background-color: #95a5a6;
-	cursor: pointer;
 }
 
 .table-red .cell-endpoint:hover {
