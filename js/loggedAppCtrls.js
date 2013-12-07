@@ -39,25 +39,30 @@ angular.module('loggedApp').controller("mainController", ["$scope", "socket", "g
 	 * @param {event} event key event
 	 */
 	$scope.keyPress = function(event) {
-		event.preventDefault();
 		switch(event.which) {
 			case 40: //DOWN
 				game.move('DOWN');
+				event.preventDefault();
 				break;
 			case 38: //UP
 				game.move('UP');
+				event.preventDefault();
 				break;
 			case 37: //LEFT
 				game.move('LEFT');
+				event.preventDefault();
 				break;
 			case 39: //RIGHT
 				game.move('RIGHT');
+				event.preventDefault();
 				break;
 			case 32: //SPACEBAR, SWITCH ROBOT
 				game.selectNext();
+				event.preventDefault();
 				break;
 			case 8: //BACKSPACE, RESET
 				game.reset();
+				event.preventDefault();
 				break;
 		}
 	};

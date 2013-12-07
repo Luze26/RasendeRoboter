@@ -73,10 +73,12 @@ table {
 	height: 100%;
 	border: 0;
 	vertical-align: middle;
-	background-color: #95a5a6;
+	opacity: 0.5;
+	background-color: #525252;
 }
 
 .table-red .cell-endpoint:hover {
+	opacity: 1;
 	background-color: #e74c3c;
 }
 

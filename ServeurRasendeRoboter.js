@@ -280,6 +280,7 @@ var RRServer = {
 				  , TerminateGame: function(idGame) {
 						 if(this.list[idGame] == undefined) {throw new Error( 'NO_SUCH_GAME_ID');}
 						 var nextGame = idGame + Math.floor(Math.random()*100000);
+						 this.list[idGame].nextGame = nextGame;
 						 this.emit(idGame, 'TerminateGame', {TerminateGame: true, NextGame: nextGame});
 						 this.list[idGame].Terminated = true;
 						}
@@ -364,7 +365,7 @@ var RRServer = {
 											 if( RRServer.games.list[ idGame ] ) {
 												 res.writeHead(200, {'Content-Type': 'application/json'});
 												 res.end( JSON.stringify({"game": RRServer.games.list[ idGame ].game.getConfiguration(), "solutions": RRServer.games.list[ idGame ].solutions,
-													"ms": RRServer.games.list[ idGame ].ms}) );
+													"ms": RRServer.games.list[ idGame ].ms, "nextGame": RRServer.games.list[ idGame ].nextGame}) );
 												 return;
 												}
 											 res.writeHead(404);

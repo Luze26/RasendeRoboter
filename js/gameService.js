@@ -145,6 +145,7 @@ angular.module('loggedApp').factory('game', ['$http', 'HOST_URL', '$timeout', 'p
 			}
 			else {
 				service.tooLate = true;
+				service.nextGame = data.nextGame;
 				service.finishGame();
 			}
 			service.refreshRanks(data.solutions);

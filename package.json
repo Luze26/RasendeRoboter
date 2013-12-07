@@ -10,7 +10,7 @@
 	"express": ">= 3",
 	"socket.io": ">=0.9",
     "grunt": "~0.4.1",
-	"seed-random": "",
+	"mongoose": "",
     "grunt-ngdocs": "~0.1.1",
 	"grunt-contrib-jshint": "",
     "grunt-contrib-connect": "~0.3.0",
