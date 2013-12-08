@@ -2,7 +2,7 @@ angular.module('loggedApp').factory('game', ['$http', 'HOST_URL', '$timeout', 'p
 	var service = {};
 	
 	//User login
-	service.login = gameConstants.login;
+	service.login = gameConstants.user.name;
 	//Game id
 	service.idGame = gameConstants.idGame;
 	

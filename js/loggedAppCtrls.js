@@ -1,4 +1,4 @@
-angular.module('loggedApp').constant('gameConstants', {"login": angular.element('#login').val(),"idGame": angular.element('#idGame').val()});
+angular.module('loggedApp').constant('gameConstants', {"user": JSON.parse(decodeURIComponent(angular.element('#user').val())),"idGame": angular.element('#idGame').val()});
 
 /**
  * @ngdoc object

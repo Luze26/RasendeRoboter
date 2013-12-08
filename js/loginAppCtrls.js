@@ -31,12 +31,21 @@ angular.module('loginApp').controller("mainController", ['$http', 'HOST_URL', "$
         $scope.displayContainer = true;
     });
 
-    
+    socket.on('topPlayers', function(data) {
+        $scope.topPlayers = data.players;
+    });
+	
     $scope.join = function() {
         if ($scope.game.login != "" && $scope.game.idGame != "") {
             document.getElementById('idGame').value = $scope.game.idGame;
             document.getElementById('login').value = $scope.game.login;
-            document.getElementById('newGame').submit();
+			document.getElementById('password').value = $scope.game.password;
+			$http.post(HOST_URL + "/checkPlayer", $scope.game).success(function() {
+				document.getElementById('newGame').submit();
+			})
+			.error(function(error) {
+				console.log(error);
+			});
         } else {
             $scope.loginKO.display = $scope.game.login === "";
             $scope.idGameKO.display = $scope.game.idGame === ""; 

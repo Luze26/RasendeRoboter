@@ -24,7 +24,7 @@ angular.module('loggedApp').factory('propositionService', ['$http', 'HOST_URL', 
 	 * @returns {promise} promise for the request used to send the proposition
 	 */
 	service.sendProposition = function() {
-		var data = 'login=' + gameConstants.login + '&idGame=' + gameConstants.idGame + '&proposition=' + JSON.stringify(service.proposition);
+		var data = 'login=' + gameConstants.user.name + '&idGame=' + gameConstants.idGame + '&proposition=' + JSON.stringify(service.proposition);
 		
 		return $http({
 			url: HOST_URL + '/proposition',
