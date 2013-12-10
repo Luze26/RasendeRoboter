@@ -17,10 +17,17 @@ angular.module('loginApp').controller("mainController", ['$http', 'HOST_URL', "$
     $scope.loginKO = {display:false, text:"Vous n'avez renseigné votre nom d'utilisateur."};
     $scope.idGameKO = {display:false, text:"Vous n'avez renseigné le nom de votre partie."};
 
+	$scope.initGamesListClass = function() {
+		$scope.gamesListClass = [];
+		for(var i = 0; i < $scope.gamesList.length; i++) {
+			$scope.gamesListClass.push("notOver");
+		}
+	}
     
 	socket.on('gamesList', function(data) {
         $scope.gamesList = data.gamesList;
-        
+        $scope.initGamesListClass();
+		
         if($scope.gamesList.length == 0) {
             $scope.displayCreationField = true;
             $scope.displayGameSelection = false;
@@ -51,6 +58,27 @@ angular.module('loginApp').controller("mainController", ['$http', 'HOST_URL', "$
         $scope.game.idGame = game;
         $scope.join();
     };
+	
+	$scope.mouseOver = function(numGame) {
+		$scope.initGamesListClass();
+		$scope.gamesListClass[numGame] = "over";
+		if((numGame-1) >= 0 && ((numGame-1) % 3) != 0 ||(numGame-1) == 0) {
+			var tmp = numGame - 1;
+			$scope.gamesListClass[tmp] = "nextToOver";
+		}
+		
+		if((numGame+1) < $scope.gamesListClass.length && ((numGame+1) % 4) != 0) {
+			var tmp = numGame + 1;
+			$scope.gamesListClass[tmp] = "nextToOver";
+		}
+	}
+	
+	$scope.mouseLeave = function(numGame) {
+		//sleep(1);
+		if($scope.gamesListClass[numGame] === "over") {
+			$scope.initGamesListClass();
+		}
+	}
             
 	socket.emit('loginPage');
 }]);
