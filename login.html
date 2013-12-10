@@ -18,52 +18,46 @@
         </a>
     </header>
     
+    <!-- Loading image -->
+    <center ng-show="!displayContainer" >
+        <img width="30%" heigth="30%" src="/img/spinner.gif" alt="Application loading .. Please wait ..">
+    </center>
+    
     <div class="container" ng-cloak ng-show="displayContainer">
-        <!-- Login Panel -->
         <div class="page-header">
-            <div class="row">
-                <div class="col-lg-12">
+        
+            <!-- Login Panel -->
+            <div class="row form-horizontal">
+				<div class="form-group homepage-form col-lg-12">
+					<label class="col-lg-3" for="inputLogin">Identifiant</label>
+					<div class="col-lg-7" style="display: inline-block;float: none;">
+						<input id="inputLogin" type="text" class="form-control input-sm" ng-model="game.login" placeholder="Entrez votre nom d'utilisateur"/>
+					</div>
+				</div>
+				<div class="form-group homepage-form col-lg-12">
+					<label class="col-lg-3" for="inputPassword">Mot de passe</label>
+					<div class="col-lg-7" style="display: inline-block;float: none;">
+						<input id="inputPassword" type="password" class="form-control input-sm" ng-model="game.password" placeholder="Entrez un mot de passe, si vous voulez protéger votre compte"/>
+					</div>
+				</div>
+				<div ng-show="loginKO.display" class="alert-danger">
+					<small>{{loginKO.text}}</small>
+				</div>
+				<div class="col-lg-12" ng-show="displayCreationField" >
                     <div class="form-group">
-                        <div class="col-lg-2">
-                            Identifiant
-                        </div>
-                        <div class="col-lg-10">
-                            <input type="text" class="form-control input-sm" ng-model="game.login" placeholder="Entrez votre nom d'utilisateur"/>
-                        </div>
-                    </div>
-                    <div ng-show="loginKO.display" class="alert-danger">
-                        <small>{{loginKO.text}}</small>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Game Creation Panel -->
-            <div class="row">
-                <div class="col-lg-12" ng-show="displayCreationField" >
-                    <div class="form-group">
-                        <div class="col-lg-2">
-                            Nom de la partie
-                        </div>
-                        <div class="col-lg-10">
-                            <input type="text" class="form-control input-sm" ng-model="game.idGame" placeholder="Entrez le nom de votre partie"/>
+                        <label class="col-lg-3" for="inputGame">Nom de la partie</label>
+                        <div class="col-lg-7">
+                            <input id="inputGame" type="text" class="form-control input-sm" ng-model="game.idGame" placeholder="Entrez le nom de votre partie"/>
                         </div>
                     </div>
                     <div ng-show="idGameKO.display" class="alert-danger">
                         <small>{{idGameKO.text}}</small>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-12" ng-show="displayCreationField">
-                    <div class="span12" style="text-align:center; margin-top:10px">
-                        <button type="button" id="idConnexion" ng-click="join()" class="btn btn-warning">Créer</button>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-12" ng-hide="displayCreationField">
-                    <div class="span12" style="text-align:center; margin-top:10px">
-                        <button type="button" ng-click="showCreationField()" class="btn btn-warning">Créer votre partie</button>
+				<div class="col-lg-12">
+                    <div class="creation-btn span12">
+                        <button ng-hide="displayCreationField" type="button" ng-click="showCreationField()" class="btn btn-warning">Créer votre partie</button>
+                        <button ng-show="displayCreationField" type="button" id="idConnexion" ng-click="join()" class="btn btn-warning">Créer</button>
                     </div>
                 </div>
             </div>
@@ -84,15 +78,32 @@
 						</button>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="row" ng-hide="displayGameSelection">
-            <div class="col-lg-12">
-                <div class="list-group-item">
+				<div class="list-group-item" ng-hide="displayGameSelection">
                     <p class="lead">Aucune partie n'est disponible actuellement</p>
                 </div>
             </div>
-        </div>
+			<div class="col-lg-4">
+				Top players:
+				<table class="table table-striped table-bordered table-hover">
+					<thead>
+						<tr>
+							<td title="Joueur">Joueur</td>
+							<td title="Jouée">J</td>
+							<td title="Gagnée">G</td>
+							<td title="Finie">F</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="player in topPlayers">
+							<td>{{player.name}}</td>
+							<td>{{player.played}}</td>
+							<td>{{player.win}}</td>
+							<td>{{player.finish}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
     </div>
     
     <!-- Hidden form to submit data to server -->
@@ -100,6 +111,7 @@
         <form class="bs-example form-horizontal" method="post" action="/" id="newGame">
           <fieldset>
                 <input type="text" class="form-control input-sm" id="login" name="login"/>
+				<input type="text" class="form-control input-sm" id="password" name="password"/>
                 <input type="text" class="form-control input-sm" id="idGame" name="idGame"/>
           </fieldset>
         </form>

@@ -2,7 +2,7 @@ angular.module('loggedApp').factory('game', ['$http', 'HOST_URL', '$timeout', 'p
 	var service = {};
 	
 	//User login
-	service.login = gameConstants.login;
+	service.login = gameConstants.user.name;
 	//Game id
 	service.idGame = gameConstants.idGame;
 	
@@ -36,9 +36,10 @@ angular.module('loggedApp').factory('game', ['$http', 'HOST_URL', '$timeout', 'p
 	//Terminate game, if the game is terminate
 	service.terminateGame = false;
 	
-	service.finishGame = function() {
+	service.finishGame = function(nextGame) {
 		service.terminateGame = true;
 		service.countDown = 0;
+		service.nextGame = nextGame;
 		service.isWinner = false;
 		service.participants.forEach(function(participant) {
 			if(participant.place == 1) {
@@ -144,6 +145,7 @@ angular.module('loggedApp').factory('game', ['$http', 'HOST_URL', '$timeout', 'p
 			}
 			else {
 				service.tooLate = true;
+				service.nextGame = data.nextGame;
 				service.finishGame();
 			}
 			service.refreshRanks(data.solutions);

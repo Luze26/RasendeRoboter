@@ -2,6 +2,7 @@
 <html lang="fr">
 	<head>
 		<title>Rasende Roboter</title>
+		<meta name="viewport" content="width=device-width">
 		<link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" media="all">
 		<link rel="stylesheet" type="text/css" href="css/main.css">
 	</head>
@@ -14,7 +15,7 @@
 			</a>
         </header>
         <div class="container">
-			<input id="login" type="hidden" value="__LOGIN__"/>
+			<input id="user" type="hidden" value="__USER__"/>
 			<input id="idGame" type="hidden" value="__IDGAME__"/>
 			<section>
 				<div ng-controller="mapController">
@@ -55,7 +56,7 @@
 							</div>						
 							<form id="nextGameForm" ng-show="game.terminateGame" ng-cloak method="post" action="/">
 								<input type="hidden" name="login" value="__LOGIN__"/>
-								<input type="hidden" name="idGame" value="__IDGAME__1"/>
+								<input type="hidden" name="idGame" ng-value="game.nextGame"/>
 								<button type="submit" class="btn btn-primary btn-next-game" title="Rejoindre la partie suivante">Rejoindre la partie suivante</button>
 							</form>
 							<div id="tableWrap">
@@ -63,7 +64,8 @@
 								<table rules="none" class="table-{{game.selectedRobot.color}}" ng-cloak>
 									<tr ng-repeat="row in game.map">
 										<td ng-repeat="cell in row" class="cell" ng-click="clickCell(cell)"
-											ng-class="{'cell-trail': cell.trail, 'cell-endpoint': cell.endpoint != null}" style-cell-directive>
+											ng-class="{'cell-trail': cell.trail}" style-cell-directive>
+											<button ng-show="cell.endpoint" class="cell-endpoint"></button>
 											<button class="robot robot-{{cell.robot.color}}" ng-if="cell.robot" ng-click="game.selectRobot(cell.robot)" style="height: {{cell.robot.height}}px; width: {{cell.robot.width}}px;"
 												ng-class="{'robot-selected': cell.robot.selected, 'robot-unselectable': !cell.robot.canMove(game.lastRobotMoved)}"></button>
 										</td>

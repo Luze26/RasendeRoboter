@@ -1,4 +1,4 @@
-angular.module('loggedApp').constant('gameConstants', {"login": angular.element('#login').val(),"idGame": angular.element('#idGame').val()});
+angular.module('loggedApp').constant('gameConstants', {"user": JSON.parse(decodeURIComponent(angular.element('#user').val())),"idGame": angular.element('#idGame').val()});
 
 /**
  * @ngdoc object
@@ -17,7 +17,7 @@ angular.module('loggedApp').controller("mainController", ["$scope", "socket", "g
 	});
 	
 	socket.on('TerminateGame', function(data) {
-		game.finishGame();
+		game.finishGame(data.NextGame);
 	});
 
 	socket.on('solutions', function(data) {
@@ -39,25 +39,30 @@ angular.module('loggedApp').controller("mainController", ["$scope", "socket", "g
 	 * @param {event} event key event
 	 */
 	$scope.keyPress = function(event) {
-		event.preventDefault();
 		switch(event.which) {
 			case 40: //DOWN
 				game.move('DOWN');
+				event.preventDefault();
 				break;
 			case 38: //UP
 				game.move('UP');
+				event.preventDefault();
 				break;
 			case 37: //LEFT
 				game.move('LEFT');
+				event.preventDefault();
 				break;
 			case 39: //RIGHT
 				game.move('RIGHT');
+				event.preventDefault();
 				break;
 			case 32: //SPACEBAR, SWITCH ROBOT
 				game.selectNext();
+				event.preventDefault();
 				break;
 			case 8: //BACKSPACE, RESET
 				game.reset();
+				event.preventDefault();
 				break;
 		}
 	};
@@ -141,21 +146,13 @@ angular.module('loggedApp').controller("mapController", ["$scope", "$http", "gam
 	table.swipe( {
         swipe:function(event, direction, distance, duration, fingerCount) {
 			if(direction && distance > 15) {
-				if(fingerCount === 4) {
-					$scope.$apply(function() {
-						game.reset();
-					});
-				}
-				else {
-					$scope.$apply(function() {
-						game.move(direction.toUpperCase());
-					});
-				}
+				game.move(direction.toUpperCase());
+				$scope.$apply();
 			}
         },
 		tap:function(event) {
         },
-		doubleTap:function(event) {
+		doubleTap:function() {
 			$scope.$apply(function() {
 				game.selectNext();
 			});

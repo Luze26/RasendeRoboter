@@ -165,12 +165,111 @@ var RasendeRoboter = function() {return {
 };
 };
 
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/test');
+//mongoose.connect('mongodb://mongoUser:mongoUser19455605,@ds057568.mongolab.com:57568/heroku_app19455605');
+var db = mongoose.connection;
+
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function callback () {
+	var User = mongoose.model('User', {name: String, password: String, email: String, played: Number, win: Number, finish: Number});
+	var dbManager = {};
+	
+	dbManager.connectUser = function(name, password, callback) {
+		User.findOne({'name': name}, function(err, user) {
+			if(user !== null) {
+				if(user.password && user.password !== password) {
+					callback(null);
+				}
+				else {
+					var update = { played: user.played + 1 };
+					if(!user.password && !!password) {
+						update.password = password;
+					}
+					User.findByIdAndUpdate(user.id, { $set: update}, function (err, user) {
+						if(err) {
+							console.log(err);
+						}
+						else {
+							callback(user);
+						}
+					});
+				}
+			}
+			else {
+				if(!password || password == "undefined") {
+					password = "";
+				}
+				var user = new User({name: name, password: password, email: "", played: 1, win: 0, finish: 0});
+				user.save(function(err, user) {
+					if(err) {
+						console.log(err);
+					}
+					else {
+						callback(user);
+					}
+				});
+			}
+		});
+	};
+	
+	dbManager.getTopPlayers = function(limit, callback) {
+		User.find().limit(limit).sort('-win').sort('-finish').sort('-played').sort('+name').exec(
+			function(err, players) {
+				if(err) {
+					console.log(err);
+				}
+				else {
+					callback(players);
+				}
+			});
+	};
+	
+	dbManager.finish = function(name) {
+		User.findOne({'name': name}, function(err, user) {
+			if(user !== null) {
+				User.findByIdAndUpdate(user.id, { $set: { finish: user.finish + 1 }}, function (err, user) {
+					if(err) {
+						console.log(err);
+					}
+				});
+			}
+		});
+	};
+	
+	dbManager.win = function(name) {
+		User.findOne({'name': name}, function(err, user) {
+			if(user !== null) {
+				User.findByIdAndUpdate(user.id, { $set: { win: user.win + 1 }}, function (err, user) {
+					if(err) {
+						console.log(err);
+					}
+				});
+			}
+		});
+	};
+	
+	dbManager.checkPlayer = function(name, password, callback) {
+		User.findOne({'name': name}, function(err, user) {
+			if(user !== null && !!user.password && user.password !== password) {
+				callback(false);
+			}
+			else {
+				callback(true);
+			}
+		});
+	};
+	
+	var port = process.env.PORT || 8090;
+	console.log("Listening on port " + port);
+	RRServer.init(port, dbManager);
+});
 
 var RRServer = {
 	  fs		: require('fs')
 	, express	: require('express')
 	, app		: null
-	, io		: require('socket.io')
+	, io		: require('socket.io')	
 	, games		: { list	: {}
 				  , ProcessProposition : function(idGame, playerName, proposition) {
 								 if(this.list[idGame] == undefined) {throw new Error( 'NO_SUCH_GAME_ID' );}
@@ -277,15 +376,27 @@ var RRServer = {
 						}
 				  , OtherFinalProposition: function(idGame, playerName, proposition) {
 						 if(this.list[idGame] == undefined) {throw new Error( 'NO_SUCH_GAME_ID');}
+						 RRServer.dbManager.finish(playerName);
 						 this.list[idGame].solutions.push( {player: playerName, proposition: proposition} );
 						 this.emit(idGame, 'solutions', {solutions: this.list[idGame].solutions});
 						}
 				  , TerminateGame: function(idGame) {
+<<<<<<< HEAD
 						 if(this.list[idGame] == undefined) {throw new Error( 'NO_SUCH_GAME_ID');}
 						 this.emit(idGame, 'TerminateGame', {TerminateGame: true});
 						 this.list[idGame].Terminated = true;
 						 RRServer.sendGamesInfo();
+=======
+						if(this.list[idGame] == undefined) {throw new Error( 'NO_SUCH_GAME_ID');}
+						if(this.list[idGame].solutions) {
+							RRServer.dbManager.win(this.list[idGame].solutions[0].player);
+>>>>>>> 6fc6447e5ddd4ef2f53add8a991e5c871827201e
 						}
+						var nextGame = idGame + Math.floor(Math.random()*100000);
+						this.list[idGame].nextGame = nextGame;
+						this.emit(idGame, 'TerminateGame', {TerminateGame: true, NextGame: nextGame});
+						this.list[idGame].Terminated = true;
+					}
 				  }
 	, sockets	: [] // Sockets connected to the loggin page
 	, connect	: function(socket) {//console.log("Connection on loggin page of " + socket.id);
@@ -302,6 +413,7 @@ var RRServer = {
 		 this.games.disconnect(socket);
 		}
 	, sendGamesInfo	: function(sockets) {//console.log("--> Sending game informations");
+<<<<<<< HEAD
 		 sockets = sockets || this.sockets;
 		 // Build the game list
 		 var gamesList = [];
@@ -317,10 +429,25 @@ var RRServer = {
 		 // Send it to all connected login pages
 		 for(var i in sockets) {
 			 sockets[i].emit( 'gamesList', {gamesList: gamesList});
+=======
+			sockets = sockets || this.sockets;
+			// Build the game list
+			var gamesList = [];
+			for(var g in this.games.list) {gamesList.push(g);}
+			// Send it to all connected login pages
+			for(var i in sockets) {
+				sockets[i].emit( 'gamesList', {gamesList: gamesList});
+>>>>>>> 6fc6447e5ddd4ef2f53add8a991e5c871827201e
 			}
+			this.dbManager.getTopPlayers(10, function(players) {
+				for(var i in sockets) {
+					sockets[i].emit( 'topPlayers', {players: players});
+				}
+			});
 		}
-	, init		: function(port) {
-		 this.app	= this.express().use(this.express.static(__dirname))
+	, init		: function(port, dbManager) {
+		this.dbManager = dbManager;
+		this.app	= this.express().use(this.express.static(__dirname))
 									.use(this.express.bodyParser())
 									.get('/', function(req, res) {
 										RRServer.fs.readFile(__dirname + '/login.html',
@@ -333,6 +460,25 @@ var RRServer = {
                                                     res.end();
 												  });
 										})
+									.post('/checkPlayer', function(req, res) {
+										if(RRServer.games.list[req.body.idGame]) {
+											if(RRServer.games.list[req.body.idGame].participants[req.body.login]) {
+												res.writeHead(400, {'Content-Type': 'text/html; charset=utf-8'});
+												return res.end("Un joueur avec ce pseudo est déjà dans cette partie");
+											}
+										}
+										RRServer.dbManager.checkPlayer(req.body.login, req.body.password, function(ok) {
+											if(ok) {
+												res.writeHead(200, {'Content-Type': 'text/html; charset=utf-8'});
+												res.end();
+											}
+											else {
+												res.writeHead(400, {'Content-Type': 'text/html; charset=utf-8'});
+												return res.end("Mot de passe incorrect");
+											}
+										});
+										RRServer.dbManager
+									})
 									.post('/', function(req, res) {
 										// POST VARIABLES :
 										//	- login
@@ -357,14 +503,26 @@ var RRServer = {
 											function (err, data) {
 												if (err) {res.writeHead(500);
 														  return res.end('Error loading logged.html');}
-												res.writeHead(200, {'Content-Type': 'text/html; charset=utf-8'});
+												
 												var title = req.body.idGame
 												  , state = '', numRobot = Math.floor((Math.random()*19)+1);
-												res.write( data.toString().replace(/__LOGIN__/g	, req.body.login)
-																		  .replace(/__IDGAME__/g, title)
-																		  .replace(/__ROBOT__/g, numRobot)
-														 );
-												res.end();
+												
+												var generatePage = function(user) {
+													if(user !== null) {
+														res.writeHead(200, {'Content-Type': 'text/html; charset=utf-8'});
+														res.write( data.toString().replace(/__USER__/g	, encodeURIComponent(JSON.stringify(user)))
+																				  .replace(/__IDGAME__/g, title)
+																				  .replace(/__ROBOT__/g, numRobot)
+																 );
+														res.end();
+													}
+													else {
+														res.writeHead(400, {'Content-Type': 'text/html; charset=utf-8'});
+														res.end();
+													}
+												}
+												
+												RRServer.dbManager.connectUser(req.body.login, req.body.password, generatePage);
 											  });
 											
 										})
@@ -375,7 +533,7 @@ var RRServer = {
 											 if( RRServer.games.list[ idGame ] ) {
 												 res.writeHead(200, {'Content-Type': 'application/json'});
 												 res.end( JSON.stringify({"game": RRServer.games.list[ idGame ].game.getConfiguration(), "solutions": RRServer.games.list[ idGame ].solutions,
-													"ms": RRServer.games.list[ idGame ].ms}) );
+													"ms": RRServer.games.list[ idGame ].ms, "nextGame": RRServer.games.list[ idGame ].nextGame}) );
 												 return;
 												}
 											 res.writeHead(404);
@@ -417,22 +575,15 @@ var RRServer = {
 																								   , JSON.parse( req.body.proposition ) );
 														}
 													res.writeHead(200, {'Content-Type': 'application/json'});
-													// console.log( 'coucou' );
-													// console.log( "Send answer : " + JSON.stringify( answer ));
 													res.end( JSON.stringify( answer ) );
 												 break;
 												}
 											}
 										})
 									.listen(port) ;
-		 this.io	= this.io.listen( this.app, { log: false } );
-		 // assuming io is the Socket.IO server object
-		 /*this.io.configure(function () { 
-			 RRServer.io.set("transports", ["xhr-polling"]); 
-			 RRServer.io.set("polling duration", 10); 
-			});*/
+			 this.io	= this.io.listen( this.app, { log: false } );
 
-		 this.io.on	('connection', function (socket) {
+			 this.io.on	('connection', function (socket) {
 										  socket.on	( 'loginPage'
 													, function(data) {
 														 console.log("Someone is connected on the loggin page...");
@@ -452,17 +603,4 @@ var RRServer = {
 					);
 		}
 };
-
-var port = process.env.PORT || 8090;
-console.log("Listening on port " + port);
-RRServer.init( port );
-
-/*
-io.sockets.on('connection', function (socket) {
-	socket.emit('news', { hello: 'world' });
-	socket.on('my other event', function (data) {
-		 console.log(data);
-		});
-	});
-*/
 
