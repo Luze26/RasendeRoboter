@@ -13,6 +13,10 @@ table {
   display: none !important;
 }
 
+.cr-icon {
+	vertical-align: baseline;
+}
+
 .help {
 	cursor: pointer;
 	float: right;
@@ -97,14 +101,17 @@ table {
 }
 
 .table-blue .cell-endpoint:hover {
+	opacity: 1;
 	background-color: #3498db;
 }
 
 .table-yellow .cell-endpoint:hover {
+	opacity: 1;
 	background-color: #f1c40f;
 }
 
 .table-green .cell-endpoint:hover {
+	opacity: 1;
 	background-color: #2ecc71;
 }
 
