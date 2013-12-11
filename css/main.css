@@ -387,6 +387,30 @@ legend {
 	padding: 5px;
 }
 
+.caret-up {
+	display: inline-block;
+	width: 0;
+	height: 0;
+	margin-left: 2px;
+	vertical-align: middle;
+	border-bottom: 4px solid #000;
+	border-right: 4px solid transparent;
+	border-top: 0 dotted;
+	border-left: 4px solid transparent;
+}
+
+.top-players-header td {
+	cursor: pointer;
+}
+	
+.visible {
+	visibility: visible ! important;
+}
+
+.not-visible {
+	visibility: hidden;
+}
+
 /** ANIMATION **/
 .header-title:hover {
 	-webkit-animation: wobble 1s linear;

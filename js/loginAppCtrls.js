@@ -19,6 +19,17 @@ angular.module('loginApp').controller("mainController", ['$http', 'HOST_URL', "$
 	$scope.pwdNeededKO = {display:false, text:"Cet utilisateur est protégé par un mot de passe !"};
     $scope.idGameKO = {display:false, text:"Vous n'avez pas renseigné le nom de votre partie."};
 
+	$scope.orderBy = {prop: "place", asc: true};
+	
+	$scope.changeOrder = function(prop) {
+		if($scope.orderBy.prop == prop) {
+			$scope.orderBy.asc = !$scope.orderBy.asc;
+		}
+		else {
+			$scope.orderBy = {prop: prop, asc: true};
+		}
+	};
+	
 	$scope.initGamesListClass = function() {
 		$scope.gamesListClass = [];
 		for(var i = 0; i < $scope.gamesList.length; i++) {

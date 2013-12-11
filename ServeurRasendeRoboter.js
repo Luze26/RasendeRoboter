@@ -480,10 +480,6 @@ var RRServer = {
 										RRServer.dbManager
 									})
 									.post('/', function(req, res) {
-										// POST VARIABLES :
-										//	- login
-										//	- idGame
-												// Create or join the idGame
 										try {RRServer.games.joining(req.body.idGame, req.body.login);
 											} catch(err) {switch(err.message) {
 															 case 'NO_SUCH_GAME_ID':
