@@ -97,7 +97,7 @@
 									<span ng-show="game.countDown">Il reste {{game.countDown}} secondes aux autres participants pour proposer leur solution.</span>
 								</p>
 							</div>						
-							<form id="nextGameForm"  method="post" action="/">
+							<form id="nextGameForm" ng-show="game.terminateGame" ng-cloak method="post" action="/">
 								<input type="hidden" name="login" ng-value="game.login"/>
 								<input type="hidden" name="password" ng-value="game.password"/>
 								<input type="hidden" name="idGame" ng-value="game.nextGame"/>
