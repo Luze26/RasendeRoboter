@@ -67,12 +67,18 @@
         </div>
             
         <!-- Game Selection Panel -->
-        <div class="row">
-            <div class="col-lg-8">
-                <div class="list-group-item" ng-show="displayGameSelection">
-                    <legend class="lead">Ou rejoignez une partie existante</legend>
-                    <div id="lesParties">
-                        <button type="button" class="btn btn-default" ng-repeat="game in gamesList" ng-click="select(game)">{{game}}</button>
+        <div class="row" ng-show="displayGameSelection">
+            <div class="col-lg-12">
+                <div class="list-group-item">
+                    <p class="lead">Ou rejoignez une partie existante</p>
+                    <div id="fisheye" class="col-lg-3 lesParties" ng-repeat="game in gamesList">
+                        <button type="button" class="btn btn-default" ng-class="gamesListClass[$index]" ng-click="select(game)" ng-mouseenter="mouseOver($index)" ng-mouseleave="mouseLeave($index)">
+						{{game.gameName}}
+						<div class="infos-sup">
+						Nombre de participants: {{game.gameParticipants}}<br/>
+						Partie finie: {{game.Terminated}}
+						</div>
+						</button>
                     </div>
                 </div>
 				<div class="list-group-item" ng-hide="displayGameSelection">

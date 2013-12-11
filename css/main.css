@@ -191,6 +191,44 @@ legend {
 	color: #444135;
 }
 
+.lesParties {
+	width: 25%;
+	height: 25%;
+	text-align: center;
+	padding: 0px;
+	margin: 5px 0px;
+}
+
+.lesParties .notOver {
+	width: 50%;
+	min-height: 80px;
+	max-height: 80px;
+}
+
+.lesParties .notOver .infos-sup {
+	display: none;
+}
+
+.lesParties .nextToOver .infos-sup {
+	display: none;
+}
+
+.lesParties .over .infos-sup {
+	display: block;
+}
+
+.lesParties .over  {
+	width: 100%;
+	min-height: 80px;
+	max-height: 80px;
+}
+
+.lesParties .nextToOver {
+	width: 75%;
+	min-height: 80px;
+	max-height: 80px;
+}
+
 #header {
 	line-height: 65px;
 	text-align: center;
