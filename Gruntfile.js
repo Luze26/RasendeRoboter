@@ -9,7 +9,7 @@ module.exports = function (grunt) {
   grunt.initConfig({
     ngdocs: {
       options: {
-        scripts: ['angular.js', '../js/robot.js', '../js/commonModuke.js', '../js/propositionService.js', '../js/gameService.js',
+        scripts: ['angular.js', '../js/robot.js', '../js/commonModule.js', '../js/propositionService.js', '../js/gameService.js',
 			'../js/loggedApp.js', '../js/loggedAppCtrls.js', '../js/login.js'],
         html5Mode: false
       },
@@ -18,14 +18,13 @@ module.exports = function (grunt) {
 	uglify: {
 		my_target: {
 			files: {
-				'js/min/main.min.js': ['js/robot.js', 'js/commonModuke.js', 'js/propositionService.js', 'js/gameService.js', 
-				'js/loggedApp.js', 'js/loggedAppCtrls.js', 'js/login.js']
-			}
+				'js/min/main.min.js': ['js/robot.js', 'js/commonModule.js', 'js/loggedApp.js', 'js/propositionService.js', 'js/gameService.js', 
+				'js/loggedAppCtrls.js', 'js/loginApp.js', 'js/loginAppCtrls.js'] }
 		}
 	},
 	jshint: {
-		all: ['js/robot.js', 'js/commonModuke.js', 'js/propositionService.js', 'js/gameService.js', 
-			'js/loggedApp.js', 'js/loggedAppCtrls.js', 'js/login.js']
+		all: ['js/robot.js', 'js/commonModule.js', 'js/propositionService.js', 'js/gameService.js', 
+			'js/loggedApp.js', 'js/loggedAppCtrls.js', 'js/loginApp.js', 'js/loginAppCtrls.js']
 	},
 	connect: {
       options: {
