@@ -166,8 +166,8 @@ var RasendeRoboter = function() {return {
 };
 
 var mongoose = require('mongoose');
-//mongoose.connect('mongodb://localhost/test');
-mongoose.connect('mongodb://mongoUser:mongoUser19455605,@ds057568.mongolab.com:57568/heroku_app19455605');
+mongoose.connect('mongodb://localhost/test');
+//mongoose.connect('mongodb://mongoUser:mongoUser19455605,@ds057568.mongolab.com:57568/heroku_app19455605');
 var db = mongoose.connection;
 
 db.on('error', console.error.bind(console, 'connection error:'));

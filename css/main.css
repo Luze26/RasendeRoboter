@@ -30,6 +30,7 @@ table {
 
 .modal {
 	opacity: 1;
+	z-index: 1500;
 	display: block;
 }
 
@@ -64,7 +65,7 @@ table {
 
 .map-overlay {
 	position: absolute;
-	z-index: 1500;
+	z-index: 1000;
 	background-color: #000;
 	opacity: 0.5;
 }
@@ -161,6 +162,10 @@ table {
 	border: none;
 	display: block;
 	border-radius: 50%;
+}
+
+td {
+	overflow: hidden;
 }
 
 .robot-selected {
