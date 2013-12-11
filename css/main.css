@@ -203,42 +203,95 @@ legend {
 	color: #444135;
 }
 
-.lesParties {
-	width: 25%;
-	height: 25%;
+/* Page d'accueil */
+.gameSelection {
+	text-align: center;
+}
+
+.gameStyle {
+	min-width: 10%;
+	max-width: 25%;
+	min-height: 90px;
+	max-height: 90px;
 	text-align: center;
 	padding: 0px;
-	margin: 5px 0px;
+	float: left;
+	color: black;
 }
 
-.lesParties .notOver {
-	width: 50%;
-	min-height: 80px;
-	max-height: 80px;
+.gameStyle.displayBlock {
+	clear: left;
 }
 
-.lesParties .notOver .infos-sup {
-	display: none;
+.gameStyle.notOver {
+	width: 15%;
 }
 
-.lesParties .nextToOver .infos-sup {
-	display: none;
-}
-
-.lesParties .over .infos-sup {
+.gameStyle.notOver .infos {
 	display: block;
 }
 
-.lesParties .over  {
-	width: 100%;
-	min-height: 80px;
-	max-height: 80px;
+.gameStyle.nextToOver .infos {
+	display: block;
 }
 
-.lesParties .nextToOver {
-	width: 75%;
-	min-height: 80px;
-	max-height: 80px;
+.gameStyle.over .infos {
+	display: none;
+}
+
+.gameStyle.notOver .infosDetail {
+	display: none;
+}
+
+.gameStyle.nextToOver .infosDetail {
+	display: none;
+}
+
+.gameStyle.over .infosDetail {
+	display: block;
+	text-align: left;
+    margin-left:5%;
+}
+
+.gameStyle.over  {
+	width: 25%;
+}
+
+.gameStyle.nextToOver {
+	width: 20%;
+}
+
+.gameStyle button {
+	min-width: 100%;
+	min-height: 90px;
+	max-height: 90px;
+}
+
+.gameName {
+    font-size:1.2em;
+    font-weight:bold;
+}
+
+.gameState {
+	height: 20px;
+	width: 20px;
+	margin-top: 4px;
+	border: none;
+	display: inline-block;
+	border-radius: 50%;
+}
+
+.detailBlock {
+    display: inline-block;
+    width:50%;
+}
+
+.gameTerminate {
+	background-color: #e74c3c;
+}
+
+.gameNotTerminate {
+	background-color: #2ecc71;
 }
 
 #header {
