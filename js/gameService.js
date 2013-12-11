@@ -89,9 +89,12 @@ angular.module('loggedApp').factory('game', ['$http', 'HOST_URL', '$timeout', 'p
 	service.refreshParticipants = function(participants) {
 		var participantsTmp = [];
 		participants.forEach(function(participant) {
-			if(!participantsHash[participant]) {
-				participantsHash[participant] = {name: participant, place: "~", me: service.login == participant, nbCoups: null};
-				service.participants.push(participantsHash[participant]);
+			if(!participantsHash[participant.name]) {
+				participantsHash[participant.name] = {name: participant.name, stats: participant.stats, place: "~", me: service.login == participant, nbCoups: null};
+				service.participants.push(participantsHash[participant.name]);
+			}
+			else if(participant.name == service.login) {
+				participantsHash[participant.name].stats = participant.stats;
 			}
 		});
 	};

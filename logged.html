@@ -122,10 +122,16 @@
 					<div class="left-panel">
 						<legend class="border-green">Les participants</legend>
 						<ul class="participants-list" ng-cloak>
-							<li class="participant" ng-repeat="p in game.participants | orderBy:'place'" ng-class="{'me': p.me}">
+							<li class="participant" ng-repeat="p in game.participants | orderBy:'place'" ng-class="{'me': p.me}" 
+								ng-init="showStats = false" ng-mouseenter="showStats = true" ng-mouseleave="showStats = false">
 								<span class="rank">{{p.place}}</span>{{p.name}}
 								<span class="participant-nb-coups" ng-show="p.nbCoups">{{p.nbCoups}} coups</span>
 								<span ng-show="p.name == game.firstFinder">*</span>
+								<div ng-show="showStats" class="participant-stats">
+									Jouée(s): {{p.stats.played}}<br>
+									Gagnée(s): {{p.stats.win}}<br>
+									Finie(s): {{p.stats.finish}}
+								</div>
 							</li>
 						</ul>
 						<p class="notice">* = premier participant à avoir trouvé une solution.</p>
