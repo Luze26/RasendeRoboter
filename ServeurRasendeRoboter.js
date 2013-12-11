@@ -309,8 +309,9 @@ var RRServer = {
 				  , joining	: function(idGame, playerName) {
 								 if(this.list[idGame] == undefined) {throw new Error( 'NO_SUCH_GAME_ID' );}
 								 if(this.list[idGame].participants[playerName] == undefined) {
+										RRServer.games.list[idGame].participants[playerName] = {sockets: new Array()};
 										RRServer.dbManager.getStats(playerName, function(stats) {
-											RRServer.games.list[idGame].participants[playerName] = {name: playerName, stats: stats, sockets: new Array()};
+											RRServer.games.list[idGame].participants[playerName] = {name: playerName, stats: stats, sockets: RRServer.games.list[idGame].participants[playerName].sockets};
 										});
 									}
 								 RRServer.sendGamesInfo();
@@ -318,17 +319,15 @@ var RRServer = {
 				  , leaving	: function(idGame, playerName) {
 								 if(this.list[idGame] == undefined) {throw new Error( 'NO_SUCH_GAME_ID' );}
 								 if(this.list[idGame].participants[playerName] == undefined) {throw new Error( 'PLAYER_IS_NOT_PRESENT' );}
-								 //console.log("\tPlayer " + playerName + ' is leaving game ' + idGame);
 								 delete this.list[idGame].participants[playerName];
 								 this.sendListOfParticipants(idGame);
 								 setTimeout( function() {RRServer.games.checkParticipants(idGame);}, 5000);
 								 RRServer.sendGamesInfo();
 								}
-				  , checkParticipants : function(idGame) {//console.log("\tcheckParticipants");
+				  , checkParticipants : function(idGame) {
 								 if(this.list[idGame] == undefined) {return;}
 								 var nb=0; 
 								 for(i in this.list[idGame].participants) {
-									 //console.log("\t\tConsidering participant " + i + ' with ' + this.list[idGame].participants[i].sockets.length + ' sockets');
 									 if(this.list[idGame].participants[i].sockets.length > 0) {nb++;}
 									}
 								 if(nb==0) {this.close(idGame);}
@@ -338,7 +337,6 @@ var RRServer = {
 								 if(this.list[idGame].participants[playerName] == undefined) {
 									 this.joining(idGame, playerName);
 									}
-								 //console.log("\tParticipant " + playerName + " is connected on game " + idGame + " using socket " + socket.id);
 								 this.list[idGame].participants[playerName].sockets.push(socket);
 								 this.sendListOfParticipants(idGame);
 								}
