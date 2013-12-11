@@ -98,7 +98,7 @@
 								</p>
 							</div>						
 							<form id="nextGameForm" ng-show="game.terminateGame" ng-cloak method="post" action="/">
-								<input type="hidden" name="login" value="__LOGIN__"/>
+								<input type="hidden" name="login" ng-value="game.login"/>
 								<input type="hidden" name="idGame" ng-value="game.nextGame"/>
 								<button type="submit" class="btn btn-primary btn-next-game" title="Rejoindre la partie suivante">Rejoindre la partie suivante</button>
 							</form>

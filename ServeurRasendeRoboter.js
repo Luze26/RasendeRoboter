@@ -166,18 +166,18 @@ var RasendeRoboter = function() {return {
 };
 
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/test');
-//mongoose.connect('mongodb://mongoUser:mongoUser19455605,@ds057568.mongolab.com:57568/heroku_app19455605');
+var mongoUrl = process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || "mongodb://localhost/test";
+mongoose.connect(mongoUrl);
 var db = mongoose.connection;
 
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function callback () {
-	var User = mongoose.model('User', {name: String, password: String, email: String, played: Number, win: Number, finish: Number});
+	var User = mongoose.model('cr_user', {name: String, password: String, email: String, played: Number, win: Number, finish: Number});
 	var dbManager = {};
 	
 	dbManager.connectUser = function(name, password, callback) {
 		User.findOne({'name': name}, function(err, user) {
-			if(user !== null) {
+			if(user != null) {
 				if(user.password && user.password !== password) {
 					callback(null);
 				}
@@ -227,7 +227,7 @@ db.once('open', function callback () {
 	
 	dbManager.finish = function(name) {
 		User.findOne({'name': name}, function(err, user) {
-			if(user !== null) {
+			if(user != null) {
 				User.findByIdAndUpdate(user.id, { $set: { finish: user.finish + 1 }}, function (err, user) {
 					if(err) {
 						console.log(err);
@@ -239,7 +239,7 @@ db.once('open', function callback () {
 	
 	dbManager.win = function(name) {
 		User.findOne({'name': name}, function(err, user) {
-			if(user !== null) {
+			if(user != null) {
 				User.findByIdAndUpdate(user.id, { $set: { win: user.win + 1 }}, function (err, user) {
 					if(err) {
 						console.log(err);
@@ -251,7 +251,7 @@ db.once('open', function callback () {
 	
 	dbManager.checkPlayer = function(name, password, callback) {
 		User.findOne({'name': name}, function(err, user) {
-			if(user !== null && !!user.password && user.password !== password) {
+			if(user != null && !!user.password && user.password !== password) {
 				callback(false);
 			}
 			else {
@@ -262,7 +262,7 @@ db.once('open', function callback () {
 	
 	dbManager.getStats = function(name, callback) {
 		User.findOne({'name': name}, function(err, user) {
-			if(user !== null) {
+			if(user != null) {
 				callback({"played": user.played, "win": user.win, "finish": user.finish});
 			}
 			else {
