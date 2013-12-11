@@ -23,7 +23,40 @@
 						<div>
 							<legend class="game-legend border-blue" ng-cloak>
 								Partie: {{game.idGame}}
-								<span class="help" ng-click="showHelp()">Aide</span>
+								<span class="help" ng-click="showHelp = true">Aide <img src="/img/help.png" alt="aide"></span>
+								<div class="modal" ng-show="showHelp" ng-cloak>
+									<div class="modal-dialog">
+										<div class="modal-content">
+										  <div class="modal-header">
+											<button type="button" class="close" ng-click="showHelp = false">&times;</button>
+											<h4 class="modal-title">Aide <img src="/img/help.png" alt="aide"></h4>
+										  </div>
+										  <div class="modal-body">
+											<h4>Règles du jeu</h4>
+											<p>
+												blabla<br>
+												lorem ipsum
+											</p>
+											<hr>
+											<h4>Jouer avec le tactile</h4>
+											<p>
+												Swipe: bouger les robots.<br>
+												Double tap: changer le robot sélectionné
+											</p>
+											<hr>
+											<h4>Raccourcis clavier</h4>
+											<p>
+												Flèches directionelles: bouger les robots.<br>
+												Espace: changer le robot sélectionné.<br>
+												Retour arrière: remettre à 0 le plateau de jeu.
+											</p>											
+										  </div>
+										  <div class="modal-footer">
+											<button type="button" class="btn btn-default" ng-click="showHelp = false">Fermer l'aide</button>
+										  </div>
+										</div>
+									</div>
+								</div>
 							</legend>
 							<div class="alert alert-info" ng-if="!game.terminateGame && game.countDown && !game.propositionDone" ng-cloak>
 								<p><strong>{{game.firstFinder}}</strong> a été le premier à trouvé une solution.<br>
