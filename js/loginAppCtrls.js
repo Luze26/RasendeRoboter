@@ -68,7 +68,7 @@ angular.module('loginApp').controller("mainController", ['$http', 'HOST_URL', "$
         $scope.join();
     };
 	
-	$scope.mouseOver = function(numGame) {
+	$scope.mouseEnter = function(numGame) {
 		$scope.initGamesListClass();
 		$scope.gamesListClass[numGame] = "over";
 		if((numGame-1) >= 0 && ((numGame-1) % 3) != 0 ||(numGame-1) == 0) {

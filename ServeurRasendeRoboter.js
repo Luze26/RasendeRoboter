@@ -390,7 +390,7 @@ var RRServer = {
 						this.list[idGame].nextGame = nextGame;
 						this.emit(idGame, 'TerminateGame', {TerminateGame: true, NextGame: nextGame});
 						this.list[idGame].Terminated = true;
-						 RRServer.sendGamesInfo();
+						RRServer.sendGamesInfo();
 					}
 				  }
 	, sockets	: [] // Sockets connected to the loggin page
@@ -571,7 +571,7 @@ var RRServer = {
 			 this.io.on	('connection', function (socket) {
 										  socket.on	( 'loginPage'
 													, function(data) {
-														 console.log("Someone is connected on the loggin page...");
+														 // console.log("Someone is connected on the loggin page...");
 														 RRServer.connect( socket );
 														}			
 													);
