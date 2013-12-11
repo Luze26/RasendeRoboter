@@ -15,6 +15,8 @@ angular.module('loginApp').controller("mainController", ['$http', 'HOST_URL', "$
     $scope.displayContainer = false; // Enforse socket init before display
     
     $scope.loginKO = {display:false, text:"Vous n'avez pas renseigné votre nom d'utilisateur."};
+	$scope.pwdKO = {display:false, text:"Le mot de passe est incorrect !"};
+	$scope.pwdNeededKO = {display:false, text:"Cet utilisateur est protégé par un mot de passe !"};
     $scope.idGameKO = {display:false, text:"Vous n'avez pas renseigné le nom de votre partie."};
 
 	$scope.initGamesListClass = function() {
@@ -43,6 +45,11 @@ angular.module('loginApp').controller("mainController", ['$http', 'HOST_URL', "$
     });
 	
     $scope.join = function() {
+		$scope.pwdKO.display = false;
+		$scope.pwdNeededKO.display = false;
+		$scope.loginKO.display = false;
+		$scope.idGameKO.display = false;
+		
         if ($scope.game.login != "" && $scope.game.idGame != "") {
             document.getElementById('idGame').value = $scope.game.idGame;
             document.getElementById('login').value = $scope.game.login;
@@ -51,7 +58,12 @@ angular.module('loginApp').controller("mainController", ['$http', 'HOST_URL', "$
 				document.getElementById('newGame').submit();
 			})
 			.error(function(error) {
-				console.log(error);
+				if($scope.game.password) {
+					$scope.pwdKO.display = true;
+				}
+				else {
+					$scope.pwdNeededKO.display = true;
+				}
 			});
         } else {
             $scope.loginKO.display = $scope.game.login === "";

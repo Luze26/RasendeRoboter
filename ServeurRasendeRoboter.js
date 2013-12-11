@@ -260,6 +260,17 @@ db.once('open', function callback () {
 		});
 	};
 	
+	dbManager.getStats = function(name, callback) {
+		User.findOne({'name': name}, function(err, user) {
+			if(user !== null) {
+				callback({"played": user.played, "win": user.win, "finish": user.finish});
+			}
+			else {
+				callback({"played": 1, "win": 0, "finish": 0});
+			}
+		});
+	};
+	
 	var port = process.env.PORT || 8090;
 	console.log("Listening on port " + port);
 	RRServer.init(port, dbManager);
@@ -298,8 +309,9 @@ var RRServer = {
 				  , joining	: function(idGame, playerName) {
 								 if(this.list[idGame] == undefined) {throw new Error( 'NO_SUCH_GAME_ID' );}
 								 if(this.list[idGame].participants[playerName] == undefined) {
-									 //console.log("\tParticipant " + playerName + ' is joining game ' + idGame);
-									 this.list[idGame].participants[playerName] = {name:playerName, sockets: new Array()};
+										RRServer.dbManager.getStats(playerName, function(stats) {
+											RRServer.games.list[idGame].participants[playerName] = {name: playerName, stats: stats, sockets: new Array()};
+										});
 									}
 								 RRServer.sendGamesInfo();
 								}
@@ -355,7 +367,10 @@ var RRServer = {
 				  , sendListOfParticipants: function(idGame) {
 								 // List all participants
 								 var participants = [];
-								 for (var p in this.list[idGame].participants) {participants.push( p );}
+								 for (var p in this.list[idGame].participants) {
+									var participant = RRServer.games.list[idGame].participants[p];
+									participants.push( {"name": participant.name, "stats": participant.stats} );
+								 }
 								 this.emit(idGame, 'participants', {participants: participants});
 								}
 				  , FinalCountDown: function(idGame, playerName, proposition) {

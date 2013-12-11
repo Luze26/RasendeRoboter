@@ -35,13 +35,17 @@
 					</div>
 				</div>
 				<div class="form-group homepage-form col-lg-12">
-					<label class="col-lg-3" for="inputPassword">Mot de passe</label>
+					<p class="notice" style="margin-left: 13px; text-align: left;">Le mot de passe est facultatif. Pour vous inscrire: entrez un mot de passe et jouez une partie !</p>
+					<label class="col-lg-3" for="inputPassword">Mot de passe <span class="notice">(facultatif)</span></label>
 					<div class="col-lg-7" style="display: inline-block;float: none;">
 						<input id="inputPassword" type="password" class="form-control input-sm" ng-model="game.password" placeholder="Entrez un mot de passe, si vous voulez protéger votre compte"/>
 					</div>
 				</div>
 				<div ng-show="loginKO.display" class="alert-danger">
 					<small>{{loginKO.text}}</small>
+				</div>
+				<div ng-show="pwdKO.display" class="alert-danger">
+					<small>{{pwdKO.text}}</small>
 				</div>
 				<div class="col-lg-12" ng-show="displayCreationField" >
                     <div class="form-group">

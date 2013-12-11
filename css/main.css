@@ -13,10 +13,29 @@ table {
   display: none !important;
 }
 
+.cr-icon {
+	vertical-align: baseline;
+}
+
 .help {
+	cursor: pointer;
 	float: right;
 	font-size: 17px;
 	line-height: 35px;
+}
+
+.help:hover {
+	text-decoration: underline;
+}
+
+.modal {
+	opacity: 1;
+	z-index: 1500;
+	display: block;
+}
+
+.modal-body p {
+	font-size: 14px;
 }
 
 .alert-danger {
@@ -46,7 +65,7 @@ table {
 
 .map-overlay {
 	position: absolute;
-	z-index: 1500;
+	z-index: 1000;
 	background-color: #000;
 	opacity: 0.5;
 }
@@ -83,14 +102,17 @@ table {
 }
 
 .table-blue .cell-endpoint:hover {
+	opacity: 1;
 	background-color: #3498db;
 }
 
 .table-yellow .cell-endpoint:hover {
+	opacity: 1;
 	background-color: #f1c40f;
 }
 
 .table-green .cell-endpoint:hover {
+	opacity: 1;
 	background-color: #2ecc71;
 }
 
@@ -140,6 +162,10 @@ table {
 	border: none;
 	display: block;
 	border-radius: 50%;
+}
+
+td {
+	overflow: hidden;
 }
 
 .robot-selected {
@@ -328,6 +354,25 @@ legend {
 
 .btn[disabled] {
 	background-color: #eee;
+}
+
+.participant:hover {
+	cursor: default;
+	color: #2ecc71;
+}
+
+.participant-stats {
+	position: absolute;
+	color: #444135 ! important;
+	font-weight: normal ! important;
+	background-color: #fff;
+	border: solid 1px #2c3e50;
+	border-radius: 5px;
+	width: 120px;
+	box-shadow: 2px 2px 5px #AAA9A9;
+	left: 90px;
+	font-size: 12px;
+	padding: 5px;
 }
 
 /** ANIMATION **/

@@ -23,7 +23,50 @@
 						<div>
 							<legend class="game-legend border-blue" ng-cloak>
 								Partie: {{game.idGame}}
-								<span class="help" ng-click="showHelp()">Aide</span>
+								<span class="help" ng-click="showHelp = true">Aide <img src="/img/help.png" alt="aide"></span>
+								<div class="modal" ng-show="showHelp" ng-cloak>
+									<div class="modal-dialog">
+										<div class="modal-content">
+										  <div class="modal-header">
+											<button type="button" class="close" ng-click="showHelp = false">&times;</button>
+											<h4 class="modal-title">Aide <img src="/img/help.png" alt="aide"></h4>
+										  </div>
+										  <div class="modal-body">
+											<h4><img class="cr-icon" src="/img/robot.png" alt="robot"> <b>Règles du jeu</b></h4>
+											<p>
+												Le plateau est composé de robots correspondant aux pions de couleurs, d'une case colorée à atteindre et
+												de murs empêchant les robots de passer.
+											</p>
+											<p>
+												Le but du jeu est d'amener sur la case colorée le robot de cette couleur, tout cela avec le moins de coups possibles.
+											</p>
+											<p>
+												En revanche, un robot déjà déplacé devient figé une fois qu'on a déplacer un autre robot.
+											</p>
+											<p>
+												Lorsqu'un joueur trouve une solution, celui-ci ne peut plus jouer et les autres joueurs ont alors 60 secondes pour trouver
+												une meilleure solution.
+											</p>
+											<hr>
+											<h4><img class="cr-icon" src="/img/touch.png" alt="robot"> <b>Jouer avec le tactile</b></h4>
+											<p>
+												<b>Swipe</b>: bouger les robots.<br>
+												<b>Double tap</b>: changer le robot sélectionné
+											</p>
+											<hr>
+											<h4><img class="cr-icon" src="/img/keyboard.png" alt="robot"> <b>Raccourcis clavier</b></h4>
+											<p>
+												<b>Flèches directionelles</b>: bouger les robots.<br>
+												<b>Espace</b>: changer le robot sélectionné.<br>
+												<b>Retour arrière</b>: remettre à 0 le plateau de jeu.
+											</p>											
+										  </div>
+										  <div class="modal-footer">
+											<button type="button" class="btn btn-default" ng-click="showHelp = false">Fermer l'aide</button>
+										  </div>
+										</div>
+									</div>
+								</div>
 							</legend>
 							<div class="alert alert-info" ng-if="!game.terminateGame && game.countDown && !game.propositionDone" ng-cloak>
 								<p><strong>{{game.firstFinder}}</strong> a été le premier à trouvé une solution.<br>
@@ -79,10 +122,16 @@
 					<div class="left-panel">
 						<legend class="border-green">Les participants</legend>
 						<ul class="participants-list" ng-cloak>
-							<li class="participant" ng-repeat="p in game.participants | orderBy:'place'" ng-class="{'me': p.me}">
+							<li class="participant" ng-repeat="p in game.participants | orderBy:'place'" ng-class="{'me': p.me}" 
+								ng-init="showStats = false" ng-mouseenter="showStats = true" ng-mouseleave="showStats = false">
 								<span class="rank">{{p.place}}</span>{{p.name}}
 								<span class="participant-nb-coups" ng-show="p.nbCoups">{{p.nbCoups}} coups</span>
 								<span ng-show="p.name == game.firstFinder">*</span>
+								<div ng-show="showStats" class="participant-stats">
+									Jouée(s): {{p.stats.played}}<br>
+									Gagnée(s): {{p.stats.win}}<br>
+									Finie(s): {{p.stats.finish}}
+								</div>
 							</li>
 						</ul>
 						<p class="notice">* = premier participant à avoir trouvé une solution.</p>
@@ -121,9 +170,9 @@
 		<script src="//codeorigin.jquery.com/jquery-2.0.3.min.js"></script>
 		<script src="js/touchswipe.js"></script>
 		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.min.js"></script>
-		<script type="text/javascript" src="//code.angularjs.org/1.2.0/angular-animate.js"></script>
+		<script src="//code.angularjs.org/1.2.0/angular-animate.js"></script>
 		<script src="/socket.io/socket.io.js"></script>
-		<!-- PROD JS <script src="js/min/main.min.js"></script>-->
+		<!--<script src="js/min/main.min.js"></script>-->
 		<script src="js/commonModule.js"></script>
 		<script src="js/robot.js"></script>
 		<script src="js/loggedApp.js"></script>
