@@ -47,12 +47,11 @@
 				<div ng-show="pwdKO.display" class="alert-danger">
 					<small>{{pwdKO.text}}</small>
 				</div>
-				<div class="col-lg-12" ng-show="displayCreationField" >
-                    <div class="form-group">
-                        <label class="col-lg-3" for="inputGame">Nom de la partie</label>
-                        <div class="col-lg-7">
-                            <input id="inputGame" type="text" class="form-control input-sm" ng-model="game.idGame" placeholder="Entrez le nom de votre partie"/>
-                        </div>
+                
+				<div class="form-group col-lg-12" ng-show="displayCreationField" >
+                    <label class="col-lg-3" for="inputGame">Nom de la partie</label>
+                    <div class="col-lg-7">
+                        <input id="inputGame" type="text" class="form-control input-sm" ng-model="game.idGame" placeholder="Entrez le nom de votre partie"/>
                     </div>
                     <div ng-show="idGameKO.display" class="alert-danger">
                         <small>{{idGameKO.text}}</small>
