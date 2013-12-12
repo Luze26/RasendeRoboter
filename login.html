@@ -47,6 +47,9 @@
 				<div ng-show="pwdKO.display" class="alert-danger">
 					<small>{{pwdKO.text}}</small>
 				</div>
+				<div ng-show="pwdNeededKO.display" class="alert-danger">
+					<small>{{pwdNeededKO.text}}</small>
+				</div>
                 
 				<div class="form-group col-lg-12" ng-show="displayCreationField" >
                     <label class="col-lg-3" for="inputGame">Nom de la partie</label>
@@ -114,15 +117,17 @@
 				<p class="lead">Top players:</p>
 				<table class="table table-striped table-bordered table-hover">
 					<thead>
-						<tr>
-							<td title="Joueur">Joueur</td>
-							<td title="Jouée">J</td>
-							<td title="Gagnée">G</td>
-							<td title="Finie">F</td>
+						<tr class="top-players-header">
+							<td ng-click="changeOrder('place')" title="Place"># <span class="not-visible" ng-class="{'visible': orderBy.prop == 'place', 'caret': orderBy.asc, 'caret-up': !orderBy.asc}"></span></td>
+							<td ng-click="changeOrder('name')" title="Joueur">Joueur <span class="not-visible" ng-class="{'visible': orderBy.prop == 'name', 'caret': orderBy.asc, 'caret-up': !orderBy.asc}"></span></td>
+							<td ng-click="changeOrder('played')" title="Jouée">Jouée <span class="not-visible" ng-class="{'visible': orderBy.prop == 'played', 'caret': orderBy.asc, 'caret-up': !orderBy.asc}"></span></td>
+							<td ng-click="changeOrder('win')" title="Gagnée">Gagnée <span class="not-visible" ng-class="{'visible': orderBy.prop == 'win', 'caret': orderBy.asc, 'caret-up': !orderBy.asc}"></span></td>
+							<td ng-click="changeOrder('finish')" title="Finie">Finie <span class="not-visible" ng-class="{'visible': orderBy.prop == 'finish', 'caret': orderBy.asc, 'caret-up': !orderBy.asc}"></span></td>
 						</tr>
 					</thead>
 					<tbody>
-						<tr ng-repeat="player in topPlayers">
+						<tr ng-repeat="player in topPlayers | orderBy:orderBy.prop:!orderBy.asc" ng-init="player.place = $index + 1">
+							<td>{{player.place}}</td>
 							<td>{{player.name}}</td>
 							<td>{{player.played}}</td>
 							<td>{{player.win}}</td>
