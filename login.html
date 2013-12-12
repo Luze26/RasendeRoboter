@@ -77,30 +77,24 @@
                 <div ng-show="displayGameSelection">
                     <p class="lead">Ou rejoignez une partie existante</p>
                     <div class="gameStyle {{gamesListClass[$index]}}" ng-repeat="game in gamesList" ng-class="($index%4===0 && $index!=0) ? 'displayBlock' : ''">
-                        <button type="button" class="btn btn-default" ng-click="select(game.gameName)" ng-mouseenter="mouseEnter($index)" ng-mouseleave="mouseLeave($index)">
+                        <button type="button" class="btn game" ng-click="select(game.gameName)" ng-mouseenter="mouseEnter($index)" ng-mouseleave="mouseLeave($index)">
                             <span class="gameName">{{game.gameName}}</span>
                             <div class="infos">
-                                <span style="float:left;"><img src="img/people.png"/> {{game.gameParticipants}}</span>
+                                <span style="float:left;"><img src="img/people.png"/> <b>{{game.gameParticipants}}</b></span>
                                 <span class="gameState" style="float:right; height: 12px; width: 12px;" ng-class="game.gameTerminate ? 'gameTerminate' : 'gameNotTerminate'"/>
                             </div>
                             
                             <div class="infosDetail">
-                                <span class="detailBlockLbl">
-                                    Participants
-                                </span>
-                                <span class="detailBlockVal">
-                                    <img src="img/people.png"/> {{game.gameParticipants}}
-                                </span>
-                                <br/>
-                                
-                                <span class="detailBlockLbl">
+                                <div class="detailBlockLbl">
+                                    <img src="img/people.png" alt="participant" style="margin-right:4px"/>Participants <b>{{game.gameParticipants}}</b>
+                                </div>
+								<br>
+                                <div class="detailBlockLbl" style="margin-top: 5px;">
+									<span class="gameState" style="height: 10px; width: 10px; margin-right: 11px; margin-left: 11px;" ng-class="game.gameTerminate ? 'gameTerminate' : 'gameNotTerminate'"></span>
                                     Partie
                                     <span ng-if="game.gameTerminate">terminé</span>
                                     <span ng-if="!(game.gameTerminate)">en cours</span>
-                                </span>
-                                <span class="detailBlockVal" style="margin-left:10px;">
-                                    <div class="gameState" style="height: 10px; width: 10px;" ng-class="game.gameTerminate ? 'gameTerminate' : 'gameNotTerminate'"></div>
-                                </span>
+                                </div>
                             </div>
                         </button>
                     </div>

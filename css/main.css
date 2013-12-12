@@ -210,6 +210,20 @@ legend {
 	text-align: center;
 }
 
+.game {
+	background: -moz-linear-gradient(top, rgba(238,238,238,1) 0%, rgba(211,211,211,1) 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(238,238,238,1)), color-stop(100%,rgba(211,211,211,1)));
+	background: -webkit-linear-gradient(top, rgba(238,238,238,1) 0%,rgba(211,211,211,1) 100%);
+	background: -o-linear-gradient(top, rgba(238,238,238,1) 0%,rgba(211,211,211,1) 100%);
+	background: -ms-linear-gradient(top, rgba(238,238,238,1) 0%,rgba(211,211,211,1) 100%);
+	background: linear-gradient(to bottom, rgba(238,238,238,1) 0%,rgba(211,211,211,1) 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#d3d3d3',GradientType=0 );
+	
+	color: #666 ! important;
+	text-shadow: none ! important;
+	border: solid 1px #bbb;
+}
+
 .gameStyle {
 	min-width: 10%;
 	max-width: 25%;
@@ -219,6 +233,7 @@ legend {
 	padding: 0px;
 	display:inline-block;
 	color: black;
+	margin-top: 4px ! important;
 }
 
 .gameStyle.displayBlock {
@@ -230,23 +245,10 @@ legend {
     max-width:21%;
 }
 
-.gameStyle.notOver .infos {
+.gameStyle.notOver .infos, .gameStyle.nextToOver .infos  {
 	display: block;
 }
-
-.gameStyle.nextToOver .infos {
-	display: block;
-}
-
-.gameStyle.over .infos {
-	display: none;
-}
-
-.gameStyle.notOver .infosDetail {
-	display: none;
-}
-
-.gameStyle.nextToOver .infosDetail {
+.gameStyle.over .infos, .gameStyle.notOver .infosDetail, .gameStyle.nextToOver .infosDetail {
 	display: none;
 }
 
@@ -268,8 +270,9 @@ legend {
 
 .gameStyle button {
 	min-width: 100%;
-	min-height: 80px;
-	max-height: 80px;
+	min-height: 84px;
+	max-height: 84px;
+	padding-top: 4px;
 }
 
 .gameName {
