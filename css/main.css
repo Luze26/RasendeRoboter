@@ -225,6 +225,7 @@ legend {
 
 .gameStyle.notOver {
 	width: 21%;
+    max-width:21%;
 }
 
 .gameStyle.notOver .infos {
@@ -250,16 +251,17 @@ legend {
 .gameStyle.over .infosDetail {
 	display: block;
 	text-align: left;
-    margin-left:10px;
+    margin-left:0px;
 }
 
 .gameStyle.over  {
-	width: 31%;
-    min-width:200px;
+	width: 30%;
+    max-width:30%;
 }
 
 .gameStyle.nextToOver {
 	width: 24%;
+    max-width:24%;
 }
 
 .gameStyle button {
