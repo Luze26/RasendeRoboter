@@ -211,11 +211,11 @@ legend {
 .gameStyle {
 	min-width: 10%;
 	max-width: 25%;
-	min-height: 90px;
-	max-height: 90px;
+	min-height: 80px;
+	max-height: 80px;
 	text-align: center;
 	padding: 0px;
-	float: left;
+	display:inline-block;
 	color: black;
 }
 
@@ -224,7 +224,7 @@ legend {
 }
 
 .gameStyle.notOver {
-	width: 15%;
+	width: 21%;
 }
 
 .gameStyle.notOver .infos {
@@ -250,21 +250,22 @@ legend {
 .gameStyle.over .infosDetail {
 	display: block;
 	text-align: left;
-    margin-left:5%;
+    margin-left:10px;
 }
 
 .gameStyle.over  {
-	width: 25%;
+	width: 31%;
+    min-width:200px;
 }
 
 .gameStyle.nextToOver {
-	width: 20%;
+	width: 24%;
 }
 
 .gameStyle button {
 	min-width: 100%;
-	min-height: 90px;
-	max-height: 90px;
+	min-height: 80px;
+	max-height: 80px;
 }
 
 .gameName {
@@ -281,9 +282,14 @@ legend {
 	border-radius: 50%;
 }
 
-.detailBlock {
+.detailBlockLbl {
     display: inline-block;
+    min-width:110px;
     width:50%;
+}
+.detailBlockVal {
+    display: inline-block;
+    min-width:40px;
 }
 
 .gameTerminate {

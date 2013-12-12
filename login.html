@@ -81,20 +81,20 @@
                             </div>
                             
                             <div class="infosDetail">
-                                <span class="detailBlock">
+                                <span class="detailBlockLbl">
                                     Participants
                                 </span>
-                                <span class="detailBlock">
+                                <span class="detailBlockVal">
                                     <img src="img/people.png"/> {{game.gameParticipants}}
                                 </span>
                                 <br/>
                                 
-                                <span class="detailBlock">
+                                <span class="detailBlockLbl">
                                     Partie
                                     <span ng-if="game.gameTerminate">terminé</span>
                                     <span ng-if="!(game.gameTerminate)">en cours</span>
                                 </span>
-                                <span class="detailBlock" style="margin-left:10px;">
+                                <span class="detailBlockVal" style="margin-left:10px;">
                                     <div class="gameState" style="height: 10px; width: 10px;" ng-class="game.gameTerminate ? 'gameTerminate' : 'gameNotTerminate'"></div>
                                 </span>
                             </div>
