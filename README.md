@@ -22,7 +22,8 @@ Continuously deployed with [Codeship](http://www.codeship.io):
 
 ###Run
 
-Run `node ServeurRasendeRoboter.js` and open http://localhost:8090 in your browser.
+Run mongod
+Then run `node ServeurRasendeRoboter.js` and open http://localhost:8090 in your browser.
 
 ##Documentation
 
